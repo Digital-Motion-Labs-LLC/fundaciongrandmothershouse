@@ -213,7 +213,7 @@ export async function GET() {
             blockType: 'heroSlider',
             slides: [
               {
-                subtitle: 'Welcome to our Foundation',
+                subtitle: 'Welcome To Our Foundation',
                 title: 'Giving Help <br>To Those Who <span>Need</span> It.',
                 ctaPrimaryText: 'Discover More',
                 ctaPrimaryLink: '/quienes-somos',
@@ -221,7 +221,7 @@ export async function GET() {
                 ctaSecondaryLink: '/contacto',
               },
               {
-                subtitle: 'Making a difference',
+                subtitle: 'Making A Difference',
                 title: 'Together We Can <br>Change <span>Lives</span> Forever.',
                 ctaPrimaryText: 'Our Activities',
                 ctaPrimaryLink: '/actividades',
@@ -255,7 +255,7 @@ export async function GET() {
           },
           {
             blockType: 'help',
-            subtitle: 'About us',
+            subtitle: 'About Us',
             title: 'Helping Each Other Can Make <span>World</span> Better',
             description: 'We believe that by working together, we can create opportunities for growth and build stronger communities. Our programs focus on education, nutrition, and healthcare.',
             features: [
@@ -343,7 +343,7 @@ export async function GET() {
           blockType: 'heroSlider',
           slides: heroBlock.slides?.map((s: any, i: number) => ({
             id: s.id,
-            subtitle: ['Bienvenidos a nuestra Fundación', 'Haciendo la diferencia'][i],
+            subtitle: ['Bienvenidos A Nuestra Fundación', 'Haciendo La Diferencia'][i],
             title: ['Brindando Ayuda <br>A Quienes Más Lo <span>Necesitan</span>.', 'Juntos Podemos <br>Cambiar <span>Vidas</span> Para Siempre.'][i],
             ctaPrimaryText: ['Descubre Más', 'Nuestras Actividades'][i],
             ctaPrimaryLink: s.ctaPrimaryLink,
@@ -381,7 +381,7 @@ export async function GET() {
         esLayout.push({
           id: helpBlock.id,
           blockType: 'help',
-          subtitle: 'Sobre nosotros',
+          subtitle: 'Sobre Nosotros',
           title: 'Ayudarnos Mutuamente Puede Hacer El <span>Mundo</span> Mejor',
           description: 'Creemos que trabajando juntos podemos crear oportunidades de crecimiento y construir comunidades más fuertes. Nuestros programas se enfocan en educación, nutrición y salud.',
           features: helpBlock.features?.map((f: any, i: number) => ({

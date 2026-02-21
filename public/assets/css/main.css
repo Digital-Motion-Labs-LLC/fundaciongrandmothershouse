@@ -1148,7 +1148,7 @@ div {
 }
 
 .title-animation {
-  text-transform: lowercase !important;
+  /* text-transform: lowercase !important; */
 }
 .title-animation > div > div:nth-child(1) {
   text-transform: uppercase;
@@ -2719,7 +2719,7 @@ div {
 }
 .header .navbar-logo img {
   max-width: 160px;
-  height: 36px;
+  height: 71px;
 }
 .header .navbar__menu {
   -webkit-box-flex: 1;

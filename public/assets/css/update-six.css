@@ -965,7 +965,7 @@ div {
 }
 
 .title-animation {
-  text-transform: lowercase !important;
+  /* text-transform: lowercase !important; */
 }
 .title-animation > div > div:nth-child(1) {
   text-transform: uppercase;
@@ -2172,7 +2172,7 @@ div {
 }
 .header .navbar-logo img {
   max-width: 160px;
-  height: 36px;
+  height: 100px;
 }
 .header .navbar__menu {
   flex-grow: 1;

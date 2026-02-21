@@ -12,7 +12,8 @@ export function Header({ header, locale }: { header: any; locale: string }) {
               <nav className="navbar p-0">
                 <div className="navbar-logo">
                   <Link href="/">
-                    <img src={logoUrl} alt="Fundación Grandmother's House" style={{ maxHeight: '60px' }} />
+                    <img src={logoUrl} alt="Fundación Grandmother's House" style={{  }} /> 
+                    {/* maxHeight: '60px' */}
                   </Link>
                 </div>
                 <div className="navbar__menu-wrapper">
