@@ -2718,7 +2718,7 @@ div {
       flex-wrap: wrap;
 }
 .header .navbar-logo img {
-  max-width: 160px;
+  /* max-width: 160px; */
   height: 71px;
 }
 .header .navbar__menu {
