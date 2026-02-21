@@ -1,7 +1,8 @@
 import Link from 'next/link'
+import { placeholderImages } from '@/lib/placeholder-images'
 
-export function BlogCard({ article, locale }: { article: any; locale: string }) {
-  const imageUrl = article.image?.url || '/assets/images/blog/one.png'
+export function BlogCard({ article, index = 0, locale }: { article: any; index?: number; locale: string }) {
+  const imageUrl = article.image?.url || placeholderImages.blog(index)
   const date = article.date ? new Date(article.date).toLocaleDateString(locale === 'es' ? 'es-ES' : 'en-US', { year: 'numeric', month: 'long', day: 'numeric' }) : ''
 
   return (

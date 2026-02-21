@@ -1,9 +1,12 @@
 import Link from 'next/link'
+import { placeholderImages } from '@/lib/placeholder-images'
 
 export function HelpSection({ data }: { data: any }) {
   if (!data) return null
 
-  const imageUrl = data.image?.url || '/assets/images/help/thumb-lg.png'
+  const imageUrl = data.image?.url || placeholderImages.help.thumbLg
+  const thumbTopUrl = data.imageTop?.url || placeholderImages.help.thumbTop
+  const thumbBottomUrl = data.imageBottom?.url || placeholderImages.help.thumbBottom
 
   return (
     <section className="help">
@@ -13,7 +16,7 @@ export function HelpSection({ data }: { data: any }) {
             <div className="help__thumb">
               <div className="help__thumb-inner">
                 <div className="thumb-top thumb">
-                  <img src="/assets/images/help/thumb-top.png" alt="Image" />
+                  <img src={thumbTopUrl} alt="Image" />
                 </div>
                 <div className="thumb-lg thumb" data-aos="fade-left" data-aos-duration="1000">
                   <img src={imageUrl} alt="Image" />
@@ -26,7 +29,7 @@ export function HelpSection({ data }: { data: any }) {
                   )}
                 </div>
                 <div className="thumb thumb-bottom">
-                  <img src="/assets/images/help/thumb-bottom.png" alt="Image" />
+                  <img src={thumbBottomUrl} alt="Image" />
                 </div>
                 <div className="line">
                   <img src="/assets/images/help/line.png" alt="Image" />

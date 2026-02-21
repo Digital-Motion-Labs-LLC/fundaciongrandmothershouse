@@ -6,7 +6,7 @@ import { ContactForm } from '@/components/ContactForm'
 
 export default async function ContactPage() {
   const cookieStore = await cookies()
-  const locale = (cookieStore.get('locale')?.value || 'en') as 'en' | 'es'
+  const locale = (cookieStore.get('locale')?.value || 'es') as 'en' | 'es'
   const payload = await getPayload({ config: configPromise })
 
   const footer = await payload.findGlobal({ slug: 'footer', locale })

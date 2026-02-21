@@ -53,7 +53,7 @@ export function TestimonialSlider({ data }: { data: any }) {
                         </div>
                         <div className="author-info">
                           <div className="author-thumb">
-                            <img src={t.authorImage?.url || '/assets/images/author.png'} alt={t.authorName} />
+                            <img src={t.authorImage?.url || `https://images.pexels.com/photos/${[1239291,2379004,1181690,3778603][i % 4]}/pexels-photo-${[1239291,2379004,1181690,3778603][i % 4]}.jpeg?auto=compress&cs=tinysrgb&w=150&h=150&dpr=1`} alt={t.authorName} />
                           </div>
                           <div className="author-content">
                             <h6>{t.authorName}</h6>

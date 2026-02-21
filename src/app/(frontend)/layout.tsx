@@ -29,7 +29,7 @@ const caveat = Caveat({
 
 export default async function FrontendLayout({ children }: { children: React.ReactNode }) {
   const cookieStore = await cookies()
-  const locale = (cookieStore.get('locale')?.value || 'en') as 'en' | 'es'
+  const locale = (cookieStore.get('locale')?.value || 'es') as 'en' | 'es'
 
   const payload = await getPayload({ config: configPromise })
 
@@ -48,7 +48,7 @@ export default async function FrontendLayout({ children }: { children: React.Rea
         <Header header={header} locale={locale} />
         <MobileMenu header={header} locale={locale} />
         {children}
-        <Footer footer={footer} />
+        <Footer footer={footer} locale={locale} />
         <DonationModal settings={donationSettings} />
         <AosInit />
       </div>

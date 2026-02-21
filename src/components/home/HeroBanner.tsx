@@ -5,6 +5,7 @@ import 'swiper/css'
 import 'swiper/css/navigation'
 import 'swiper/css/effect-fade'
 import Link from 'next/link'
+import { placeholderImages } from '@/lib/placeholder-images'
 
 export function HeroBanner({ data }: { data: any }) {
   if (!data?.slides?.length) return null
@@ -20,7 +21,7 @@ export function HeroBanner({ data }: { data: any }) {
           effect="fade"
         >
           {data.slides.map((slide: any, i: number) => {
-            const bgUrl = slide.image?.url || (i % 2 === 0 ? '/assets/images/banner/banner-two-bg.png' : '/assets/images/banner/banner-one-bg.png')
+            const bgUrl = slide.image?.url || placeholderImages.hero(i)
             return (
               <SwiperSlide key={i}>
                 <div className="banner-two__slider-single">

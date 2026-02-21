@@ -10,7 +10,7 @@ import Link from 'next/link'
 
 export default async function AboutPage() {
   const cookieStore = await cookies()
-  const locale = (cookieStore.get('locale')?.value || 'en') as 'en' | 'es'
+  const locale = (cookieStore.get('locale')?.value || 'es') as 'en' | 'es'
   const payload = await getPayload({ config: configPromise })
 
   const page = await payload.find({
@@ -33,7 +33,7 @@ export default async function AboutPage() {
           case 'testimonial':
             return <TestimonialSlider key={i} data={block} />
           case 'textSection':
-            return <TextSection key={i} data={block} />
+            return <TextSection key={i} data={block} index={i} />
           case 'ctaBanner':
             return <CtaBanner key={i} data={block} />
           case 'richContent':

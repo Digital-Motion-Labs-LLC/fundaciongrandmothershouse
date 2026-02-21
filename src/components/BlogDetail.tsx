@@ -1,5 +1,7 @@
+import { placeholderImages } from '@/lib/placeholder-images'
+
 export function BlogDetail({ article }: { article: any }) {
-  const imageUrl = article.image?.url || '/assets/images/blog/one.png'
+  const imageUrl = article.image?.url || placeholderImages.blog(0)
   const date = article.date ? new Date(article.date).toLocaleDateString() : ''
 
   return (

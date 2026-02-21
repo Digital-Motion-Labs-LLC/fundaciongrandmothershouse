@@ -7,7 +7,7 @@ export function middleware(request: NextRequest) {
   // Set locale cookie if not present
   if (!request.cookies.get('locale')) {
     const acceptLanguage = request.headers.get('accept-language') || ''
-    const locale = acceptLanguage.startsWith('es') ? 'es' : 'en'
+    const locale = acceptLanguage.startsWith('en') ? 'en' : 'es'
     response.cookies.set('locale', locale, { path: '/', maxAge: 31536000 })
   }
 

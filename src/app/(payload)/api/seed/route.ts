@@ -25,13 +25,12 @@ export async function GET() {
     }
 
     // ─── 2. Header global (EN first, then ES labels) ──────────────────────────
-    // First set EN with the full structure
     await payload.updateGlobal({
       slug: 'header',
       data: {
         email: 'info@grandmothershouse.org',
         phone: '+1 (809) 555-0123',
-        donateButtonText: 'Donate Now',
+        donateButtonText: 'Donate now',
         socialLinks: [
           { platform: 'facebook', url: 'https://facebook.com/grandmothershouse', label: 'Facebook' },
           { platform: 'instagram', url: 'https://instagram.com/grandmothershouse', label: 'Instagram' },
@@ -39,7 +38,7 @@ export async function GET() {
         navigation: [
           { label: 'Home', link: '/' },
           {
-            label: 'About Us',
+            label: 'About us',
             link: '/quienes-somos',
             children: [
               { label: 'Mission', link: '/quienes-somos/mision' },
@@ -60,7 +59,7 @@ export async function GET() {
 
     // Update ES locale using the same IDs so we don't replace the array
     if (navItems?.length === 5) {
-      const esLabels = ['Inicio', 'Quiénes Somos', 'Actividades', 'Noticias', 'Contacto']
+      const esLabels = ['Inicio', 'Quiénes somos', 'Actividades', 'Noticias', 'Contacto']
       const esChildLabels = [[], ['Misión', 'Visión'], [], [], []]
 
       const esNav = navItems.map((item: any, i: number) => {
@@ -80,7 +79,7 @@ export async function GET() {
       await payload.updateGlobal({
         slug: 'header',
         data: {
-          donateButtonText: 'Donar Ahora',
+          donateButtonText: 'Donar ahora',
           navigation: esNav,
         },
         locale: 'es',
@@ -88,27 +87,30 @@ export async function GET() {
     }
     results.push('Header seeded (EN + ES).')
 
-    // ─── 3. Footer global (EN first, then ES labels) ──────────────────────────
+    // ─── 4. Footer global (EN first, then ES labels) ──────────────────────────
     await payload.updateGlobal({
       slug: 'footer',
       data: {
-        description: "Fundación Grandmother's House is dedicated to making a difference in the lives of those who need it most through education, nutrition, and community support.",
+        quickLinksTitle: 'Quick links',
+        servicesTitle: 'Our services',
+        contactTitle: 'Get in touch',
+        description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Fundación Grandmother's House se dedica a crear un impacto positivo.",
         socialLinks: [
           { platform: 'facebook', url: 'https://facebook.com/grandmothershouse', label: 'Facebook' },
           { platform: 'instagram', url: 'https://instagram.com/grandmothershouse', label: 'Instagram' },
         ],
         quickLinks: [
-          { label: 'About Us', link: '/quienes-somos' },
-          { label: 'Our News', link: '/noticias' },
+          { label: 'About us', link: '/quienes-somos' },
+          { label: 'Our news', link: '/noticias' },
           { label: 'Activities', link: '/actividades' },
           { label: 'Contact', link: '/contacto' },
           { label: 'Donate', link: '#' },
         ],
         services: [
-          { label: 'Education Support', link: '/actividades' },
-          { label: 'Nutrition Programs', link: '/actividades' },
-          { label: 'Healthcare Access', link: '/actividades' },
-          { label: 'Community Programs', link: '/actividades' },
+          { label: 'Education support', link: '/actividades' },
+          { label: 'Nutrition programs', link: '/actividades' },
+          { label: 'Healthcare access', link: '/actividades' },
+          { label: 'Community programs', link: '/actividades' },
           { label: 'Volunteer', link: '/contacto' },
         ],
         contactInfo: {
@@ -117,10 +119,10 @@ export async function GET() {
           phone: '+1 (809) 555-0123',
           email: 'info@grandmothershouse.org',
         },
-        copyrightText: "Copyright © 2025 Fundación Grandmother's House. All rights reserved.",
+        copyrightText: "Copyright © 2026 Fundación Grandmother's House. All rights reserved.",
         legalLinks: [
-          { label: 'Terms & Conditions', link: '#' },
-          { label: 'Privacy Policy', link: '#' },
+          { label: 'Terms and conditions', link: '/terminos-y-condiciones' },
+          { label: 'Privacy policy', link: '/terminos-y-condiciones' },
         ],
       },
       locale: 'en',
@@ -132,30 +134,33 @@ export async function GET() {
     const svcItems = savedFooter.services as any[]
     const llItems = savedFooter.legalLinks as any[]
 
-    const esQL = ['Quiénes Somos', 'Noticias', 'Actividades', 'Contacto', 'Donar']
-    const esSvc = ['Apoyo Educativo', 'Programas de Nutrición', 'Acceso a Salud', 'Programas Comunitarios', 'Voluntariado']
-    const esLL = ['Términos y Condiciones', 'Política de Privacidad']
+    const esQL = ['Quiénes somos', 'Noticias', 'Actividades', 'Contacto', 'Donar']
+    const esSvc = ['Apoyo educativo', 'Programas de nutrición', 'Acceso a salud', 'Programas comunitarios', 'Voluntariado']
+    const esLL = ['Términos y condiciones', 'Política de privacidad']
 
     await payload.updateGlobal({
       slug: 'footer',
       data: {
-        description: 'La Fundación Grandmother\'s House se dedica a hacer una diferencia en la vida de quienes más lo necesitan a través de educación, nutrición y apoyo comunitario.',
+        quickLinksTitle: 'Enlaces rápidos',
+        servicesTitle: 'Nuestros servicios',
+        contactTitle: 'Contáctanos',
+        description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Fundación Grandmother\'s House se dedica a crear un impacto positivo.',
         quickLinks: qlItems?.map((item: any, i: number) => ({ id: item.id, label: esQL[i], link: item.link })),
         services: svcItems?.map((item: any, i: number) => ({ id: item.id, label: esSvc[i], link: item.link })),
         contactInfo: { address: 'Santo Domingo, República Dominicana' },
-        copyrightText: "Copyright © 2025 Fundación Grandmother's House. Todos los derechos reservados.",
+        copyrightText: "Copyright © 2026 Fundación Grandmother's House. Todos los derechos reservados.",
         legalLinks: llItems?.map((item: any, i: number) => ({ id: item.id, label: esLL[i], link: item.link })),
       },
       locale: 'es',
     })
     results.push('Footer seeded (EN + ES).')
 
-    // ─── 4. Donation Settings (EN + ES) ──────────────────────
+    // ─── 5. Donation Settings (EN + ES) ──────────────────────
     await payload.updateGlobal({
       slug: 'donation-settings',
       data: {
-        modalTitle: 'Make a Donation',
-        modalDescription: 'Choose your preferred donation method below. Every contribution makes a difference in the lives of those who need it most.',
+        modalTitle: 'Make a donation',
+        modalDescription: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Choose your preferred donation method below. Every contribution makes a difference.',
         paypal: { enabled: true, link: 'https://paypal.me/grandmothershouse' },
         bankTransfer: {
           enabled: true,
@@ -170,14 +175,14 @@ export async function GET() {
     await payload.updateGlobal({
       slug: 'donation-settings',
       data: {
-        modalTitle: 'Hacer una Donación',
-        modalDescription: 'Elige tu método de donación preferido. Cada contribución marca la diferencia en la vida de quienes más lo necesitan.',
+        modalTitle: 'Hacer una donación',
+        modalDescription: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Elige tu método de donación preferido. Cada contribución marca la diferencia.',
       },
       locale: 'es',
     })
     results.push('Donation Settings seeded (EN + ES).')
 
-    // ─── 5. Site Settings ─────────────────────────────────────
+    // ─── 6. Site Settings ─────────────────────────────────────
     await payload.updateGlobal({
       slug: 'site-settings',
       data: {
@@ -191,7 +196,7 @@ export async function GET() {
     })
     results.push('Site Settings seeded.')
 
-    // ─── 6. Home page with blocks ─────────────────────────────
+    // ─── 7. Home page with blocks ─────────────────────────────
     // Delete existing home page first
     const existingHome = await payload.find({
       collection: 'pages',
@@ -213,61 +218,61 @@ export async function GET() {
             blockType: 'heroSlider',
             slides: [
               {
-                subtitle: 'Welcome To Our Foundation',
-                title: 'Giving Help <br>To Those Who <span>Need</span> It.',
-                ctaPrimaryText: 'Discover More',
+                subtitle: 'Welcome to our foundation',
+                title: 'Giving help <br>to those who <span>need</span> it.',
+                ctaPrimaryText: 'Discover more',
                 ctaPrimaryLink: '/quienes-somos',
-                ctaSecondaryText: 'Contact Us',
+                ctaSecondaryText: 'Contact us',
                 ctaSecondaryLink: '/contacto',
               },
               {
-                subtitle: 'Making A Difference',
-                title: 'Together We Can <br>Change <span>Lives</span> Forever.',
-                ctaPrimaryText: 'Our Activities',
+                subtitle: 'Making a difference',
+                title: 'Together we can <br>change <span>lives</span> forever.',
+                ctaPrimaryText: 'Our activities',
                 ctaPrimaryLink: '/actividades',
-                ctaSecondaryText: 'Donate Now',
+                ctaSecondaryText: 'Donate now',
                 ctaSecondaryLink: '#',
               },
             ],
           },
           {
             blockType: 'difference',
-            subtitle: 'Our Programs',
-            title: 'Charity With Difference',
-            description: 'We provide education, nutrition, and healthcare programs to those who need it most. Join our mission to create lasting change.',
+            subtitle: 'Our programs',
+            title: 'Charity with difference',
+            description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation.',
             items: [
               {
                 icon: 'icon-education',
-                title: 'Education Support',
-                description: 'Providing quality education and school supplies to children in underserved communities.',
+                title: 'Education support',
+                description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut enim ad minim veniam, quis nostrud exercitation ullamco.',
               },
               {
                 icon: 'icon-food',
-                title: 'Nutrition Programs',
-                description: 'Ensuring families have access to healthy meals and nutritional education.',
+                title: 'Nutrition programs',
+                description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum.',
               },
               {
                 icon: 'icon-health',
-                title: 'Healthcare Access',
-                description: 'Connecting communities with medical services, preventive care, and health education.',
+                title: 'Healthcare access',
+                description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia.',
               },
             ],
           },
           {
             blockType: 'help',
-            subtitle: 'About Us',
-            title: 'Helping Each Other Can Make <span>World</span> Better',
-            description: 'We believe that by working together, we can create opportunities for growth and build stronger communities. Our programs focus on education, nutrition, and healthcare.',
+            subtitle: 'About us',
+            title: 'Helping each other can make <span>world</span> better',
+            description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris.',
             features: [
               {
                 icon: 'icon-make-donation',
-                title: 'Start Helping Today',
-                description: 'Join our cause and help us raise awareness about the needs in our communities.',
+                title: 'Start helping today',
+                description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut enim ad minim veniam.',
               },
               {
                 icon: 'icon-support-heart',
-                title: 'Make Donations',
-                description: 'Your generous contributions support our programs and change lives.',
+                title: 'Make donations',
+                description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis aute irure dolor in reprehenderit.',
               },
             ],
             checkmarks: [
@@ -275,36 +280,36 @@ export async function GET() {
               { text: 'We give children the gift of education and hope' },
               { text: 'Empowering families through sustainable support' },
             ],
-            ctaText: 'More About Us',
+            ctaText: 'More about us',
             ctaLink: '/quienes-somos',
             phone: '+1 (809) 555-0123',
           },
           {
             blockType: 'testimonial',
             subtitle: 'Testimonials',
-            title: 'What People <span>Say</span> About Us',
+            title: 'What people <span>say</span> about us',
             testimonials: [
               {
                 rating: 5,
-                quote: 'This foundation has truly changed lives in our community. Their dedication to education and helping families is remarkable and inspiring.',
+                quote: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam.',
                 authorName: 'María García',
-                authorTitle: 'Community Member',
+                authorTitle: 'Community member',
               },
               {
                 rating: 5,
-                quote: 'The programs they offer are making a real difference for children and families. I am proud to be part of this incredible organization.',
+                quote: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla.',
                 authorName: 'Juan Pérez',
                 authorTitle: 'Volunteer',
               },
               {
                 rating: 5,
-                quote: 'I am grateful for the support and opportunities this organization has provided to my family. They truly care about every person they serve.',
+                quote: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit.',
                 authorName: 'Ana Rodríguez',
                 authorTitle: 'Beneficiary',
               },
               {
                 rating: 5,
-                quote: 'Their commitment to transparency and impact is what sets them apart. Every dollar donated goes directly to making a difference.',
+                quote: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip.',
                 authorName: 'Carlos Martínez',
                 authorTitle: 'Donor',
               },
@@ -312,8 +317,8 @@ export async function GET() {
           },
           {
             blockType: 'blogPreview',
-            subtitle: 'Latest Updates',
-            title: 'Our Latest <span>News</span> & Articles',
+            subtitle: 'Latest updates',
+            title: 'Our latest <span>news</span> & articles',
           },
         ],
       },
@@ -343,11 +348,11 @@ export async function GET() {
           blockType: 'heroSlider',
           slides: heroBlock.slides?.map((s: any, i: number) => ({
             id: s.id,
-            subtitle: ['Bienvenidos A Nuestra Fundación', 'Haciendo La Diferencia'][i],
-            title: ['Brindando Ayuda <br>A Quienes Más Lo <span>Necesitan</span>.', 'Juntos Podemos <br>Cambiar <span>Vidas</span> Para Siempre.'][i],
-            ctaPrimaryText: ['Descubre Más', 'Nuestras Actividades'][i],
+            subtitle: ['Bienvenidos a nuestra fundación', 'Haciendo la diferencia'][i],
+            title: ['Brindando ayuda <br>a quienes más lo <span>necesitan</span>.', 'Juntos podemos <br>cambiar <span>vidas</span> para siempre.'][i],
+            ctaPrimaryText: ['Descubre más', 'Nuestras actividades'][i],
             ctaPrimaryLink: s.ctaPrimaryLink,
-            ctaSecondaryText: ['Contáctanos', 'Donar Ahora'][i],
+            ctaSecondaryText: ['Contáctanos', 'Donar ahora'][i],
             ctaSecondaryLink: s.ctaSecondaryLink,
           })),
         })
@@ -355,18 +360,18 @@ export async function GET() {
 
       // Difference ES
       if (diffBlock) {
-        const esDiffItems = ['Apoyo Educativo', 'Programas de Nutrición', 'Acceso a Salud']
+        const esDiffItems = ['Apoyo educativo', 'Programas de nutrición', 'Acceso a salud']
         const esDiffDescs = [
-          'Brindando educación de calidad y útiles escolares a niños en comunidades vulnerables.',
-          'Asegurando que las familias tengan acceso a comidas saludables y educación nutricional.',
-          'Conectando comunidades con servicios médicos, cuidado preventivo y educación en salud.',
+          'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut enim ad minim veniam, quis nostrud exercitation ullamco.',
+          'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum.',
+          'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia.',
         ]
         esLayout.push({
           id: diffBlock.id,
           blockType: 'difference',
-          subtitle: 'Nuestros Programas',
-          title: 'Caridad Con Diferencia',
-          description: 'Ofrecemos programas de educación, nutrición y salud para quienes más lo necesitan. Únete a nuestra misión para crear un cambio duradero.',
+          subtitle: 'Nuestros programas',
+          title: 'Caridad con diferencia',
+          description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation.',
           items: diffBlock.items?.map((item: any, i: number) => ({
             id: item.id,
             icon: item.icon,
@@ -381,16 +386,16 @@ export async function GET() {
         esLayout.push({
           id: helpBlock.id,
           blockType: 'help',
-          subtitle: 'Sobre Nosotros',
-          title: 'Ayudarnos Mutuamente Puede Hacer El <span>Mundo</span> Mejor',
-          description: 'Creemos que trabajando juntos podemos crear oportunidades de crecimiento y construir comunidades más fuertes. Nuestros programas se enfocan en educación, nutrición y salud.',
+          subtitle: 'Sobre nosotros',
+          title: 'Ayudarnos mutuamente puede hacer el <span>mundo</span> mejor',
+          description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris.',
           features: helpBlock.features?.map((f: any, i: number) => ({
             id: f.id,
             icon: f.icon,
-            title: ['Comienza a Ayudar Hoy', 'Haz una Donación'][i],
+            title: ['Comienza a ayudar hoy', 'Haz una donación'][i],
             description: [
-              'Únete a nuestra causa y ayúdanos a concientizar sobre las necesidades en nuestras comunidades.',
-              'Tus generosas contribuciones apoyan nuestros programas y cambian vidas.',
+              'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut enim ad minim veniam.',
+              'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis aute irure dolor in reprehenderit.',
             ][i],
           })),
           checkmarks: helpBlock.checkmarks?.map((c: any, i: number) => ({
@@ -401,7 +406,7 @@ export async function GET() {
               'Empoderando familias a través de apoyo sostenible',
             ][i],
           })),
-          ctaText: 'Más Sobre Nosotros',
+          ctaText: 'Más sobre nosotros',
           ctaLink: helpBlock.ctaLink,
           phone: helpBlock.phone,
         })
@@ -410,17 +415,17 @@ export async function GET() {
       // Testimonial ES
       if (testBlock) {
         const esQuotes = [
-          'Esta fundación ha cambiado verdaderamente vidas en nuestra comunidad. Su dedicación a la educación y ayuda a las familias es notable e inspiradora.',
-          'Los programas que ofrecen están haciendo una diferencia real para niños y familias. Me enorgullece ser parte de esta increíble organización.',
-          'Estoy agradecida por el apoyo y las oportunidades que esta organización ha brindado a mi familia. Realmente se preocupan por cada persona que atienden.',
-          'Su compromiso con la transparencia y el impacto es lo que los distingue. Cada dólar donado va directamente a hacer la diferencia.',
+          'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam.',
+          'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla.',
+          'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit.',
+          'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip.',
         ]
-        const esTitles = ['Miembro de la Comunidad', 'Voluntario', 'Beneficiaria', 'Donante']
+        const esTitles = ['Miembro de la comunidad', 'Voluntario', 'Beneficiaria', 'Donante']
         esLayout.push({
           id: testBlock.id,
           blockType: 'testimonial',
           subtitle: 'Testimonios',
-          title: 'Lo Que La Gente <span>Dice</span> Sobre Nosotros',
+          title: 'Lo que la gente <span>dice</span> sobre nosotros',
           testimonials: testBlock.testimonials?.map((t: any, i: number) => ({
             id: t.id,
             rating: t.rating,
@@ -436,8 +441,8 @@ export async function GET() {
         esLayout.push({
           id: blogBlock.id,
           blockType: 'blogPreview',
-          subtitle: 'Últimas Actualizaciones',
-          title: 'Nuestras Últimas <span>Noticias</span> y Artículos',
+          subtitle: 'Últimas actualizaciones',
+          title: 'Nuestras últimas <span>noticias</span> y artículos',
         })
       }
 
@@ -453,7 +458,7 @@ export async function GET() {
     }
     results.push('Home page seeded with all blocks (EN + ES).')
 
-    // ─── 7. News articles (EN + ES) ─────────────────────────────
+    // ─── 8. News articles (EN + ES) ─────────────────────────────
     // Delete existing news first for clean re-seed
     const existingNews = await payload.find({ collection: 'news', limit: 10 })
     for (const doc of existingNews.docs) {
@@ -462,31 +467,31 @@ export async function GET() {
 
     const newsEN = [
       {
-        title: 'Education Program Reaches 500 Children This Year',
+        title: 'Education program reaches 500 children this year',
         slug: 'education-program-500-children',
         date: '2025-01-15',
-        excerpt: 'Our education support program has reached a milestone of 500 children enrolled this year, providing them with school supplies, tutoring, and mentorship.',
+        excerpt: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam.',
         published: true,
       },
       {
-        title: 'Community Health Fair a Great Success',
+        title: 'Community health fair a great success',
         slug: 'community-health-fair-success',
         date: '2025-01-08',
-        excerpt: 'Over 200 families attended our annual Community Health Fair, receiving free health screenings, nutrition counseling, and wellness resources.',
+        excerpt: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.',
         published: true,
       },
       {
-        title: 'New Partnership with Local Schools Announced',
+        title: 'New partnership with local schools announced',
         slug: 'partnership-local-schools',
         date: '2024-12-20',
-        excerpt: 'We are excited to announce new partnerships with three local schools to expand our after-school tutoring and mentorship programs.',
+        excerpt: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
         published: true,
       },
     ]
     const newsES = [
-      { title: 'Programa Educativo Alcanza 500 Niños Este Año', excerpt: 'Nuestro programa de apoyo educativo ha alcanzado la meta de 500 niños inscritos este año, brindándoles útiles escolares, tutorías y mentoría.' },
-      { title: 'Feria de Salud Comunitaria un Gran Éxito', excerpt: 'Más de 200 familias asistieron a nuestra Feria de Salud Comunitaria anual, recibiendo exámenes de salud gratuitos, asesoría nutricional y recursos de bienestar.' },
-      { title: 'Anuncian Nueva Alianza con Escuelas Locales', excerpt: 'Estamos emocionados de anunciar nuevas alianzas con tres escuelas locales para expandir nuestros programas de tutoría y mentoría después de clases.' },
+      { title: 'Programa educativo alcanza 500 niños este año', excerpt: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam.' },
+      { title: 'Feria de salud comunitaria un gran éxito', excerpt: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.' },
+      { title: 'Anuncian nueva alianza con escuelas locales', excerpt: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.' },
     ]
 
     for (let i = 0; i < newsEN.length; i++) {
@@ -500,21 +505,21 @@ export async function GET() {
     }
     results.push('3 news articles seeded (EN + ES).')
 
-    // ─── 8. Activities (EN + ES) ────────────────────────────────
+    // ─── 9. Activities (EN + ES) ────────────────────────────────
     const existingActivities = await payload.find({ collection: 'activities', limit: 10 })
     for (const doc of existingActivities.docs) {
       await payload.delete({ collection: 'activities', id: doc.id })
     }
 
     const activitiesEN = [
-      { name: 'After-School Tutoring Program', slug: 'after-school-tutoring', date: '2025-02-01', location: 'Santo Domingo Community Center', published: true },
-      { name: 'Monthly Nutrition Workshop', slug: 'monthly-nutrition-workshop', date: '2025-02-15', location: "Grandmother's House Main Hall", published: true },
-      { name: 'Annual Fundraising Gala', slug: 'annual-fundraising-gala', date: '2025-03-20', location: 'Hotel Santo Domingo', published: true },
+      { name: 'After-school tutoring program', slug: 'after-school-tutoring', date: '2025-02-01', location: 'Santo Domingo Community Center', published: true },
+      { name: 'Monthly nutrition workshop', slug: 'monthly-nutrition-workshop', date: '2025-02-15', location: "Grandmother's House Main Hall", published: true },
+      { name: 'Annual fundraising gala', slug: 'annual-fundraising-gala', date: '2025-03-20', location: 'Hotel Santo Domingo', published: true },
     ]
     const activitiesES = [
-      { name: 'Programa de Tutoría Después de Clases' },
-      { name: 'Taller de Nutrición Mensual' },
-      { name: 'Gala Anual de Recaudación de Fondos' },
+      { name: 'Programa de tutoría después de clases' },
+      { name: 'Taller de nutrición mensual' },
+      { name: 'Gala anual de recaudación de fondos' },
     ]
 
     for (let i = 0; i < activitiesEN.length; i++) {
@@ -528,47 +533,47 @@ export async function GET() {
     }
     results.push('3 activities seeded (EN + ES).')
 
-    // ─── 9. About, Mission, Vision pages ─────────────────────
+    // ─── 10. About, Mission, Vision pages ─────────────────────
     const innerPages = [
       {
         slug: 'about',
-        enTitle: 'About Us',
-        esTitle: 'Quiénes Somos',
+        enTitle: 'About us',
+        esTitle: 'Quiénes somos',
         enBlocks: [
           {
             blockType: 'textSection',
-            subtitle: 'Who We Are',
+            subtitle: 'Who we are',
             heading: "About Fundación <span>Grandmother's House</span>",
-            body: "Fundación Grandmother's House is a non-profit organization dedicated to making a lasting difference in the lives of those who need it most. Founded with the vision of building stronger communities, we focus on three core pillars: education, nutrition, and healthcare.\n\nOur programs serve hundreds of families across the Dominican Republic, providing children with school supplies and tutoring, families with access to nutritious meals, and communities with preventive healthcare services.\n\nWe believe that every person deserves the opportunity to thrive, and we work tirelessly to create that opportunity through compassion, dedication, and community-driven programs.",
+            body: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.\n\nDuis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.\n\nSed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.",
             imagePosition: 'left',
-            ctaText: 'Contact Us',
+            ctaText: 'Contact us',
             ctaLink: '/contacto',
           },
           {
             blockType: 'ctaBanner',
-            title: 'Together We Can Make A <span>Difference</span>',
-            description: 'Join us in our mission to empower communities and transform lives. Whether through donations, volunteering, or spreading awareness, every action counts.',
-            primaryButtonText: 'Discover More',
+            title: 'Together we can make a <span>difference</span>',
+            description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
+            primaryButtonText: 'Discover more',
             primaryButtonLink: '/actividades',
-            secondaryButtonText: 'Contact Us',
+            secondaryButtonText: 'Contact us',
             secondaryButtonLink: '/contacto',
           },
         ],
         esBlocks: [
           {
             blockType: 'textSection',
-            subtitle: 'Quiénes Somos',
+            subtitle: 'Quiénes somos',
             heading: 'Sobre Fundación <span>Grandmother\'s House</span>',
-            body: "La Fundación Grandmother's House es una organización sin fines de lucro dedicada a hacer una diferencia duradera en la vida de quienes más lo necesitan. Fundada con la visión de construir comunidades más fuertes, nos enfocamos en tres pilares fundamentales: educación, nutrición y salud.\n\nNuestros programas atienden a cientos de familias en toda la República Dominicana, brindando a los niños útiles escolares y tutorías, a las familias acceso a comidas nutritivas, y a las comunidades servicios de salud preventiva.\n\nCreemos que cada persona merece la oportunidad de prosperar, y trabajamos incansablemente para crear esa oportunidad a través de la compasión, la dedicación y los programas comunitarios.",
+            body: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.\n\nDuis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.\n\nSed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.",
             imagePosition: 'left',
             ctaText: 'Contáctanos',
             ctaLink: '/contacto',
           },
           {
             blockType: 'ctaBanner',
-            title: 'Juntos Podemos Hacer La <span>Diferencia</span>',
-            description: 'Únete a nuestra misión de empoderar comunidades y transformar vidas. Ya sea a través de donaciones, voluntariado o concientización, cada acción cuenta.',
-            primaryButtonText: 'Descubre Más',
+            title: 'Juntos podemos hacer la <span>diferencia</span>',
+            description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
+            primaryButtonText: 'Descubre más',
             primaryButtonLink: '/actividades',
             secondaryButtonText: 'Contáctanos',
             secondaryButtonLink: '/contacto',
@@ -582,18 +587,18 @@ export async function GET() {
         enBlocks: [
           {
             blockType: 'textSection',
-            subtitle: 'Our Mission',
-            heading: 'Our <span>Mission</span>',
-            body: "Our mission is to empower underserved communities in the Dominican Republic by providing access to quality education, proper nutrition, and essential healthcare services.\n\nWe are committed to creating sustainable programs that address the root causes of poverty and inequality, giving every individual the tools they need to build a better future for themselves and their families.\n\nThrough collaboration with local leaders, schools, and healthcare providers, we ensure our programs are deeply rooted in the communities we serve and responsive to their unique needs.",
+            subtitle: 'Our mission',
+            heading: 'Our <span>mission</span>',
+            body: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.\n\nDuis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.\n\nNemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt.",
             imagePosition: 'none',
           },
         ],
         esBlocks: [
           {
             blockType: 'textSection',
-            subtitle: 'Nuestra Misión',
-            heading: 'Nuestra <span>Misión</span>',
-            body: "Nuestra misión es empoderar a las comunidades vulnerables de la República Dominicana brindando acceso a educación de calidad, nutrición adecuada y servicios de salud esenciales.\n\nEstamos comprometidos con la creación de programas sostenibles que aborden las causas fundamentales de la pobreza y la desigualdad, dando a cada individuo las herramientas que necesita para construir un mejor futuro para sí mismo y su familia.\n\nA través de la colaboración con líderes locales, escuelas y proveedores de salud, nos aseguramos de que nuestros programas estén profundamente arraigados en las comunidades que servimos y respondan a sus necesidades únicas.",
+            subtitle: 'Nuestra misión',
+            heading: 'Nuestra <span>misión</span>',
+            body: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.\n\nDuis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.\n\nNemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt.",
             imagePosition: 'none',
           },
         ],
@@ -605,18 +610,41 @@ export async function GET() {
         enBlocks: [
           {
             blockType: 'textSection',
-            subtitle: 'Our Vision',
-            heading: 'Our <span>Vision</span>',
-            body: "We envision a world where every child has access to quality education, every family can put nutritious food on the table, and every community has the healthcare resources it needs to thrive.\n\nFundación Grandmother's House aspires to be a catalyst for lasting social change in the Dominican Republic and beyond, building bridges between those who want to help and those who need support.\n\nOur vision is a future where compassion drives action, where communities are self-sustaining, and where the cycle of poverty is broken through education, health, and empowerment.",
+            subtitle: 'Our vision',
+            heading: 'Our <span>vision</span>',
+            body: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.\n\nDuis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.\n\nAt vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi.",
             imagePosition: 'none',
           },
         ],
         esBlocks: [
           {
             blockType: 'textSection',
-            subtitle: 'Nuestra Visión',
-            heading: 'Nuestra <span>Visión</span>',
-            body: "Visualizamos un mundo donde cada niño tenga acceso a educación de calidad, cada familia pueda poner comida nutritiva en la mesa, y cada comunidad cuente con los recursos de salud que necesita para prosperar.\n\nLa Fundación Grandmother's House aspira a ser un catalizador de cambio social duradero en la República Dominicana y más allá, construyendo puentes entre quienes quieren ayudar y quienes necesitan apoyo.\n\nNuestra visión es un futuro donde la compasión impulse la acción, donde las comunidades sean autosuficientes y donde el ciclo de la pobreza se rompa a través de la educación, la salud y el empoderamiento.",
+            subtitle: 'Nuestra visión',
+            heading: 'Nuestra <span>visión</span>',
+            body: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.\n\nDuis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.\n\nAt vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi.",
+            imagePosition: 'none',
+          },
+        ],
+      },
+      {
+        slug: 'terms',
+        enTitle: 'Terms and conditions',
+        esTitle: 'Términos y condiciones',
+        enBlocks: [
+          {
+            blockType: 'textSection',
+            subtitle: 'Legal',
+            heading: 'Terms and <span>conditions</span>',
+            body: "1. General information\n\nLorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.\n\n2. Use of the website\n\nDuis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.\n\n3. Intellectual property\n\nSed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.\n\n4. Donations and payments\n\nNemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet.\n\n5. Privacy and data protection\n\nAt vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident.\n\n6. Limitation of liability\n\nSimilique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga. Et harum quidem rerum facilis est et expedita distinctio.\n\n7. Modifications\n\nFundación Grandmother's House reserves the right to modify these terms and conditions at any time. Changes will be effective upon publication on this website.\n\n8. Contact\n\nFor questions about these terms, please contact us at info@grandmothershouse.org.",
+            imagePosition: 'none',
+          },
+        ],
+        esBlocks: [
+          {
+            blockType: 'textSection',
+            subtitle: 'Legal',
+            heading: 'Términos y <span>condiciones</span>',
+            body: "1. Información general\n\nLorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.\n\n2. Uso del sitio web\n\nDuis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.\n\n3. Propiedad intelectual\n\nSed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.\n\n4. Donaciones y pagos\n\nNemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet.\n\n5. Privacidad y protección de datos\n\nAt vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident.\n\n6. Limitación de responsabilidad\n\nSimilique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga. Et harum quidem rerum facilis est et expedita distinctio.\n\n7. Modificaciones\n\nFundación Grandmother's House se reserva el derecho de modificar estos términos y condiciones en cualquier momento. Los cambios serán efectivos al momento de su publicación en este sitio web.\n\n8. Contacto\n\nPara preguntas sobre estos términos, contáctanos en info@grandmothershouse.org.",
             imagePosition: 'none',
           },
         ],
@@ -669,7 +697,7 @@ export async function GET() {
         },
       })
     }
-    results.push('About, Mission, Vision pages seeded (EN + ES).')
+    results.push('About, Mission, Vision, Terms pages seeded (EN + ES).')
 
     return NextResponse.json({
       success: true,

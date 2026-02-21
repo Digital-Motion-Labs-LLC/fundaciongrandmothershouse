@@ -1,5 +1,7 @@
+import { placeholderImages } from '@/lib/placeholder-images'
+
 export function EventDetail({ activity }: { activity: any }) {
-  const imageUrl = activity.featuredImage?.url || '/assets/images/event/poster.png'
+  const imageUrl = activity.featuredImage?.url || placeholderImages.events(0)
   const date = activity.date ? new Date(activity.date).toLocaleDateString() : ''
 
   return (
@@ -27,7 +29,7 @@ export function EventDetail({ activity }: { activity: any }) {
                 <div className="cm-img-group cta">
                   {activity.gallery.map((item: any, i: number) => (
                     <div key={i} className="cm-img-single">
-                      <img src={item.image?.url || ''} alt="" />
+                      <img src={item.image?.url || placeholderImages.events(i)} alt="" />
                     </div>
                   ))}
                 </div>

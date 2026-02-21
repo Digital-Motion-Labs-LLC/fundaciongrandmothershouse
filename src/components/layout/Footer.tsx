@@ -1,11 +1,15 @@
 import Link from 'next/link'
 
-export function Footer({ footer }: { footer: any }) {
+export function Footer({ footer, locale }: { footer: any; locale: string }) {
   const logoUrl = footer.logo?.url || '/logos/logo-full.png'
   const socialIconMap: Record<string, string> = {
     facebook: 'fa-facebook-f', instagram: 'fa-instagram', youtube: 'fa-youtube',
     tiktok: 'fa-tiktok', x: 'fa-twitter', linkedin: 'fa-linkedin-in', other: 'fa-globe',
   }
+
+  const quickLinksTitle = footer.quickLinksTitle || (locale === 'es' ? 'Enlaces Rápidos' : 'Quick Links')
+  const servicesTitle = footer.servicesTitle || (locale === 'es' ? 'Nuestros Servicios' : 'Our Services')
+  const contactTitle = footer.contactTitle || (locale === 'es' ? 'Contáctanos' : 'Get In Touch')
 
   return (
     <footer className="footer-two">
@@ -31,7 +35,7 @@ export function Footer({ footer }: { footer: any }) {
           <div className="col-12 col-md-6 col-xl-2 offset-xl-1">
             <div className="footer-two__widget" data-aos="fade-up" data-aos-duration="1000" data-aos-delay="200">
               <div className="footer-two__widget-intro">
-                <h5>Quick Links</h5>
+                <h5>{quickLinksTitle}</h5>
                 <div className="line"><span className="large-line"></span><span className="small-line"></span><span className="small-line"></span></div>
               </div>
               <div className="footer-two__widget-content">
@@ -46,7 +50,7 @@ export function Footer({ footer }: { footer: any }) {
           <div className="col-12 col-md-6 col-xl-3">
             <div className="footer-two__widget footer-two__widget--alternate" data-aos="fade-up" data-aos-duration="1000" data-aos-delay="400">
               <div className="footer-two__widget-intro">
-                <h5>Our Services</h5>
+                <h5>{servicesTitle}</h5>
                 <div className="line"><span className="large-line"></span><span className="small-line"></span><span className="small-line"></span></div>
               </div>
               <div className="footer-two__widget-content">
@@ -61,7 +65,7 @@ export function Footer({ footer }: { footer: any }) {
           <div className="col-12 col-md-6 col-xl-3">
             <div className="footer-two__widget footer-two__widget--alternate" data-aos="fade-up" data-aos-duration="1000" data-aos-delay="600">
               <div className="footer-two__widget-intro">
-                <h5>Get In Touch</h5>
+                <h5>{contactTitle}</h5>
                 <div className="line"><span className="large-line"></span><span className="small-line"></span><span className="small-line"></span></div>
               </div>
               <div className="footer-two__widget-content footer-two__widget-content--contact">
@@ -86,7 +90,7 @@ export function Footer({ footer }: { footer: any }) {
           <div className="row align-items-center gutter-12">
             <div className="col-12 col-lg-6">
               <div className="footer-two__copyright-inner text-center text-lg-start">
-                <p>{footer.copyrightText || `Copyright © ${new Date().getFullYear()} Fundación Grandmother's House. All rights reserved.`}</p>
+                <p>{footer.copyrightText || `Copyright © ${new Date().getFullYear()} Fundación Grandmother's House. ${locale === 'es' ? 'Todos los derechos reservados.' : 'All rights reserved.'}`}</p>
               </div>
             </div>
             <div className="col-12 col-lg-6">

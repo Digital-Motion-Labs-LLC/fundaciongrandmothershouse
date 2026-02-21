@@ -8,7 +8,7 @@ import { Pagination } from '@/components/Pagination'
 export default async function NewsPage({ searchParams }: { searchParams: Promise<{ page?: string }> }) {
   const params = await searchParams
   const cookieStore = await cookies()
-  const locale = (cookieStore.get('locale')?.value || 'en') as 'en' | 'es'
+  const locale = (cookieStore.get('locale')?.value || 'es') as 'en' | 'es'
   const payload = await getPayload({ config: configPromise })
 
   const currentPage = Number(params.page) || 1
@@ -28,9 +28,9 @@ export default async function NewsPage({ searchParams }: { searchParams: Promise
       <section className="blog-main blog cm-details">
         <div className="container">
           <div className="row gutter-30">
-            {news.docs.map((article: any) => (
+            {news.docs.map((article: any, i: number) => (
               <div key={article.id} className="col-12 col-lg-6 col-xl-4">
-                <BlogCard article={article} locale={locale} />
+                <BlogCard article={article} index={i} locale={locale} />
               </div>
             ))}
           </div>

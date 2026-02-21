@@ -43,6 +43,24 @@ export const Footer: GlobalConfig = {
       ],
     },
     {
+      name: 'quickLinksTitle',
+      type: 'text',
+      localized: true,
+      defaultValue: 'Quick Links',
+    },
+    {
+      name: 'servicesTitle',
+      type: 'text',
+      localized: true,
+      defaultValue: 'Our Services',
+    },
+    {
+      name: 'contactTitle',
+      type: 'text',
+      localized: true,
+      defaultValue: 'Get In Touch',
+    },
+    {
       name: 'quickLinks',
       type: 'array',
       fields: [

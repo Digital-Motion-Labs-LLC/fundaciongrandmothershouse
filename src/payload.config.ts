@@ -40,7 +40,7 @@ export default buildConfig({
       { label: 'English', code: 'en' },
       { label: 'Español', code: 'es' },
     ],
-    defaultLocale: 'en',
+    defaultLocale: 'es',
     fallback: true,
   },
   plugins: [

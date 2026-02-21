@@ -10,7 +10,7 @@ import { SectionWrapper } from '@/components/SectionWrapper'
 
 export default async function HomePage() {
   const cookieStore = await cookies()
-  const locale = (cookieStore.get('locale')?.value || 'en') as 'en' | 'es'
+  const locale = (cookieStore.get('locale')?.value || 'es') as 'en' | 'es'
 
   const payload = await getPayload({ config: configPromise })
 

@@ -8,7 +8,7 @@ import { BlogDetail } from '@/components/BlogDetail'
 export default async function NewsDetailPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params
   const cookieStore = await cookies()
-  const locale = (cookieStore.get('locale')?.value || 'en') as 'en' | 'es'
+  const locale = (cookieStore.get('locale')?.value || 'es') as 'en' | 'es'
   const payload = await getPayload({ config: configPromise })
 
   const result = await payload.find({

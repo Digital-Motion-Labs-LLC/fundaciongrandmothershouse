@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import { placeholderImages } from '@/lib/placeholder-images'
 
 export function BlogPreview({ data, news }: { data: any; news: any[] }) {
   if (!news?.length) return null
@@ -16,7 +17,7 @@ export function BlogPreview({ data, news }: { data: any; news: any[] }) {
         </div>
         <div className="row gutter-40">
           {news.map((article: any, i: number) => {
-            const imageUrl = article.image?.url || `/assets/images/blog/${['one','two','three'][i % 3]}.png`
+            const imageUrl = article.image?.url || placeholderImages.blog(i)
             const date = article.date ? new Date(article.date).toLocaleDateString() : ''
             return (
               <div key={article.id} className="col-12 col-lg-6 col-xl-4" data-aos="fade-up" data-aos-duration="1000" data-aos-delay={String(i * 300)}>

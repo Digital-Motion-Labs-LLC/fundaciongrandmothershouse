@@ -6,7 +6,7 @@ import { TextSection } from '@/components/TextSection'
 
 export default async function MisionPage() {
   const cookieStore = await cookies()
-  const locale = (cookieStore.get('locale')?.value || 'en') as 'en' | 'es'
+  const locale = (cookieStore.get('locale')?.value || 'es') as 'en' | 'es'
   const payload = await getPayload({ config: configPromise })
 
   const page = await payload.find({

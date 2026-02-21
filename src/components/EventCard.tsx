@@ -1,7 +1,8 @@
 import Link from 'next/link'
+import { placeholderImages } from '@/lib/placeholder-images'
 
-export function EventCard({ activity, locale }: { activity: any; locale: string }) {
-  const imageUrl = activity.featuredImage?.url || '/assets/images/event/one.png'
+export function EventCard({ activity, index = 0, locale }: { activity: any; index?: number; locale: string }) {
+  const imageUrl = activity.featuredImage?.url || placeholderImages.events(index)
   const date = activity.date ? new Date(activity.date).toLocaleDateString(locale === 'es' ? 'es-ES' : 'en-US', { year: 'numeric', month: 'long', day: 'numeric' }) : ''
 
   return (

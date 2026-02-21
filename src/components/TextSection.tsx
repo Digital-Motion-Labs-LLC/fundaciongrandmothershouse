@@ -1,9 +1,10 @@
 import Link from 'next/link'
+import { placeholderImages } from '@/lib/placeholder-images'
 
-export function TextSection({ data }: { data: any }) {
+export function TextSection({ data, index = 0 }: { data: any; index?: number }) {
   if (!data) return null
 
-  const imageUrl = data.image?.url
+  const imageUrl = data.image?.url || (data.imagePosition !== 'none' ? placeholderImages.about(index) : null)
   const pos = data.imagePosition || 'left'
 
   return (
