@@ -6,12 +6,28 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "seed": "npx tsx src/seed.ts",
+    "generate:types": "npx payload generate:types"
   },
   "dependencies": {
-    "next": "16.1.6",
+    "@aws-sdk/client-s3": "^3.995.0",
+    "@aws-sdk/lib-storage": "^3.995.0",
+    "@payloadcms/db-postgres": "^3.77.0",
+    "@payloadcms/next": "^3.77.0",
+    "@payloadcms/plugin-cloud-storage": "^3.77.0",
+    "@payloadcms/richtext-lexical": "^3.77.0",
+    "@payloadcms/storage-s3": "^3.77.0",
+    "@types/aos": "^3.0.7",
+    "aos": "^2.3.4",
+    "cli-color": "^2.0.4",
+    "dotenv": "^17.3.1",
+    "next": "15.4.11",
+    "payload": "^3.77.0",
     "react": "19.2.3",
-    "react-dom": "19.2.3"
+    "react-dom": "19.2.3",
+    "sharp": "^0.34.5",
+    "swiper": "^12.1.2"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",
