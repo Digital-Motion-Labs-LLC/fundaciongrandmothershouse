@@ -29,11 +29,11 @@ export function MobileMenu({ header, locale }: { header: any; locale: string }) 
     return () => { document.body.style.overflow = '' }
   }, [isOpen])
 
-  const logoUrl = header.logo?.url || '/logos/logo-full.png'
+  const logoUrl = header.logo?.url || '/logos/main-logo.svg'
 
   return (
     <>
-      <div className={`mobile-menu mobile-menu--primary d-block d-xxl-none ${isOpen ? 'active' : ''}`}>
+      <div className={`mobile-menu mobile-menu--primary d-block d-xxl-none ${isOpen ? 'show-menu' : ''}`}>
         <nav className="mobile-menu__wrapper">
           <div className="mobile-menu__header nav-fade">
             <div className="logo">
@@ -51,22 +51,20 @@ export function MobileMenu({ header, locale }: { header: any; locale: string }) 
                 <li key={i} className={`navbar__item ${item.children?.length ? 'navbar__item--has-children' : ''}`}>
                   {item.children?.length ? (
                     <>
-                      <button
-                        onClick={() => setOpenSub(openSub === i ? null : i)}
-                        className="navbar__dropdown-label"
-                        style={{ background: 'none', border: 'none', width: '100%', textAlign: 'left', cursor: 'pointer' }}
+                      <a
+                        href="#"
+                        onClick={(e) => { e.preventDefault(); setOpenSub(openSub === i ? null : i) }}
+                        className="navbar__dropdown-label dropdown-label-alter"
                       >
                         {item.label}
-                      </button>
-                      {openSub === i && (
-                        <ul className="navbar__sub-menu" style={{ display: 'block' }}>
-                          {item.children.map((child: any, j: number) => (
-                            <li key={j}>
-                              <Link href={child.link} onClick={() => setIsOpen(false)}>{child.label}</Link>
-                            </li>
-                          ))}
-                        </ul>
-                      )}
+                      </a>
+                      <ul className="navbar__sub-menu" style={{ display: openSub === i ? 'block' : 'none' }}>
+                        {item.children.map((child: any, j: number) => (
+                          <li key={j}>
+                            <Link href={child.link} onClick={() => setIsOpen(false)}>{child.label}</Link>
+                          </li>
+                        ))}
+                      </ul>
                     </>
                   ) : (
                     <Link href={item.link} onClick={() => setIsOpen(false)}>{item.label}</Link>
@@ -89,7 +87,7 @@ export function MobileMenu({ header, locale }: { header: any; locale: string }) 
           </div>
         </nav>
       </div>
-      {isOpen && <div className="mobile-menu__backdrop active" onClick={() => setIsOpen(false)}></div>}
+      {isOpen && <div className="mobile-menu__backdrop mobile-menu__backdrop-active" onClick={() => setIsOpen(false)}></div>}
     </>
   )
 }

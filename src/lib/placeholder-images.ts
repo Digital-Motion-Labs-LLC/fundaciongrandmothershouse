@@ -1,44 +1,44 @@
 /**
- * Pexels placeholder images used as fallbacks when no image is configured in the CMS.
- * All images are served directly from Pexels CDN (no download needed).
+ * Local placeholder images used as fallbacks when no image is configured in the CMS.
+ * Uses real event photos from the redesign-photos directory.
  */
 
-const PEXELS_BASE = 'https://images.pexels.com/photos'
+const PHOTOS_BASE = '/redesign-photos'
 
 const hero = [
-  `${PEXELS_BASE}/6646918/pexels-photo-6646918.jpeg?auto=compress&cs=tinysrgb&w=1920&h=1080&dpr=1`,
-  `${PEXELS_BASE}/6994982/pexels-photo-6994982.jpeg?auto=compress&cs=tinysrgb&w=1920&h=1080&dpr=1`,
+  `${PHOTOS_BASE}/evento-juguetes-7.jpeg`,
+  `${PHOTOS_BASE}/evento-juguetes-12.jpeg`,
 ]
 
 const blog = [
-  `${PEXELS_BASE}/8613089/pexels-photo-8613089.jpeg?auto=compress&cs=tinysrgb&w=800&h=600&dpr=1`,
-  `${PEXELS_BASE}/3184418/pexels-photo-3184418.jpeg?auto=compress&cs=tinysrgb&w=800&h=600&dpr=1`,
-  `${PEXELS_BASE}/5214958/pexels-photo-5214958.jpeg?auto=compress&cs=tinysrgb&w=800&h=600&dpr=1`,
+  `${PHOTOS_BASE}/evento-juguetes-1.jpeg`,
+  `${PHOTOS_BASE}/evento-juguetes-2.jpeg`,
+  `${PHOTOS_BASE}/evento-juguetes-3.jpeg`,
 ]
 
 const events = [
-  `${PEXELS_BASE}/8363104/pexels-photo-8363104.jpeg?auto=compress&cs=tinysrgb&w=800&h=600&dpr=1`,
-  `${PEXELS_BASE}/2608517/pexels-photo-2608517.jpeg?auto=compress&cs=tinysrgb&w=800&h=600&dpr=1`,
-  `${PEXELS_BASE}/3184396/pexels-photo-3184396.jpeg?auto=compress&cs=tinysrgb&w=800&h=600&dpr=1`,
+  `${PHOTOS_BASE}/evento-juguetes-4.jpeg`,
+  `${PHOTOS_BASE}/evento-juguetes-5.jpeg`,
+  `${PHOTOS_BASE}/evento-juguetes-6.jpeg`,
 ]
 
 const about = [
-  `${PEXELS_BASE}/6646917/pexels-photo-6646917.jpeg?auto=compress&cs=tinysrgb&w=800&h=800&dpr=1`,
-  `${PEXELS_BASE}/3184360/pexels-photo-3184360.jpeg?auto=compress&cs=tinysrgb&w=800&h=800&dpr=1`,
+  `${PHOTOS_BASE}/evento-juguetes-10.jpeg`,
+  `${PHOTOS_BASE}/evento-juguetes-11.jpeg`,
 ]
 
 const authors = [
-  `${PEXELS_BASE}/1239291/pexels-photo-1239291.jpeg?auto=compress&cs=tinysrgb&w=150&h=150&dpr=1`,
-  `${PEXELS_BASE}/2379004/pexels-photo-2379004.jpeg?auto=compress&cs=tinysrgb&w=150&h=150&dpr=1`,
-  `${PEXELS_BASE}/1181690/pexels-photo-1181690.jpeg?auto=compress&cs=tinysrgb&w=150&h=150&dpr=1`,
-  `${PEXELS_BASE}/3778603/pexels-photo-3778603.jpeg?auto=compress&cs=tinysrgb&w=150&h=150&dpr=1`,
+  `${PHOTOS_BASE}/evento-juguetes-8.jpeg`,
+  `${PHOTOS_BASE}/evento-juguetes-9.jpeg`,
+  `${PHOTOS_BASE}/evento-juguetes-13.jpeg`,
+  `${PHOTOS_BASE}/evento-juguetes-14.jpeg`,
 ]
 
 // Help section: 3 images (top small, main large, bottom small)
 const help = {
-  thumbTop: `${PEXELS_BASE}/1250346/pexels-photo-1250346.jpeg?auto=compress&cs=tinysrgb&w=300&h=200&dpr=1`,
-  thumbLg: `${PEXELS_BASE}/6646917/pexels-photo-6646917.jpeg?auto=compress&cs=tinysrgb&w=600&h=700&dpr=1`,
-  thumbBottom: `${PEXELS_BASE}/3184291/pexels-photo-3184291.jpeg?auto=compress&cs=tinysrgb&w=300&h=200&dpr=1`,
+  thumbTop: `${PHOTOS_BASE}/evento-juguetes-15.jpeg`,
+  thumbLg: `${PHOTOS_BASE}/evento-juguetes-10.jpeg`,
+  thumbBottom: `${PHOTOS_BASE}/evento-juguetes-16.jpeg`,
 }
 
 export const placeholderImages = {

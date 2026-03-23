@@ -1,7 +1,7 @@
 import Link from 'next/link'
 
 export function Footer({ footer, locale }: { footer: any; locale: string }) {
-  const logoUrl = footer.logo?.url || '/logos/logo-full.png'
+  const logoUrl = footer.logo?.url || '/logos/main-logo.svg'
   const socialIconMap: Record<string, string> = {
     facebook: 'fa-facebook-f', instagram: 'fa-instagram', youtube: 'fa-youtube',
     tiktok: 'fa-tiktok', x: 'fa-twitter', linkedin: 'fa-linkedin-in', other: 'fa-globe',

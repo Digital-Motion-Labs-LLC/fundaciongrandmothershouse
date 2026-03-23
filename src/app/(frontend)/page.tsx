@@ -32,9 +32,9 @@ export default async function HomePage() {
   const testimonialBlock = blocks.find((b: any) => b.blockType === 'testimonial')
   const blogPreviewBlock = blocks.find((b: any) => b.blockType === 'blogPreview')
 
-  // Fetch latest 3 news for blog preview
-  const latestNews = await payload.find({
-    collection: 'news',
+  // Fetch latest activities for preview
+  const latestActivities = await payload.find({
+    collection: 'activities',
     where: { published: { equals: true } },
     sort: '-date',
     limit: 3,
@@ -60,7 +60,7 @@ export default async function HomePage() {
       </SectionWrapper>
 
       <SectionWrapper show={siteSettings.showBlogPreview}>
-        <BlogPreview data={blogPreviewBlock} news={latestNews.docs} />
+        <BlogPreview data={blogPreviewBlock} news={latestActivities.docs} locale={locale} linkBase="/actividades" />
       </SectionWrapper>
     </>
   )

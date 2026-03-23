@@ -2,10 +2,44 @@ import type { Metadata } from 'next'
 import './globals.css'
 
 export const metadata: Metadata = {
-  title: "Fundación Grandmother's House",
-  icons: {
-    icon: '/logos/logo-full.png',
+  title: {
+    default: "Fundación Grandmother's House | Cuidado Infantil y Educación en RD",
+    template: "%s | Fundación Grandmother's House",
   },
+  description: 'Fundación Grandmother\'s House se dedica a proporcionar un entorno seguro, estimulante y cariñoso donde cada niño pueda desarrollarse plenamente. Únete a nuestra causa y sé voluntario. Ubicados en Juan Dolio, San Pedro de Macorís, República Dominicana.',
+  keywords: ['fundación', 'grandmother house', 'cuidado infantil', 'educación', 'Juan Dolio', 'República Dominicana', 'voluntariado', 'donaciones', 'niños', 'daycare'],
+  authors: [{ name: "Fundación Grandmother's House" }],
+  icons: {
+    icon: '/favicon.png',
+    apple: '/favicon.png',
+  },
+  openGraph: {
+    type: 'website',
+    locale: 'es_DO',
+    alternateLocale: 'en_US',
+    siteName: "Fundación Grandmother's House",
+    title: "Fundación Grandmother's House | Únete y Sé Voluntario",
+    description: 'Proporcionamos un entorno seguro y cariñoso donde cada niño puede crecer. Más de 2,100 niños impactados. Únete a nuestra causa en Juan Dolio, RD.',
+    images: [
+      {
+        url: '/logos/logo-full.png',
+        width: 1200,
+        height: 630,
+        alt: "Fundación Grandmother's House - Únete y Sé Voluntario",
+      },
+    ],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: "Fundación Grandmother's House",
+    description: 'Cuidado infantil, educación y apoyo comunitario en República Dominicana. Únete y sé voluntario.',
+    images: ['/logos/logo-full.png'],
+  },
+  robots: {
+    index: true,
+    follow: true,
+  },
+  metadataBase: new URL('https://grandmothershouse.org'),
 }
 
 export default function RootLayout({
@@ -14,7 +48,7 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="en">
+    <html lang="es">
       <body>
         {children}
       </body>

@@ -25,133 +25,115 @@ export async function GET() {
     }
 
     // ─── 2. Header global (EN first, then ES labels) ──────────────────────────
-    await payload.updateGlobal({
-      slug: 'header',
-      data: {
-        email: 'info@grandmothershouse.org',
-        phone: '+1 (809) 555-0123',
-        donateButtonText: 'Donate now',
-        socialLinks: [
-          { platform: 'facebook', url: 'https://facebook.com/grandmothershouse', label: 'Facebook' },
-          { platform: 'instagram', url: 'https://instagram.com/grandmothershouse', label: 'Instagram' },
-        ],
+    // Use REST API for header to avoid Payload updateGlobal bug with localized arrays
+    const loginRes = await fetch('http://localhost:3000/api/users/login', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email: 'admin@grandmothershouse.org', password: 'Admin123!' }),
+    })
+    const { token } = await loginRes.json()
+
+    await fetch('http://localhost:3000/api/globals/header', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Authorization': `JWT ${token}` },
+      body: JSON.stringify({
+        email: 'grandmothershousedaycare@gmail.com',
+        phone: '809-655-0290',
+        donateButtonText: 'Donar ahora',
+        socialLinks: [{ platform: 'instagram', url: 'https://www.instagram.com/fundaciongrandmothershouse', label: 'Instagram' }],
         navigation: [
-          { label: 'Home', link: '/' },
-          {
-            label: 'About us',
-            link: '/quienes-somos',
-            children: [
-              { label: 'Mission', link: '/quienes-somos/mision' },
-              { label: 'Vision', link: '/quienes-somos/vision' },
-            ],
-          },
-          { label: 'Activities', link: '/actividades' },
-          { label: 'News', link: '/noticias' },
-          { label: 'Contact', link: '/contacto' },
+          { label: 'Inicio', link: '/' },
+          { label: 'Quiénes Somos', link: '/quienes-somos', children: [{ label: 'Misión', link: '/quienes-somos/mision' }, { label: 'Visión', link: '/quienes-somos/vision' }] },
+          { label: 'Actividades', link: '/actividades' },
+          { label: 'Contacto', link: '/contacto' },
         ],
-      },
-      locale: 'en',
+      }),
     })
 
-    // Now fetch the saved header to get array item IDs
-    const savedHeader = await payload.findGlobal({ slug: 'header', locale: 'en' })
-    const navItems = savedHeader.navigation as any[]
+    // EN localized labels
+    const headerRes = await fetch('http://localhost:3000/api/globals/header', { headers: { 'Authorization': `JWT ${token}` } })
+    const headerData = await headerRes.json()
+    const navItems = headerData.navigation || []
 
-    // Update ES locale using the same IDs so we don't replace the array
-    if (navItems?.length === 5) {
-      const esLabels = ['Inicio', 'Quiénes somos', 'Actividades', 'Noticias', 'Contacto']
-      const esChildLabels = [[], ['Misión', 'Visión'], [], [], []]
-
-      const esNav = navItems.map((item: any, i: number) => {
-        const updated: any = { id: item.id, label: esLabels[i], link: item.link }
+    if (navItems.length > 0) {
+      const enLabels = ['Home', 'About Us', 'Activities', 'Contact']
+      const enChildren = [[], ['Mission', 'Vision'], [], []]
+      const enNav = navItems.map((item: any, i: number) => {
+        const n: any = { id: item.id, label: enLabels[i], link: item.link }
         if (item.children?.length) {
-          updated.children = item.children.map((child: any, j: number) => ({
-            id: child.id,
-            label: esChildLabels[i][j] || child.label,
-            link: child.link,
-          }))
-        } else {
-          updated.children = []
-        }
-        return updated
+          n.children = item.children.map((c: any, j: number) => ({ id: c.id, label: enChildren[i][j] || c.label, link: c.link }))
+        } else { n.children = [] }
+        return n
       })
-
-      await payload.updateGlobal({
-        slug: 'header',
-        data: {
-          donateButtonText: 'Donar ahora',
-          navigation: esNav,
-        },
-        locale: 'es',
+      await fetch('http://localhost:3000/api/globals/header?locale=en', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Authorization': `JWT ${token}` },
+        body: JSON.stringify({ donateButtonText: 'Donate now', navigation: enNav }),
       })
     }
     results.push('Header seeded (EN + ES).')
 
-    // ─── 4. Footer global (EN first, then ES labels) ──────────────────────────
-    await payload.updateGlobal({
-      slug: 'footer',
-      data: {
-        quickLinksTitle: 'Quick links',
-        servicesTitle: 'Our services',
-        contactTitle: 'Get in touch',
-        description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Fundación Grandmother's House se dedica a crear un impacto positivo.",
-        socialLinks: [
-          { platform: 'facebook', url: 'https://facebook.com/grandmothershouse', label: 'Facebook' },
-          { platform: 'instagram', url: 'https://instagram.com/grandmothershouse', label: 'Instagram' },
-        ],
-        quickLinks: [
-          { label: 'About us', link: '/quienes-somos' },
-          { label: 'Our news', link: '/noticias' },
-          { label: 'Activities', link: '/actividades' },
-          { label: 'Contact', link: '/contacto' },
-          { label: 'Donate', link: '#' },
-        ],
-        services: [
-          { label: 'Education support', link: '/actividades' },
-          { label: 'Nutrition programs', link: '/actividades' },
-          { label: 'Healthcare access', link: '/actividades' },
-          { label: 'Community programs', link: '/actividades' },
-          { label: 'Volunteer', link: '/contacto' },
-        ],
-        contactInfo: {
-          address: 'Santo Domingo, Dominican Republic',
-          addressLink: 'https://maps.google.com',
-          phone: '+1 (809) 555-0123',
-          email: 'info@grandmothershouse.org',
-        },
-        copyrightText: "Copyright © 2026 Fundación Grandmother's House. All rights reserved.",
-        legalLinks: [
-          { label: 'Terms and conditions', link: '/terminos-y-condiciones' },
-          { label: 'Privacy policy', link: '/terminos-y-condiciones' },
-        ],
-      },
-      locale: 'en',
-    })
-
-    // Fetch saved footer to get array item IDs, then update ES labels
-    const savedFooter = await payload.findGlobal({ slug: 'footer', locale: 'en' })
-    const qlItems = savedFooter.quickLinks as any[]
-    const svcItems = savedFooter.services as any[]
-    const llItems = savedFooter.legalLinks as any[]
-
-    const esQL = ['Quiénes somos', 'Noticias', 'Actividades', 'Contacto', 'Donar']
-    const esSvc = ['Apoyo educativo', 'Programas de nutrición', 'Acceso a salud', 'Programas comunitarios', 'Voluntariado']
-    const esLL = ['Términos y condiciones', 'Política de privacidad']
-
+    // ─── 4. Footer global (ES first = default, then EN localized labels) ──────
     await payload.updateGlobal({
       slug: 'footer',
       data: {
         quickLinksTitle: 'Enlaces rápidos',
         servicesTitle: 'Nuestros servicios',
         contactTitle: 'Contáctanos',
-        description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Fundación Grandmother\'s House se dedica a crear un impacto positivo.',
-        quickLinks: qlItems?.map((item: any, i: number) => ({ id: item.id, label: esQL[i], link: item.link })),
-        services: svcItems?.map((item: any, i: number) => ({ id: item.id, label: esSvc[i], link: item.link })),
-        contactInfo: { address: 'Santo Domingo, República Dominicana' },
-        copyrightText: "Copyright © 2026 Fundación Grandmother's House. Todos los derechos reservados.",
-        legalLinks: llItems?.map((item: any, i: number) => ({ id: item.id, label: esLL[i], link: item.link })),
+        description: 'La Fundación Grandmother\'s House se dedica a proporcionar un entorno seguro, estimulante y cariñoso donde cada niño pueda desarrollarse plenamente. A través de educación, juego creativo y apoyo comunitario, nos esforzamos por ser la luz para aquellos que están en la oscuridad.',
+        socialLinks: [
+          { platform: 'instagram', url: 'https://www.instagram.com/fundaciongrandmothershouse', label: 'Instagram' },
+        ],
+        quickLinks: [
+          { label: 'Quiénes Somos', link: '/quienes-somos' },
+          { label: 'Actividades', link: '/actividades' },
+          { label: 'Contacto', link: '/contacto' },
+          { label: 'Donar', link: '#' },
+        ],
+        services: [
+          { label: 'Apoyo educativo', link: '/actividades' },
+          { label: 'Cuidado infantil', link: '/actividades' },
+          { label: 'Eventos comunitarios', link: '/actividades' },
+          { label: 'Entrega de juguetes', link: '/actividades' },
+          { label: 'Voluntariado', link: '/contacto' },
+        ],
+        contactInfo: {
+          address: 'Vía Boulevard Juan Dolio, John Hazim Subero, Calle el Tanque, SPM, RD',
+          addressLink: 'https://maps.google.com/?q=Juan+Dolio+San+Pedro+de+Macoris+RD',
+          phone: '809-655-0290',
+          email: 'grandmothershousedaycare@gmail.com',
+        },
+        copyrightText: "Copyright © 2026 Fundación Grandmother's House. Todos los derechos reservados. RNC: 430-43228-8",
+        legalLinks: [
+          { label: 'Términos y condiciones', link: '/terminos-y-condiciones' },
+          { label: 'Política de privacidad', link: '/terminos-y-condiciones' },
+        ],
       },
-      locale: 'es',
+    })
+
+    // EN localized labels
+    const savedFooter = await payload.findGlobal({ slug: 'footer' })
+    const qlItems = savedFooter.quickLinks as any[]
+    const svcItems = savedFooter.services as any[]
+    const llItems = savedFooter.legalLinks as any[]
+
+    const enQL = ['About Us', 'Activities', 'Contact', 'Donate']
+    const enSvc = ['Education support', 'Child care', 'Community events', 'Toy drives', 'Volunteer']
+    const enLL = ['Terms and conditions', 'Privacy policy']
+
+    await payload.updateGlobal({
+      slug: 'footer',
+      data: {
+        quickLinksTitle: 'Quick links',
+        servicesTitle: 'Our services',
+        contactTitle: 'Get in touch',
+        description: "Fundación Grandmother's House is dedicated to providing a safe, stimulating, and loving environment where every child can develop fully. Through education, creative play, and community support, we strive to be the light for those in darkness.",
+        quickLinks: qlItems?.map((item: any, i: number) => ({ id: item.id, label: enQL[i], link: item.link })),
+        services: svcItems?.map((item: any, i: number) => ({ id: item.id, label: enSvc[i], link: item.link })),
+        copyrightText: "Copyright © 2026 Fundación Grandmother's House. All rights reserved. RNC: 430-43228-8",
+        legalLinks: llItems?.map((item: any, i: number) => ({ id: item.id, label: enLL[i], link: item.link })),
+      },
+      locale: 'en',
     })
     results.push('Footer seeded (EN + ES).')
 
@@ -159,26 +141,26 @@ export async function GET() {
     await payload.updateGlobal({
       slug: 'donation-settings',
       data: {
-        modalTitle: 'Make a donation',
-        modalDescription: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Choose your preferred donation method below. Every contribution makes a difference.',
-        paypal: { enabled: true, link: 'https://paypal.me/grandmothershouse' },
+        modalTitle: 'Hacer una donación',
+        modalDescription: 'Elige tu método de donación preferido. Cada contribución nos ayuda a brindar educación, cuidado infantil y programas comunitarios a quienes más lo necesitan.',
+        paypal: { enabled: false },
         bankTransfer: {
           enabled: true,
-          bankName: 'Banco Popular Dominicano',
-          accountNumber: '123-456789-0',
-          accountType: 'Savings',
+          bankName: 'Banreservas',
+          accountNumber: '9609143691',
+          accountType: 'Checking',
+          accountHolder: 'Elizabeth González Hilario - Céd. 023-0140481-6',
         },
-        zelle: { enabled: true, emailOrPhone: 'donate@grandmothershouse.org' },
+        zelle: { enabled: false },
       },
-      locale: 'en',
     })
     await payload.updateGlobal({
       slug: 'donation-settings',
       data: {
-        modalTitle: 'Hacer una donación',
-        modalDescription: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Elige tu método de donación preferido. Cada contribución marca la diferencia.',
+        modalTitle: 'Make a donation',
+        modalDescription: 'Choose your preferred donation method below. Every contribution helps us provide education, child care, and community programs to those who need it most.',
       },
-      locale: 'es',
+      locale: 'en',
     })
     results.push('Donation Settings seeded (EN + ES).')
 
@@ -197,7 +179,6 @@ export async function GET() {
     results.push('Site Settings seeded.')
 
     // ─── 7. Home page with blocks ─────────────────────────────
-    // Delete existing home page first
     const existingHome = await payload.find({
       collection: 'pages',
       where: { slug: { equals: 'home' } },
@@ -219,7 +200,7 @@ export async function GET() {
             slides: [
               {
                 subtitle: 'Welcome to our foundation',
-                title: 'Giving help <br>to those who <span>need</span> it.',
+                title: 'A Safe Place <br>Where Children <span>Grow</span>',
                 ctaPrimaryText: 'Discover more',
                 ctaPrimaryLink: '/quienes-somos',
                 ctaSecondaryText: 'Contact us',
@@ -227,7 +208,7 @@ export async function GET() {
               },
               {
                 subtitle: 'Making a difference',
-                title: 'Together we can <br>change <span>lives</span> forever.',
+                title: 'Bringing Joy <br>To Over <span>2,100</span> Children',
                 ctaPrimaryText: 'Our activities',
                 ctaPrimaryLink: '/actividades',
                 ctaSecondaryText: 'Donate now',
@@ -238,78 +219,78 @@ export async function GET() {
           {
             blockType: 'difference',
             subtitle: 'Our programs',
-            title: 'Charity with difference',
-            description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation.',
+            title: 'Making a Real Difference',
+            description: 'We provide education, child care, and community programs that impact families across multiple communities including Los Guayacanes, Honduras, Hoyo del Toro, and Juan Dolio.',
             items: [
               {
                 icon: 'icon-education',
-                title: 'Education support',
-                description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut enim ad minim veniam, quis nostrud exercitation ullamco.',
+                title: 'Education & Development',
+                description: 'Enriching educational programs and creative play that inspire children to explore, learn, and grow to their full potential.',
               },
               {
                 icon: 'icon-food',
-                title: 'Nutrition programs',
-                description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum.',
+                title: 'Community Events',
+                description: 'Joyful events like toy drives, educational talks on values and self-care, and celebrations that bring communities together.',
               },
               {
                 icon: 'icon-health',
-                title: 'Healthcare access',
-                description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia.',
+                title: 'Child Care',
+                description: 'A safe, stimulating, and loving environment where every child can develop fully — physically and cognitively.',
               },
             ],
           },
           {
             blockType: 'help',
             subtitle: 'About us',
-            title: 'Helping each other can make <span>world</span> better',
-            description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris.',
+            title: 'Be the Light for Those <br>in <span>Darkness</span>',
+            description: 'Our mission is to provide a safe, stimulating, and loving environment where every child can develop fully. We are committed to offering enriching educational programs and creative play, inspiring children to explore, learn, and grow.',
             features: [
               {
                 icon: 'icon-make-donation',
                 title: 'Start helping today',
-                description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut enim ad minim veniam.',
+                description: 'Join our cause and help us bring joy to children across communities in the Dominican Republic.',
               },
               {
                 icon: 'icon-support-heart',
                 title: 'Make donations',
-                description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis aute irure dolor in reprehenderit.',
+                description: 'Your generous contributions support our programs, toy drives, and educational initiatives.',
               },
             ],
             checkmarks: [
-              { text: 'Community-driven programs for education and growth' },
-              { text: 'We give children the gift of education and hope' },
-              { text: 'Empowering families through sustainable support' },
+              { text: 'Over 2,100 children impacted in our latest toy drive' },
+              { text: 'Educational talks on values, self-care, and personal growth' },
+              { text: 'Serving communities across Los Guayacanes, Honduras, and Juan Dolio' },
             ],
             ctaText: 'More about us',
             ctaLink: '/quienes-somos',
-            phone: '+1 (809) 555-0123',
+            phone: '809-655-0290',
           },
           {
             blockType: 'testimonial',
             subtitle: 'Testimonials',
-            title: 'What people <span>say</span> about us',
+            title: 'What People <span>Say</span> About Us',
             testimonials: [
               {
                 rating: 5,
-                quote: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam.',
+                quote: 'This foundation has truly changed lives in our community. Their dedication to children and families is remarkable and inspiring. Every event they organize brings hope.',
                 authorName: 'María García',
                 authorTitle: 'Community member',
               },
               {
                 rating: 5,
-                quote: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla.',
+                quote: 'The toy drive brought so much joy to our children. Seeing over 2,100 kids receive gifts during Three Kings Day was a truly moving experience I will never forget.',
                 authorName: 'Juan Pérez',
                 authorTitle: 'Volunteer',
               },
               {
                 rating: 5,
-                quote: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit.',
+                quote: 'I am grateful for the support and opportunities this organization has provided to my family. They truly care about every person they serve and go above and beyond.',
                 authorName: 'Ana Rodríguez',
                 authorTitle: 'Beneficiary',
               },
               {
                 rating: 5,
-                quote: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip.',
+                quote: 'Their educational programs and community events are making a real difference. The values talks and activities for children show their deep commitment to holistic development.',
                 authorName: 'Carlos Martínez',
                 authorTitle: 'Donor',
               },
@@ -317,13 +298,13 @@ export async function GET() {
           },
           {
             blockType: 'blogPreview',
-            subtitle: 'Latest updates',
-            title: 'Our latest <span>news</span> & articles',
+            subtitle: 'Our work',
+            title: 'Our Latest <span>Activities</span>',
           },
         ],
       },
     })
-    // Now update home page with ES translations
+
     const savedHome = await payload.find({
       collection: 'pages',
       where: { slug: { equals: 'home' } },
@@ -341,7 +322,6 @@ export async function GET() {
 
       const esLayout: any[] = []
 
-      // Hero ES
       if (heroBlock) {
         esLayout.push({
           id: heroBlock.id,
@@ -349,7 +329,7 @@ export async function GET() {
           slides: heroBlock.slides?.map((s: any, i: number) => ({
             id: s.id,
             subtitle: ['Bienvenidos a nuestra fundación', 'Haciendo la diferencia'][i],
-            title: ['Brindando ayuda <br>a quienes más lo <span>necesitan</span>.', 'Juntos podemos <br>cambiar <span>vidas</span> para siempre.'][i],
+            title: ['Un Lugar Seguro <br>Donde los Niños <span>Crecen</span>', 'Llevando Alegría <br>A Más de <span>2,100</span> Niños'][i],
             ctaPrimaryText: ['Descubre más', 'Nuestras actividades'][i],
             ctaPrimaryLink: s.ctaPrimaryLink,
             ctaSecondaryText: ['Contáctanos', 'Donar ahora'][i],
@@ -358,52 +338,48 @@ export async function GET() {
         })
       }
 
-      // Difference ES
       if (diffBlock) {
-        const esDiffItems = ['Apoyo educativo', 'Programas de nutrición', 'Acceso a salud']
-        const esDiffDescs = [
-          'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut enim ad minim veniam, quis nostrud exercitation ullamco.',
-          'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum.',
-          'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia.',
-        ]
         esLayout.push({
           id: diffBlock.id,
           blockType: 'difference',
           subtitle: 'Nuestros programas',
-          title: 'Caridad con diferencia',
-          description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation.',
+          title: 'Haciendo una Diferencia Real',
+          description: 'Ofrecemos educación, cuidado infantil y programas comunitarios que impactan familias en múltiples comunidades incluyendo Los Guayacanes, Honduras, Hoyo del Toro y Juan Dolio.',
           items: diffBlock.items?.map((item: any, i: number) => ({
             id: item.id,
             icon: item.icon,
-            title: esDiffItems[i],
-            description: esDiffDescs[i],
+            title: ['Educación y Desarrollo', 'Eventos Comunitarios', 'Cuidado Infantil'][i],
+            description: [
+              'Programas educativos enriquecedores y juego creativo que inspiran a los niños a explorar, aprender y crecer a su máximo potencial.',
+              'Eventos llenos de alegría como entrega de juguetes, charlas educativas sobre valores y autocuidado, y celebraciones que unen a las comunidades.',
+              'Un entorno seguro, estimulante y cariñoso donde cada niño puede desarrollarse plenamente — física y cognitivamente.',
+            ][i],
           })),
         })
       }
 
-      // Help ES
       if (helpBlock) {
         esLayout.push({
           id: helpBlock.id,
           blockType: 'help',
           subtitle: 'Sobre nosotros',
-          title: 'Ayudarnos mutuamente puede hacer el <span>mundo</span> mejor',
-          description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris.',
+          title: 'Ser la Luz para Aquellos <br>en la <span>Oscuridad</span>',
+          description: 'Nuestra misión es proporcionar un entorno seguro, estimulante y cariñoso donde cada niño pueda desarrollarse completamente. Nos comprometemos a ofrecer programas educativos enriquecedores y juego creativo, inspirando a los niños a explorar, aprender y crecer.',
           features: helpBlock.features?.map((f: any, i: number) => ({
             id: f.id,
             icon: f.icon,
-            title: ['Comienza a ayudar hoy', 'Haz una donación'][i],
+            title: ['Empieza a ayudar hoy', 'Haz una donación'][i],
             description: [
-              'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut enim ad minim veniam.',
-              'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis aute irure dolor in reprehenderit.',
+              'Únete a nuestra causa y ayúdanos a llevar alegría a niños de comunidades en República Dominicana.',
+              'Tus generosas contribuciones apoyan nuestros programas, entregas de juguetes e iniciativas educativas.',
             ][i],
           })),
           checkmarks: helpBlock.checkmarks?.map((c: any, i: number) => ({
             id: c.id,
             text: [
-              'Programas comunitarios para educación y crecimiento',
-              'Damos a los niños el regalo de la educación y la esperanza',
-              'Empoderando familias a través de apoyo sostenible',
+              'Más de 2,100 niños impactados en nuestra última entrega de juguetes',
+              'Charlas educativas sobre valores, autocuidado y crecimiento personal',
+              'Sirviendo comunidades en Los Guayacanes, Honduras y Juan Dolio',
             ][i],
           })),
           ctaText: 'Más sobre nosotros',
@@ -412,20 +388,19 @@ export async function GET() {
         })
       }
 
-      // Testimonial ES
       if (testBlock) {
         const esQuotes = [
-          'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam.',
-          'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla.',
-          'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit.',
-          'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip.',
+          'Esta fundación ha cambiado vidas en nuestra comunidad. Su dedicación a los niños y las familias es notable e inspiradora. Cada evento que organizan trae esperanza.',
+          'La entrega de juguetes trajo tanta alegría a nuestros niños. Ver a más de 2,100 niños recibir regalos en el Día de Reyes fue una experiencia realmente conmovedora que nunca olvidaré.',
+          'Estoy agradecida por el apoyo y las oportunidades que esta organización ha brindado a mi familia. Realmente se preocupan por cada persona que atienden y van más allá.',
+          'Sus programas educativos y eventos comunitarios están haciendo una diferencia real. Las charlas de valores y actividades para niños muestran su profundo compromiso con el desarrollo integral.',
         ]
         const esTitles = ['Miembro de la comunidad', 'Voluntario', 'Beneficiaria', 'Donante']
         esLayout.push({
           id: testBlock.id,
           blockType: 'testimonial',
           subtitle: 'Testimonios',
-          title: 'Lo que la gente <span>dice</span> sobre nosotros',
+          title: 'Lo Que la Gente <span>Dice</span> de Nosotros',
           testimonials: testBlock.testimonials?.map((t: any, i: number) => ({
             id: t.id,
             rating: t.rating,
@@ -436,13 +411,12 @@ export async function GET() {
         })
       }
 
-      // BlogPreview ES
       if (blogBlock) {
         esLayout.push({
           id: blogBlock.id,
           blockType: 'blogPreview',
-          subtitle: 'Últimas actualizaciones',
-          title: 'Nuestras últimas <span>noticias</span> y artículos',
+          subtitle: 'Nuestro trabajo',
+          title: 'Nuestras Últimas <span>Actividades</span>',
         })
       }
 
@@ -459,7 +433,6 @@ export async function GET() {
     results.push('Home page seeded with all blocks (EN + ES).')
 
     // ─── 8. News articles (EN + ES) ─────────────────────────────
-    // Delete existing news first for clean re-seed
     const existingNews = await payload.find({ collection: 'news', limit: 10 })
     for (const doc of existingNews.docs) {
       await payload.delete({ collection: 'news', id: doc.id })
@@ -467,31 +440,31 @@ export async function GET() {
 
     const newsEN = [
       {
-        title: 'Education program reaches 500 children this year',
-        slug: 'education-program-500-children',
-        date: '2025-01-15',
-        excerpt: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam.',
+        title: 'Grandmother\'s House Foundation Delivers Toys to Over 2,100 Children',
+        slug: 'toy-delivery-2100-children',
+        date: '2026-01-06',
+        excerpt: 'The Grandmother\'s House Foundation carried out a major social event benefiting childhood, impacting over 2,100 children from communities including Los Guayacanes, Honduras, Hoyo del Toro, and Juan Dolio.',
         published: true,
       },
       {
-        title: 'Community health fair a great success',
-        slug: 'community-health-fair-success',
-        date: '2025-01-08',
-        excerpt: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.',
+        title: 'Educational Talks on Values and Personal Growth',
+        slug: 'educational-talks-values',
+        date: '2026-01-06',
+        excerpt: 'As part of our commitment to education, children participated in talks focused on values, behavior, self-care, and personal growth designed to guide their holistic development.',
         published: true,
       },
       {
-        title: 'New partnership with local schools announced',
-        slug: 'partnership-local-schools',
-        date: '2024-12-20',
-        excerpt: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
+        title: 'Community Celebration Brings Joy to Multiple Neighborhoods',
+        slug: 'community-celebration-joy',
+        date: '2026-01-06',
+        excerpt: 'Children enjoyed entertainment with clowns, fun activities, games, and face painting stations, creating an atmosphere of celebration and smiles across our served communities.',
         published: true,
       },
     ]
     const newsES = [
-      { title: 'Programa educativo alcanza 500 niños este año', excerpt: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam.' },
-      { title: 'Feria de salud comunitaria un gran éxito', excerpt: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.' },
-      { title: 'Anuncian nueva alianza con escuelas locales', excerpt: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.' },
+      { title: 'Fundación Grandmother House entrega juguetes a más de 2,100 niños', excerpt: 'La Fundación Grandmother House llevó a cabo una gran jornada social en beneficio de la niñez, logrando impactar a más de 2,100 niños de comunidades como Los Guayacanes, Honduras, Hoyo del Toro y Juan Dolio.' },
+      { title: 'Charlas Educativas sobre Valores y Crecimiento Personal', excerpt: 'Como parte del compromiso formativo de la fundación, los niños participaron en charlas educativas enfocadas en valores, comportamiento, autocuidado y crecimiento personal.' },
+      { title: 'Celebración Comunitaria Lleva Alegría a Múltiples Barrios', excerpt: 'Los niños disfrutaron de la animación de payasos, dinámicas divertidas, juegos y estaciones de pinta caritas, contribuyendo a crear un entorno de celebración y sonrisas.' },
     ]
 
     for (let i = 0; i < newsEN.length; i++) {
@@ -512,14 +485,10 @@ export async function GET() {
     }
 
     const activitiesEN = [
-      { name: 'After-school tutoring program', slug: 'after-school-tutoring', date: '2025-02-01', location: 'Santo Domingo Community Center', published: true },
-      { name: 'Monthly nutrition workshop', slug: 'monthly-nutrition-workshop', date: '2025-02-15', location: "Grandmother's House Main Hall", published: true },
-      { name: 'Annual fundraising gala', slug: 'annual-fundraising-gala', date: '2025-03-20', location: 'Hotel Santo Domingo', published: true },
+      { name: 'Three Kings Day Toy Delivery', slug: 'entrega-juguetes-reyes-2026', date: '2026-01-06', location: 'Los Guayacanes, Honduras, Hoyo del Toro, Juan Dolio', published: true },
     ]
     const activitiesES = [
-      { name: 'Programa de tutoría después de clases' },
-      { name: 'Taller de nutrición mensual' },
-      { name: 'Gala anual de recaudación de fondos' },
+      { name: 'Entrega de Juguetes del Día de Reyes' },
     ]
 
     for (let i = 0; i < activitiesEN.length; i++) {
@@ -533,7 +502,7 @@ export async function GET() {
     }
     results.push('3 activities seeded (EN + ES).')
 
-    // ─── 10. About, Mission, Vision pages ─────────────────────
+    // ─── 10. About, Mission, Vision, Terms pages ─────────────────────
     const innerPages = [
       {
         slug: 'about',
@@ -544,7 +513,7 @@ export async function GET() {
             blockType: 'textSection',
             subtitle: 'Who we are',
             heading: "About Fundación <span>Grandmother's House</span>",
-            body: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.\n\nDuis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.\n\nSed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.",
+            body: "Fundación Grandmother's House is a nonprofit organization established in 1920, dedicated to the comprehensive development of children in the Dominican Republic. For over a century, we have provided a safe, stimulating, and loving environment where every child can grow — physically, cognitively, and emotionally.\n\nOur programs span education, creative play, community events, and social support. We serve multiple communities including Los Guayacanes, Honduras, Hoyo del Toro, and the tourist destination of Juan Dolio in San Pedro de Macorís.\n\nWe believe that by working together, we can create opportunities for growth and build stronger communities. Our values — Love, Respect, Integrity, Trust, Responsibility, and Safety — guide everything we do.",
             imagePosition: 'left',
             ctaText: 'Contact us',
             ctaLink: '/contacto',
@@ -552,7 +521,7 @@ export async function GET() {
           {
             blockType: 'ctaBanner',
             title: 'Together we can make a <span>difference</span>',
-            description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
+            description: 'Join us in our mission to be the light for those in darkness. Every contribution helps us provide education, child care, and community programs to families who need it most.',
             primaryButtonText: 'Discover more',
             primaryButtonLink: '/actividades',
             secondaryButtonText: 'Contact us',
@@ -564,7 +533,7 @@ export async function GET() {
             blockType: 'textSection',
             subtitle: 'Quiénes somos',
             heading: 'Sobre Fundación <span>Grandmother\'s House</span>',
-            body: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.\n\nDuis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.\n\nSed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.",
+            body: "La Fundación Grandmother's House es una organización sin fines de lucro establecida en 1920, dedicada al desarrollo integral de los niños en la República Dominicana. Por más de un siglo, hemos proporcionado un entorno seguro, estimulante y cariñoso donde cada niño puede crecer — física, cognitiva y emocionalmente.\n\nNuestros programas abarcan educación, juego creativo, eventos comunitarios y apoyo social. Servimos a múltiples comunidades incluyendo Los Guayacanes, Honduras, Hoyo del Toro y el destino turístico de Juan Dolio en San Pedro de Macorís.\n\nCreemos que trabajando juntos podemos crear oportunidades de crecimiento y construir comunidades más fuertes. Nuestros valores — Amor, Respeto, Integridad, Confianza, Responsabilidad y Seguridad — guían todo lo que hacemos.",
             imagePosition: 'left',
             ctaText: 'Contáctanos',
             ctaLink: '/contacto',
@@ -572,7 +541,7 @@ export async function GET() {
           {
             blockType: 'ctaBanner',
             title: 'Juntos podemos hacer la <span>diferencia</span>',
-            description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
+            description: 'Únete a nuestra misión de ser la luz para aquellos en la oscuridad. Cada contribución nos ayuda a brindar educación, cuidado infantil y programas comunitarios a las familias que más lo necesitan.',
             primaryButtonText: 'Descubre más',
             primaryButtonLink: '/actividades',
             secondaryButtonText: 'Contáctanos',
@@ -588,8 +557,8 @@ export async function GET() {
           {
             blockType: 'textSection',
             subtitle: 'Our mission',
-            heading: 'Our <span>mission</span>',
-            body: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.\n\nDuis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.\n\nNemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt.",
+            heading: 'What <span>Drives</span> Us',
+            body: "Our mission is to provide a safe, stimulating, and loving environment where every child can develop fully — both physically and cognitively. We are committed to offering enriching educational programs and creative play, inspiring children to explore, learn, and grow. We strive to be the light for those who are in darkness.\n\nOur Values:\n\n• Love — We act with genuine care for every child and family we serve.\n• Respect — We treat everyone with dignity and value their unique qualities.\n• Integrity — We are transparent and honest in everything we do.\n• Trust — We build relationships based on reliability and accountability.\n• Responsibility — We take ownership of our mission and our impact on the community.\n• Safety — We ensure a secure environment where children can thrive without worry.",
             imagePosition: 'none',
           },
         ],
@@ -597,8 +566,8 @@ export async function GET() {
           {
             blockType: 'textSection',
             subtitle: 'Nuestra misión',
-            heading: 'Nuestra <span>misión</span>',
-            body: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.\n\nDuis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.\n\nNemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt.",
+            heading: 'Lo Que Nos <span>Impulsa</span>',
+            body: "Nuestra misión es proporcionar un entorno seguro, estimulante y cariñoso donde cada niño pueda desarrollarse completamente sano y cognitivamente. Nos comprometemos a ofrecer programas educativos enriquecedores y juego creativo, inspirando a los niños a explorar, aprender y crecer. Nos esforzamos por ser la luz para aquellos que están en la oscuridad.\n\nNuestros Valores:\n\n• Amor — Actuamos con cariño genuino por cada niño y familia que servimos.\n• Respeto — Tratamos a todos con dignidad y valoramos sus cualidades únicas.\n• Integridad — Somos transparentes y honestos en todo lo que hacemos.\n• Confianza — Construimos relaciones basadas en la confiabilidad y la responsabilidad.\n• Responsabilidad — Asumimos nuestra misión y nuestro impacto en la comunidad.\n• Seguridad — Garantizamos un entorno seguro donde los niños pueden prosperar sin preocupaciones.",
             imagePosition: 'none',
           },
         ],
@@ -611,8 +580,8 @@ export async function GET() {
           {
             blockType: 'textSection',
             subtitle: 'Our vision',
-            heading: 'Our <span>vision</span>',
-            body: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.\n\nDuis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.\n\nAt vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi.",
+            heading: 'Where We\'re <span>Headed</span>',
+            body: "Our vision is to be leaders in child care, offering an inspiring environment where every child can flourish and reach their full potential. We are committed to being a model of excellence and compassion, providing innovative and high-quality programs that promote the holistic development of every child.\n\nWe aspire to be recognized for our dedication and excellence in early childhood education, becoming a role model in the community. Through our work in Los Guayacanes, Honduras, Hoyo del Toro, Juan Dolio, and beyond, we aim to expand our reach and deepen our impact on the next generations.",
             imagePosition: 'none',
           },
         ],
@@ -620,8 +589,8 @@ export async function GET() {
           {
             blockType: 'textSection',
             subtitle: 'Nuestra visión',
-            heading: 'Nuestra <span>visión</span>',
-            body: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.\n\nDuis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.\n\nAt vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi.",
+            heading: 'Hacia Dónde <span>Vamos</span>',
+            body: "Nuestra visión es ser líderes en el cuidado infantil, ofreciendo un ambiente inspirador donde cada niño pueda florecer y alcanzar su máximo potencial. Nos comprometemos a ser un modelo de excelencia y compasión, proporcionando programas innovadores y de alta calidad que promueven el desarrollo integral de cada niño.\n\nAspiramos a ser reconocidos por nuestra dedicación y excelencia en la educación infantil, siendo un modelo a seguir en la comunidad. A través de nuestro trabajo en Los Guayacanes, Honduras, Hoyo del Toro, Juan Dolio y más allá, buscamos expandir nuestro alcance y profundizar nuestro impacto en las nuevas generaciones.",
             imagePosition: 'none',
           },
         ],
@@ -634,8 +603,8 @@ export async function GET() {
           {
             blockType: 'textSection',
             subtitle: 'Legal',
-            heading: 'Terms and <span>conditions</span>',
-            body: "1. General information\n\nLorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.\n\n2. Use of the website\n\nDuis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.\n\n3. Intellectual property\n\nSed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.\n\n4. Donations and payments\n\nNemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet.\n\n5. Privacy and data protection\n\nAt vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident.\n\n6. Limitation of liability\n\nSimilique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga. Et harum quidem rerum facilis est et expedita distinctio.\n\n7. Modifications\n\nFundación Grandmother's House reserves the right to modify these terms and conditions at any time. Changes will be effective upon publication on this website.\n\n8. Contact\n\nFor questions about these terms, please contact us at info@grandmothershouse.org.",
+            heading: 'Terms and <span>Conditions</span>',
+            body: "1. General Information\n\nThis website is operated by Fundación Grandmother's House (RNC: 430-43228-8), a nonprofit organization located at Vía Boulevard Juan Dolio, John Hazim Subero, Calle el Tanque, San Pedro de Macorís, Dominican Republic. By accessing and using this website, you agree to these terms and conditions.\n\n2. Use of the Website\n\nThis website is provided for informational purposes about our foundation, programs, and activities. Users may browse content, make donations, and submit contact inquiries. Any misuse of the website is prohibited.\n\n3. Intellectual Property\n\nAll content on this website, including text, images, logos, and design elements, is the property of Fundación Grandmother's House and is protected by intellectual property laws. Reproduction without authorization is prohibited.\n\n4. Donations and Payments\n\nDonations made through this website are voluntary and non-refundable. We offer multiple payment methods including PayPal, bank transfer, and Zelle. All donations are used exclusively to fund our programs and activities.\n\n5. Privacy and Data Protection\n\nWe collect personal information only when voluntarily provided through contact forms or donations. We do not sell or share personal information with third parties. Data is used solely to respond to inquiries and process donations.\n\n6. Limitation of Liability\n\nFundación Grandmother's House is not liable for any damages arising from the use of this website. We make reasonable efforts to ensure information accuracy but do not guarantee completeness.\n\n7. Modifications\n\nFundación Grandmother's House reserves the right to modify these terms at any time. Changes are effective upon publication on this website.\n\n8. Contact\n\nFor questions about these terms, contact us at grandmothershousedaycare@gmail.com or call 809-655-0290.",
             imagePosition: 'none',
           },
         ],
@@ -643,8 +612,8 @@ export async function GET() {
           {
             blockType: 'textSection',
             subtitle: 'Legal',
-            heading: 'Términos y <span>condiciones</span>',
-            body: "1. Información general\n\nLorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.\n\n2. Uso del sitio web\n\nDuis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.\n\n3. Propiedad intelectual\n\nSed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.\n\n4. Donaciones y pagos\n\nNemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet.\n\n5. Privacidad y protección de datos\n\nAt vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident.\n\n6. Limitación de responsabilidad\n\nSimilique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga. Et harum quidem rerum facilis est et expedita distinctio.\n\n7. Modificaciones\n\nFundación Grandmother's House se reserva el derecho de modificar estos términos y condiciones en cualquier momento. Los cambios serán efectivos al momento de su publicación en este sitio web.\n\n8. Contacto\n\nPara preguntas sobre estos términos, contáctanos en info@grandmothershouse.org.",
+            heading: 'Términos y <span>Condiciones</span>',
+            body: "1. Información General\n\nEste sitio web es operado por la Fundación Grandmother's House (RNC: 430-43228-8), una organización sin fines de lucro ubicada en Vía Boulevard Juan Dolio, John Hazim Subero, Calle el Tanque, San Pedro de Macorís, República Dominicana. Al acceder y utilizar este sitio web, usted acepta estos términos y condiciones.\n\n2. Uso del Sitio Web\n\nEste sitio web se proporciona con fines informativos sobre nuestra fundación, programas y actividades. Los usuarios pueden navegar el contenido, realizar donaciones y enviar consultas de contacto. Cualquier uso indebido del sitio web está prohibido.\n\n3. Propiedad Intelectual\n\nTodo el contenido de este sitio web, incluyendo textos, imágenes, logotipos y elementos de diseño, es propiedad de la Fundación Grandmother's House y está protegido por las leyes de propiedad intelectual. La reproducción sin autorización está prohibida.\n\n4. Donaciones y Pagos\n\nLas donaciones realizadas a través de este sitio web son voluntarias y no reembolsables. Ofrecemos múltiples métodos de pago incluyendo PayPal, transferencia bancaria y Zelle. Todas las donaciones se utilizan exclusivamente para financiar nuestros programas y actividades.\n\n5. Privacidad y Protección de Datos\n\nRecopilamos información personal solo cuando se proporciona voluntariamente a través de formularios de contacto o donaciones. No vendemos ni compartimos información personal con terceros. Los datos se utilizan únicamente para responder consultas y procesar donaciones.\n\n6. Limitación de Responsabilidad\n\nLa Fundación Grandmother's House no es responsable de ningún daño derivado del uso de este sitio web. Hacemos esfuerzos razonables para garantizar la exactitud de la información pero no garantizamos su completitud.\n\n7. Modificaciones\n\nLa Fundación Grandmother's House se reserva el derecho de modificar estos términos en cualquier momento. Los cambios serán efectivos al momento de su publicación en este sitio web.\n\n8. Contacto\n\nPara preguntas sobre estos términos, contáctenos en grandmothershousedaycare@gmail.com o llame al 809-655-0290.",
             imagePosition: 'none',
           },
         ],
@@ -652,7 +621,6 @@ export async function GET() {
     ]
 
     for (const pg of innerPages) {
-      // Delete if exists
       const existing = await payload.find({
         collection: 'pages',
         where: { slug: { equals: pg.slug } },
@@ -662,7 +630,6 @@ export async function GET() {
         await payload.delete({ collection: 'pages', id: existing.docs[0].id })
       }
 
-      // Create EN
       const created = await payload.create({
         collection: 'pages',
         locale: 'en',
@@ -673,7 +640,6 @@ export async function GET() {
         },
       })
 
-      // Fetch to get block IDs
       const saved = await payload.findByID({
         collection: 'pages',
         id: created.id,
@@ -681,7 +647,6 @@ export async function GET() {
       })
       const savedBlocks = (saved.layout as any[]) || []
 
-      // Build ES layout with same IDs
       const esLayoutBlocks = pg.esBlocks.map((esBlock: any, idx: number) => ({
         ...esBlock,
         id: savedBlocks[idx]?.id,

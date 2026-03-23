@@ -1,7 +1,7 @@
 import Link from 'next/link'
 
 export function Header({ header, locale }: { header: any; locale: string }) {
-  const logoUrl = header.logo?.url || '/logos/logo-full.png'
+  const logoUrl = header.logo?.url || '/logos/main-logo.svg'
 
   return (
     <header className="header header-secondary">
@@ -12,8 +12,7 @@ export function Header({ header, locale }: { header: any; locale: string }) {
               <nav className="navbar p-0">
                 <div className="navbar-logo">
                   <Link href="/">
-                    <img src={logoUrl} alt="Fundación Grandmother's House" style={{  }} /> 
-                    {/* maxHeight: '60px' */}
+                    <img src={logoUrl} alt="Fundación Grandmother's House" />
                   </Link>
                 </div>
                 <div className="navbar__menu-wrapper">

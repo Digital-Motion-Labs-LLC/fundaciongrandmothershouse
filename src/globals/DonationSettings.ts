@@ -50,6 +50,10 @@ export const DonationSettings: GlobalConfig = {
           type: 'text',
         },
         {
+          name: 'accountHolder',
+          type: 'text',
+        },
+        {
           name: 'routingNumber',
           type: 'text',
         },

@@ -1,8 +1,101 @@
 :root {
-  --base-color: #ffc107;
+  --base-color: #1E293B;
 }
 
 .base-img {
-  -webkit-filter: brightness(0) saturate(100%) invert(76%) sepia(74%) saturate(1946%) hue-rotate(354deg) brightness(104%) contrast(102%);
-          filter: brightness(0) saturate(100%) invert(76%) sepia(74%) saturate(1946%) hue-rotate(354deg) brightness(104%) contrast(102%);
+  -webkit-filter: brightness(0) saturate(100%) invert(42%) sepia(55%) saturate(2000%) hue-rotate(315deg) brightness(95%) contrast(95%);
+          filter: brightness(0) saturate(100%) invert(42%) sepia(55%) saturate(2000%) hue-rotate(315deg) brightness(95%) contrast(95%);
+}
+
+/* Topbar + Header stacking: topbar is absolute, header needs offset */
+.topbar--secondary {
+  z-index: 100;
+}
+.header-secondary {
+  top: 50px !important;
+}
+
+/* Nav text: white on dark background */
+.header-secondary .navbar__menu .navbar__list .navbar__item > a,
+.header-secondary .navbar__menu .navbar__list .navbar__item > .navbar__dropdown-label {
+  color: #ffffff !important;
+}
+
+/* Contact section in header - white text */
+.contact-btn .contact-content p,
+.contact-btn .contact-content a {
+  color: #ffffff !important;
+}
+.contact-btn .contact-icon i {
+  color: #ffffff !important;
+}
+
+/* Fix: template media query sets nav to transparent at 1200-1400px */
+@media only screen and (min-width: 1200px) and (max-width: 1399.98px) {
+  .header-secondary .navbar__menu-wrapper {
+    background-color: var(--base-color) !important;
+    border-radius: 60px !important;
+  }
+}
+
+/* CTA buttons: vibrant pink that pops */
+.btn--primary,
+.donate-trigger {
+  background-color: #E8447A !important;
+  border-color: #E8447A !important;
+  color: #ffffff !important;
+}
+.btn--primary:hover,
+.donate-trigger:hover {
+  background-color: #D6336C !important;
+  border-color: #D6336C !important;
+}
+.btn--primary::before,
+.btn--primary::after {
+  background-color: #D6336C !important;
+}
+
+/* Tertiary button (outline style) */
+.btn--tertiary {
+  border-color: #ffffff !important;
+  color: #ffffff !important;
+}
+.btn--tertiary:hover {
+  background-color: #ffffff !important;
+  color: #1E293B !important;
+}
+
+/* Topbar: dark bg for contrast */
+.topbar--secondary .topbar__inner {
+  background-color: #0F172A !important;
+}
+.topbar--secondary a,
+.topbar--secondary p,
+.topbar--secondary li {
+  color: #F1F5F9 !important;
+}
+
+/* Page banner inner */
+.banner-inner {
+  padding: 160px 0 80px;
+  background-color: #F1F5F9;
+  background-size: cover;
+  background-position: center;
+  position: relative;
+}
+.banner-inner__content h2 {
+  font-size: 42px;
+  font-weight: 800;
+  color: #1E293B;
+}
+
+/* Hero subtitle accent color */
+.banner__content .subtitle {
+  color: #14B8A6 !important;
+}
+
+/* Accent text (span in titles) */
+.section__header .section-title span,
+.banner__content-two .banner-title span {
+  color: #E8447A !important;
 }

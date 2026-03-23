@@ -1,11 +1,42 @@
 import * as dotenv from 'dotenv'
 import path from 'path'
+import fs from 'fs'
 
 // Load .env before anything else
 dotenv.config({ path: path.resolve(__dirname, '../.env') })
 
 import { getPayload } from 'payload'
 import config from './payload.config'
+
+async function uploadImage(payload: any, filePath: string, alt: string, altEs?: string) {
+  const absolutePath = path.resolve(__dirname, filePath)
+  if (!fs.existsSync(absolutePath)) {
+    console.log(`⚠️  Image not found: ${absolutePath}`)
+    return null
+  }
+  const data = fs.readFileSync(absolutePath)
+  const fileName = path.basename(absolutePath)
+  const media = await payload.create({
+    collection: 'media',
+    data: { alt },
+    locale: 'en',
+    file: {
+      data,
+      mimetype: 'image/jpeg',
+      name: fileName,
+      size: data.length,
+    },
+  })
+  if (altEs) {
+    await payload.update({
+      collection: 'media',
+      id: media.id,
+      locale: 'es',
+      data: { alt: altEs },
+    })
+  }
+  return media
+}
 
 async function seed() {
   const payload = await getPayload({ config })
@@ -29,17 +60,36 @@ async function seed() {
     console.log('⏭️  Admin user already exists.')
   }
 
-  // ─── 2. Header global (EN + ES) ──────────────────────────
+  // ─── 2. Upload images to R2 ────────────────────────────────
+  console.log('📸 Uploading images to R2...')
+  const eventPhotos: any[] = []
+  for (let i = 1; i <= 18; i++) {
+    const photo = await uploadImage(
+      payload,
+      `../public/redesign-photos/evento-juguetes-${i}.jpeg`,
+      `Toy delivery event - Photo ${i}`,
+      `Entrega de juguetes - Foto ${i}`,
+    )
+    if (photo) eventPhotos.push(photo)
+  }
+  console.log(`✅ ${eventPhotos.length} event photos uploaded.`)
+
+  // Use first few photos for hero, about, etc.
+  const heroImage1 = eventPhotos[6] || null  // Group photo
+  const heroImage2 = eventPhotos[11] || null // Another good one
+  const aboutImage = eventPhotos[9] || null
+  const featuredEventImage = eventPhotos[0] || null
+
+  // ─── 3. Header global (EN + ES) ──────────────────────────
   console.log('📝 Seeding Header...')
   await payload.updateGlobal({
     slug: 'header',
     data: {
-      email: 'info@grandmothershouse.org',
-      phone: '+1 (809) 555-0123',
+      email: 'grandmothershousedaycare@gmail.com',
+      phone: '809-655-0290',
       donateButtonText: 'Donate Now',
       socialLinks: [
-        { platform: 'facebook', url: 'https://facebook.com/grandmothershouse', label: 'Facebook' },
-        { platform: 'instagram', url: 'https://instagram.com/grandmothershouse', label: 'Instagram' },
+        { platform: 'instagram', url: 'https://www.instagram.com/fundaciongrandmothershouse', label: 'Instagram' },
       ],
       navigation: [
         { label: 'Home', link: '/' },
@@ -81,15 +131,14 @@ async function seed() {
   })
   console.log('✅ Header seeded.')
 
-  // ─── 3. Footer global (EN + ES) ──────────────────────────
+  // ─── 4. Footer global (EN + ES) ──────────────────────────
   console.log('📝 Seeding Footer...')
   await payload.updateGlobal({
     slug: 'footer',
     data: {
-      description: "Fundación Grandmother's House is dedicated to making a difference in the lives of those who need it most through education, nutrition, and community support.",
+      description: "Fundación Grandmother's House is dedicated to providing a safe, stimulating, and loving environment where every child can develop fully. Through education, play, and community support, we strive to be the light for those in darkness.",
       socialLinks: [
-        { platform: 'facebook', url: 'https://facebook.com/grandmothershouse', label: 'Facebook' },
-        { platform: 'instagram', url: 'https://instagram.com/grandmothershouse', label: 'Instagram' },
+        { platform: 'instagram', url: 'https://www.instagram.com/fundaciongrandmothershouse', label: 'Instagram' },
       ],
       quickLinks: [
         { label: 'About Us', link: '/quienes-somos' },
@@ -100,20 +149,20 @@ async function seed() {
       ],
       services: [
         { label: 'Education Support', link: '/actividades' },
-        { label: 'Nutrition Programs', link: '/actividades' },
-        { label: 'Healthcare Access', link: '/actividades' },
+        { label: 'Child Care', link: '/actividades' },
         { label: 'Community Programs', link: '/actividades' },
+        { label: 'Toy Drives', link: '/actividades' },
         { label: 'Volunteer Opportunities', link: '/contacto' },
       ],
       contactInfo: {
-        address: 'Santo Domingo, Dominican Republic',
-        addressLink: 'https://maps.google.com',
-        phone: '+1 (809) 555-0123',
-        email: 'info@grandmothershouse.org',
+        address: 'Vía Boulevard Juan Dolio, John Hazim Subero, Calle el Tanque, SPM, RD',
+        addressLink: 'https://maps.google.com/?q=Juan+Dolio+San+Pedro+de+Macoris+RD',
+        phone: '809-655-0290',
+        email: 'grandmothershousedaycare@gmail.com',
       },
-      copyrightText: "Copyright © 2025 Fundación Grandmother's House. All rights reserved.",
+      copyrightText: "Copyright © 2026 Fundación Grandmother's House. All rights reserved. RNC: 430-43228-8",
       legalLinks: [
-        { label: 'Terms & Conditions', link: '#' },
+        { label: 'Terms & Conditions', link: '/terminos-y-condiciones' },
         { label: 'Privacy Policy', link: '#' },
       ],
     },
@@ -122,7 +171,7 @@ async function seed() {
   await payload.updateGlobal({
     slug: 'footer',
     data: {
-      description: 'La Fundación Grandmother\'s House se dedica a hacer una diferencia en la vida de quienes más lo necesitan a través de educación, nutrición y apoyo comunitario.',
+      description: 'La Fundación Grandmother\'s House se dedica a proporcionar un entorno seguro, estimulante y cariñoso donde cada niño pueda desarrollarse plenamente. A través de educación, juego y apoyo comunitario, nos esforzamos por ser la luz para aquellos que están en la oscuridad.',
       quickLinks: [
         { label: 'Quiénes Somos', link: '/quienes-somos' },
         { label: 'Noticias', link: '/noticias' },
@@ -132,17 +181,17 @@ async function seed() {
       ],
       services: [
         { label: 'Apoyo Educativo', link: '/actividades' },
-        { label: 'Programas de Nutrición', link: '/actividades' },
-        { label: 'Acceso a Salud', link: '/actividades' },
+        { label: 'Cuidado Infantil', link: '/actividades' },
         { label: 'Programas Comunitarios', link: '/actividades' },
+        { label: 'Entrega de Juguetes', link: '/actividades' },
         { label: 'Oportunidades de Voluntariado', link: '/contacto' },
       ],
       contactInfo: {
-        address: 'Santo Domingo, República Dominicana',
+        address: 'Vía Boulevard Juan Dolio, John Hazim Subero, Calle el Tanque, SPM, RD',
       },
-      copyrightText: "Copyright © 2025 Fundación Grandmother's House. Todos los derechos reservados.",
+      copyrightText: "Copyright © 2026 Fundación Grandmother's House. Todos los derechos reservados. RNC: 430-43228-8",
       legalLinks: [
-        { label: 'Términos y Condiciones', link: '#' },
+        { label: 'Términos y Condiciones', link: '/terminos-y-condiciones' },
         { label: 'Política de Privacidad', link: '#' },
       ],
     },
@@ -150,7 +199,7 @@ async function seed() {
   })
   console.log('✅ Footer seeded.')
 
-  // ─── 4. Donation Settings (EN + ES) ──────────────────────
+  // ─── 5. Donation Settings (EN + ES) ──────────────────────
   console.log('📝 Seeding Donation Settings...')
   await payload.updateGlobal({
     slug: 'donation-settings',
@@ -160,11 +209,12 @@ async function seed() {
       paypal: { enabled: true, link: 'https://paypal.me/grandmothershouse' },
       bankTransfer: {
         enabled: true,
-        bankName: 'Banco Popular Dominicano',
-        accountNumber: '123-456789-0',
-        accountType: 'Savings',
+        bankName: 'Banreservas',
+        accountNumber: '9609143691',
+        accountType: 'Checking',
+        accountHolder: 'Elizabeth González Hilario - Céd. 023-0140481-6',
       },
-      zelle: { enabled: true, email: 'donate@grandmothershouse.org' },
+      zelle: { enabled: true, email: 'grandmothershousedaycare@gmail.com' },
     },
     locale: 'en',
   })
@@ -178,7 +228,7 @@ async function seed() {
   })
   console.log('✅ Donation Settings seeded.')
 
-  // ─── 5. Site Settings ─────────────────────────────────────
+  // ─── 6. Site Settings ─────────────────────────────────────
   console.log('📝 Seeding Site Settings...')
   await payload.updateGlobal({
     slug: 'site-settings',
@@ -193,10 +243,9 @@ async function seed() {
   })
   console.log('✅ Site Settings seeded.')
 
-  // ─── 6. Home page with blocks ─────────────────────────────
+  // ─── 7. Home page with blocks ─────────────────────────────
   console.log('📝 Seeding Home page...')
 
-  // Delete existing home page first
   const existingHome = await payload.find({
     collection: 'pages',
     where: { slug: { equals: 'home' } },
@@ -217,71 +266,74 @@ async function seed() {
           blockType: 'heroSlider',
           slides: [
             {
-              subtitle: 'Welcome to our Foundation',
-              title: 'Giving Help <br>To Those Who <span>Need</span> It.',
+              subtitle: 'Fundación Grandmother\'s House',
+              title: 'A Safe Place <br>Where Children <span>Grow</span>',
               ctaPrimaryText: 'Discover More',
               ctaPrimaryLink: '/quienes-somos',
               ctaSecondaryText: 'Contact Us',
               ctaSecondaryLink: '/contacto',
+              ...(heroImage1 ? { image: heroImage1.id } : {}),
             },
             {
               subtitle: 'Making a difference',
-              title: 'Together We Can <br>Change <span>Lives</span> Forever.',
+              title: 'Bringing Joy <br>To Over <span>2,100</span> Children',
               ctaPrimaryText: 'Our Activities',
               ctaPrimaryLink: '/actividades',
               ctaSecondaryText: 'Donate Now',
               ctaSecondaryLink: '#',
+              ...(heroImage2 ? { image: heroImage2.id } : {}),
             },
           ],
         },
         {
           blockType: 'difference',
           subtitle: 'Our Programs',
-          title: 'Charity With Difference',
-          description: 'We provide education, nutrition, and healthcare programs to those who need it most. Join our mission to create lasting change.',
+          title: 'Making a Real Difference',
+          description: 'We provide education, child care, and community programs that impact families across multiple communities including Los Guayacanes, Honduras, Hoyo del Toro, and Juan Dolio.',
           items: [
             {
               icon: 'icon-education',
-              title: 'Education Support',
-              description: 'Providing quality education and school supplies to children in underserved communities.',
+              title: 'Education & Development',
+              description: 'Enriching educational programs and creative play that inspire children to explore, learn, and grow.',
             },
             {
               icon: 'icon-food',
-              title: 'Nutrition Programs',
-              description: 'Ensuring families have access to healthy meals and nutritional education.',
+              title: 'Community Events',
+              description: 'Joyful events like toy drives, educational talks, and celebrations that bring communities together.',
             },
             {
               icon: 'icon-health',
-              title: 'Healthcare Access',
-              description: 'Connecting communities with medical services, preventive care, and health education.',
+              title: 'Child Care',
+              description: 'A safe, stimulating, and loving environment where every child can develop fully — physically and cognitively.',
             },
           ],
         },
         {
           blockType: 'help',
           subtitle: 'About us',
-          title: 'Helping Each Other Can Make <span>World</span> Better',
-          description: 'We believe that by working together, we can create opportunities for growth and build stronger communities. Our programs focus on education, nutrition, and healthcare to make a lasting impact.',
+          title: 'Be the Light for Those <br>in <span>Darkness</span>',
+          description: 'Our mission is to provide a safe, stimulating, and loving environment where every child can develop fully. We are committed to offering enriching educational programs and creative play, inspiring children to explore, learn, and grow.',
           features: [
             {
               icon: 'icon-make-donation',
               title: 'Start Helping Today',
-              description: 'Join our cause and help us raise awareness about the needs in our communities.',
+              description: 'Join our cause and help us bring joy to children across communities in the Dominican Republic.',
             },
             {
               icon: 'icon-support-heart',
               title: 'Make Donations',
-              description: 'Your generous contributions support our programs and change lives.',
+              description: 'Your generous contributions support our programs, toy drives, and educational initiatives.',
             },
           ],
           checkmarks: [
-            { text: 'Community-driven programs for education and growth' },
-            { text: 'We give children the gift of education and hope' },
-            { text: 'Empowering families through sustainable support' },
+            { text: 'Over 2,100 children impacted in our latest toy drive' },
+            { text: 'Educational talks on values, self-care, and personal growth' },
+            { text: 'Serving communities across Los Guayacanes, Honduras, and Juan Dolio' },
           ],
           ctaText: 'More About Us',
           ctaLink: '/quienes-somos',
-          phone: '+1 (809) 555-0123',
+          phone: '809-655-0290',
+          ...(aboutImage ? { image: aboutImage.id } : {}),
         },
         {
           blockType: 'testimonial',
@@ -290,13 +342,13 @@ async function seed() {
           testimonials: [
             {
               rating: 5,
-              quote: 'This foundation has truly changed lives in our community. Their dedication to education and helping families is remarkable and inspiring.',
+              quote: 'This foundation has truly changed lives in our community. Their dedication to children and families is remarkable and inspiring.',
               authorName: 'María García',
               authorTitle: 'Community Member',
             },
             {
               rating: 5,
-              quote: 'The programs they offer are making a real difference for children and families. I am proud to be part of this incredible organization.',
+              quote: 'The toy drive brought so much joy to our children. Seeing over 2,100 kids receive gifts was a truly moving experience.',
               authorName: 'Juan Pérez',
               authorTitle: 'Volunteer',
             },
@@ -308,7 +360,7 @@ async function seed() {
             },
             {
               rating: 5,
-              quote: 'Their commitment to transparency and impact is what sets them apart. Every dollar donated goes directly to making a difference.',
+              quote: 'Their educational programs and community events are making a real difference. Every contribution goes directly to the children who need it most.',
               authorName: 'Carlos Martínez',
               authorTitle: 'Donor',
             },
@@ -322,84 +374,394 @@ async function seed() {
       ],
     },
   })
-  console.log('✅ Home page seeded.')
 
-  // ─── 7. News articles ─────────────────────────────────────
+  // ES version of home page
+  const homePageEs = await payload.find({
+    collection: 'pages',
+    where: { slug: { equals: 'home' } },
+    limit: 1,
+  })
+  if (homePageEs.docs[0]) {
+    await payload.update({
+      collection: 'pages',
+      id: homePageEs.docs[0].id,
+      locale: 'es',
+      data: {
+        title: 'Inicio',
+        layout: [
+          {
+            blockType: 'heroSlider',
+            slides: [
+              {
+                subtitle: 'Fundación Grandmother\'s House',
+                title: 'Un Lugar Seguro <br>Donde los Niños <span>Crecen</span>',
+                ctaPrimaryText: 'Descubre Más',
+                ctaPrimaryLink: '/quienes-somos',
+                ctaSecondaryText: 'Contáctanos',
+                ctaSecondaryLink: '/contacto',
+                ...(heroImage1 ? { image: heroImage1.id } : {}),
+              },
+              {
+                subtitle: 'Haciendo la diferencia',
+                title: 'Llevando Alegría <br>A Más de <span>2,100</span> Niños',
+                ctaPrimaryText: 'Nuestras Actividades',
+                ctaPrimaryLink: '/actividades',
+                ctaSecondaryText: 'Donar Ahora',
+                ctaSecondaryLink: '#',
+                ...(heroImage2 ? { image: heroImage2.id } : {}),
+              },
+            ],
+          },
+          {
+            blockType: 'difference',
+            subtitle: 'Nuestros Programas',
+            title: 'Haciendo una Diferencia Real',
+            description: 'Ofrecemos educación, cuidado infantil y programas comunitarios que impactan familias en múltiples comunidades incluyendo Los Guayacanes, Honduras, Hoyo del Toro y Juan Dolio.',
+            items: [
+              {
+                icon: 'icon-education',
+                title: 'Educación y Desarrollo',
+                description: 'Programas educativos enriquecedores y juego creativo que inspiran a los niños a explorar, aprender y crecer.',
+              },
+              {
+                icon: 'icon-food',
+                title: 'Eventos Comunitarios',
+                description: 'Eventos llenos de alegría como entrega de juguetes, charlas educativas y celebraciones que unen a las comunidades.',
+              },
+              {
+                icon: 'icon-health',
+                title: 'Cuidado Infantil',
+                description: 'Un entorno seguro, estimulante y cariñoso donde cada niño puede desarrollarse plenamente — física y cognitivamente.',
+              },
+            ],
+          },
+          {
+            blockType: 'help',
+            subtitle: 'Sobre nosotros',
+            title: 'Ser la Luz para Aquellos <br>en la <span>Oscuridad</span>',
+            description: 'Nuestra misión es proporcionar un entorno seguro, estimulante y cariñoso donde cada niño pueda desarrollarse completamente. Nos comprometemos a ofrecer programas educativos enriquecedores y juego creativo, inspirando a los niños a explorar, aprender y crecer.',
+            features: [
+              {
+                icon: 'icon-make-donation',
+                title: 'Empieza a Ayudar Hoy',
+                description: 'Únete a nuestra causa y ayúdanos a llevar alegría a niños de comunidades en República Dominicana.',
+              },
+              {
+                icon: 'icon-support-heart',
+                title: 'Haz una Donación',
+                description: 'Tus generosas contribuciones apoyan nuestros programas, entregas de juguetes e iniciativas educativas.',
+              },
+            ],
+            checkmarks: [
+              { text: 'Más de 2,100 niños impactados en nuestra última entrega de juguetes' },
+              { text: 'Charlas educativas sobre valores, autocuidado y crecimiento personal' },
+              { text: 'Sirviendo comunidades en Los Guayacanes, Honduras y Juan Dolio' },
+            ],
+            ctaText: 'Más Sobre Nosotros',
+            ctaLink: '/quienes-somos',
+            phone: '809-655-0290',
+            ...(aboutImage ? { image: aboutImage.id } : {}),
+          },
+          {
+            blockType: 'testimonial',
+            subtitle: 'Testimonios',
+            title: 'Lo Que la Gente <span>Dice</span> de Nosotros',
+            testimonials: [
+              {
+                rating: 5,
+                quote: 'Esta fundación ha cambiado vidas en nuestra comunidad. Su dedicación a los niños y las familias es notable e inspiradora.',
+                authorName: 'María García',
+                authorTitle: 'Miembro de la Comunidad',
+              },
+              {
+                rating: 5,
+                quote: 'La entrega de juguetes trajo tanta alegría a nuestros niños. Ver a más de 2,100 niños recibir regalos fue una experiencia realmente conmovedora.',
+                authorName: 'Juan Pérez',
+                authorTitle: 'Voluntario',
+              },
+              {
+                rating: 5,
+                quote: 'Estoy agradecida por el apoyo y las oportunidades que esta organización ha brindado a mi familia. Realmente se preocupan por cada persona que atienden.',
+                authorName: 'Ana Rodríguez',
+                authorTitle: 'Beneficiaria',
+              },
+              {
+                rating: 5,
+                quote: 'Sus programas educativos y eventos comunitarios están haciendo una diferencia real. Cada contribución va directamente a los niños que más lo necesitan.',
+                authorName: 'Carlos Martínez',
+                authorTitle: 'Donante',
+              },
+            ],
+          },
+          {
+            blockType: 'blogPreview',
+            subtitle: 'Últimas Noticias',
+            title: 'Nuestras Últimas <span>Noticias</span> y Artículos',
+          },
+        ],
+      },
+    })
+  }
+  console.log('✅ Home page seeded (EN + ES).')
+
+  // ─── 8. Mission page ─────────────────────────────────────
+  console.log('📝 Seeding Mission page...')
+  const existingMission = await payload.find({
+    collection: 'pages',
+    where: { slug: { equals: 'mission' } },
+    limit: 1,
+  })
+  if (existingMission.docs.length > 0) {
+    await payload.delete({ collection: 'pages', id: existingMission.docs[0].id })
+  }
+
+  const missionPage = await payload.create({
+    collection: 'pages',
+    locale: 'en',
+    data: {
+      title: 'Mission',
+      slug: 'mission',
+      layout: [
+        {
+          blockType: 'textSection',
+          subtitle: 'Our Mission',
+          heading: 'What Drives Us',
+          body: 'Our mission is to provide a safe, stimulating, and loving environment where every child can develop fully — both physically and cognitively. We are committed to offering enriching educational programs and creative play, inspiring children to explore, learn, and grow. We strive to be the light for those who are in darkness.',
+          imagePosition: 'right',
+          ...(eventPhotos[9] ? { image: eventPhotos[9].id } : {}),
+        },
+        {
+          blockType: 'textSection',
+          subtitle: 'Our Values',
+          heading: 'The Principles That Guide Us',
+          body: 'Love — We act with genuine care for every child and family we serve.\n\nRespect — We treat everyone with dignity and value their unique qualities.\n\nIntegrity — We are transparent and honest in everything we do.\n\nTrust — We build relationships based on reliability and accountability.\n\nResponsibility — We take ownership of our mission and our impact on the community.\n\nSafety — We ensure a secure environment where children can thrive without worry.',
+          imagePosition: 'none',
+        },
+      ],
+    },
+  })
+  await payload.update({
+    collection: 'pages',
+    id: missionPage.id,
+    locale: 'es',
+    data: {
+      title: 'Misión',
+      layout: [
+        {
+          blockType: 'textSection',
+          subtitle: 'Nuestra Misión',
+          heading: 'Lo Que Nos Impulsa',
+          body: 'Nuestra misión es proporcionar un entorno seguro, estimulante y cariñoso donde cada niño pueda desarrollarse completamente sano y cognitivamente. Nos comprometemos a ofrecer programas educativos enriquecedores y juego creativo, inspirando a los niños a explorar, aprender y crecer. Nos esforzamos por ser la luz para aquellos que están en la oscuridad.',
+          imagePosition: 'right',
+          ...(eventPhotos[9] ? { image: eventPhotos[9].id } : {}),
+        },
+        {
+          blockType: 'textSection',
+          subtitle: 'Nuestros Valores',
+          heading: 'Los Principios Que Nos Guían',
+          body: 'Amor — Actuamos con cariño genuino por cada niño y familia que servimos.\n\nRespeto — Tratamos a todos con dignidad y valoramos sus cualidades únicas.\n\nIntegridad — Somos transparentes y honestos en todo lo que hacemos.\n\nConfianza — Construimos relaciones basadas en la confiabilidad y la responsabilidad.\n\nResponsabilidad — Asumimos nuestra misión y nuestro impacto en la comunidad.\n\nSeguridad — Garantizamos un entorno seguro donde los niños pueden prosperar sin preocupaciones.',
+          imagePosition: 'none',
+        },
+      ],
+    },
+  })
+  console.log('✅ Mission page seeded (EN + ES).')
+
+  // ─── 9. Vision page ──────────────────────────────────────
+  console.log('📝 Seeding Vision page...')
+  const existingVision = await payload.find({
+    collection: 'pages',
+    where: { slug: { equals: 'vision' } },
+    limit: 1,
+  })
+  if (existingVision.docs.length > 0) {
+    await payload.delete({ collection: 'pages', id: existingVision.docs[0].id })
+  }
+
+  const visionPage = await payload.create({
+    collection: 'pages',
+    locale: 'en',
+    data: {
+      title: 'Vision',
+      slug: 'vision',
+      layout: [
+        {
+          blockType: 'textSection',
+          subtitle: 'Our Vision',
+          heading: 'Where We\'re Headed',
+          body: 'Our vision is to be leaders in child care, offering an inspiring environment where every child can flourish and reach their full potential. We are committed to being a model of excellence and compassion, providing innovative and high-quality programs that promote the holistic development of every child. We aspire to be recognized for our dedication and excellence in early childhood education, becoming a role model in the community.',
+          imagePosition: 'left',
+          ...(eventPhotos[5] ? { image: eventPhotos[5].id } : {}),
+        },
+      ],
+    },
+  })
+  await payload.update({
+    collection: 'pages',
+    id: visionPage.id,
+    locale: 'es',
+    data: {
+      title: 'Visión',
+      layout: [
+        {
+          blockType: 'textSection',
+          subtitle: 'Nuestra Visión',
+          heading: 'Hacia Dónde Vamos',
+          body: 'Nuestra visión es ser líderes en el cuidado infantil, ofreciendo un ambiente inspirador donde cada niño pueda florecer y alcanzar su máximo potencial. Nos comprometemos a ser un modelo de excelencia y compasión, proporcionando programas innovadores y de alta calidad que promueven el desarrollo integral de cada niño. Aspiramos a ser reconocidos por nuestra dedicación y excelencia en la educación infantil, siendo un modelo a seguir en la comunidad.',
+          imagePosition: 'left',
+          ...(eventPhotos[5] ? { image: eventPhotos[5].id } : {}),
+        },
+      ],
+    },
+  })
+  console.log('✅ Vision page seeded (EN + ES).')
+
+  // ─── 10. News articles ─────────────────────────────────────
   console.log('📝 Seeding News articles...')
   const existingNews = await payload.find({ collection: 'news', limit: 1 })
   if (existingNews.docs.length === 0) {
+    // Main news article about the toy drive
+    const toyDriveNews = await payload.create({
+      collection: 'news',
+      locale: 'en',
+      data: {
+        title: 'Grandmother\'s House Foundation Delivers Toys to Over 2,100 Children',
+        slug: 'toy-delivery-2100-children',
+        date: '2026-01-06',
+        excerpt: 'The Grandmother\'s House Foundation carried out a major social event benefiting childhood, impacting over 2,100 children from different communities.',
+        published: true,
+        ...(featuredEventImage ? { image: featuredEventImage.id } : {}),
+      } as any,
+    })
+    await payload.update({
+      collection: 'news',
+      id: toyDriveNews.id,
+      locale: 'es',
+      data: {
+        title: 'Fundación Grandmother House entrega juguetes a más de 2,100 niños de diversas comunidades',
+        excerpt: 'La Fundación Grandmother House llevó a cabo una gran jornada social en beneficio de la niñez, logrando impactar a más de 2,100 niños de distintas comunidades.',
+      },
+    })
+
     const newsData = [
       {
-        title: 'Education Program Reaches 500 Children This Year',
-        slug: 'education-program-500-children',
-        date: '2025-01-15',
-        excerpt: 'Our education support program has reached a milestone of 500 children enrolled this year, providing them with school supplies, tutoring, and mentorship.',
-        published: true,
+        en: {
+          title: 'Educational Talks on Values and Personal Growth',
+          slug: 'educational-talks-values',
+          date: '2026-01-06',
+          excerpt: 'As part of our commitment to education, children participated in talks focused on values, behavior, self-care, and personal growth.',
+          published: true,
+        },
+        es: {
+          title: 'Charlas Educativas sobre Valores y Crecimiento Personal',
+          excerpt: 'Como parte del compromiso formativo de la fundación, los niños participaron en charlas educativas enfocadas en valores, comportamiento, autocuidado y crecimiento personal.',
+        },
       },
       {
-        title: 'Community Health Fair a Great Success',
-        slug: 'community-health-fair-success',
-        date: '2025-01-08',
-        excerpt: 'Over 200 families attended our annual Community Health Fair, receiving free health screenings, nutrition counseling, and wellness resources.',
-        published: true,
-      },
-      {
-        title: 'New Partnership with Local Schools Announced',
-        slug: 'partnership-local-schools',
-        date: '2024-12-20',
-        excerpt: 'We are excited to announce new partnerships with three local schools to expand our after-school tutoring and mentorship programs.',
-        published: true,
+        en: {
+          title: 'Community Celebration Brings Joy to Multiple Neighborhoods',
+          slug: 'community-celebration-joy',
+          date: '2026-01-06',
+          excerpt: 'Children enjoyed entertainment with clowns, fun activities, games, and face painting stations, creating an atmosphere of celebration and smiles.',
+          published: true,
+        },
+        es: {
+          title: 'Celebración Comunitaria Lleva Alegría a Múltiples Barrios',
+          excerpt: 'Los niños disfrutaron de la animación de payasos, dinámicas divertidas, juegos y estaciones de pinta caritas, contribuyendo a crear un entorno de celebración y sonrisas.',
+        },
       },
     ]
 
     for (const article of newsData) {
-      await payload.create({
+      const created = await payload.create({
         collection: 'news',
         locale: 'en',
-        data: article as any,
+        data: article.en as any,
+      })
+      await payload.update({
+        collection: 'news',
+        id: created.id,
+        locale: 'es',
+        data: article.es,
       })
     }
-    console.log('✅ News articles seeded (3 articles).')
+    console.log('✅ News articles seeded (3 articles, EN + ES).')
   } else {
     console.log('⏭️  News articles already exist.')
   }
 
-  // ─── 8. Activities ────────────────────────────────────────
+  // ─── 11. Activities ────────────────────────────────────────
   console.log('📝 Seeding Activities...')
   const existingActivities = await payload.find({ collection: 'activities', limit: 1 })
   if (existingActivities.docs.length === 0) {
-    const activities = [
-      {
-        name: 'After-School Tutoring Program',
-        slug: 'after-school-tutoring',
-        date: '2025-02-01',
-        location: 'Santo Domingo Community Center',
+    // Main activity: Toy delivery
+    const toyDrive = await payload.create({
+      collection: 'activities',
+      locale: 'en',
+      data: {
+        name: 'Three Kings Day Toy Delivery',
+        slug: 'entrega-juguetes-reyes-2026',
+        date: '2026-01-06',
+        location: 'Los Guayacanes, Honduras, Hoyo del Toro, Juan Dolio',
         published: true,
+        ...(featuredEventImage ? { featuredImage: featuredEventImage.id } : {}),
+        gallery: eventPhotos.map((photo) => ({ image: photo.id })),
+      } as any,
+    })
+    await payload.update({
+      collection: 'activities',
+      id: toyDrive.id,
+      locale: 'es',
+      data: {
+        name: 'Entrega de Juguetes del Día de Reyes',
+        location: 'Los Guayacanes, Honduras, Hoyo del Toro, Juan Dolio',
+      },
+    })
+
+    // Additional activities
+    const additionalActivities = [
+      {
+        en: {
+          name: 'After-School Educational Program',
+          slug: 'programa-educativo',
+          date: '2026-02-01',
+          location: 'Vía Boulevard Juan Dolio, Calle el Tanque, SPM',
+          published: true,
+        },
+        es: {
+          name: 'Programa Educativo Después de Clases',
+          location: 'Vía Boulevard Juan Dolio, Calle el Tanque, SPM',
+        },
       },
       {
-        name: 'Monthly Nutrition Workshop',
-        slug: 'monthly-nutrition-workshop',
-        date: '2025-02-15',
-        location: 'Grandmother\'s House Main Hall',
-        published: true,
-      },
-      {
-        name: 'Annual Fundraising Gala',
-        slug: 'annual-fundraising-gala',
-        date: '2025-03-20',
-        location: 'Hotel Santo Domingo',
-        published: true,
+        en: {
+          name: 'Community Values Workshop',
+          slug: 'taller-valores-comunitarios',
+          date: '2026-03-15',
+          location: 'Santo Domingo Community Center',
+          published: true,
+        },
+        es: {
+          name: 'Taller de Valores Comunitarios',
+          location: 'Centro Comunitario de Santo Domingo',
+        },
       },
     ]
 
-    for (const activity of activities) {
-      await payload.create({
+    for (const activity of additionalActivities) {
+      const created = await payload.create({
         collection: 'activities',
         locale: 'en',
-        data: activity as any,
+        data: activity.en as any,
+      })
+      await payload.update({
+        collection: 'activities',
+        id: created.id,
+        locale: 'es',
+        data: activity.es,
       })
     }
-    console.log('✅ Activities seeded (3 activities).')
+    console.log('✅ Activities seeded (3 activities, EN + ES).')
   } else {
     console.log('⏭️  Activities already exist.')
   }
