@@ -89,6 +89,24 @@
   color: #1E293B;
 }
 
+/* Hero dark overlay for text readability */
+.banner-two__slider-bg::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to right, rgba(0,0,0,0.55) 0%, rgba(0,0,0,0.2) 100%);
+  z-index: 1;
+}
+.banner-two__slider-content {
+  position: relative;
+  z-index: 2;
+}
+.banner-two__slider-content h1,
+.banner-two__slider-content .sub-title {
+  color: #ffffff !important;
+  text-shadow: 0 2px 8px rgba(0,0,0,0.3);
+}
+
 /* Hero subtitle accent color */
 .banner__content .subtitle {
   color: #14B8A6 !important;
