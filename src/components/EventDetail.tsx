@@ -33,7 +33,7 @@ function Lightbox({ images, startIndex, onClose }: { images: string[]; startInde
       </button>
       <img
         src={images[index]}
-        alt=""
+        alt={`Foto ${index + 1}`}
         onClick={(e) => e.stopPropagation()}
         style={{ maxHeight: '85vh', maxWidth: '90vw', objectFit: 'contain', borderRadius: '8px' }}
       />
@@ -91,7 +91,7 @@ export function EventDetail({ activity }: { activity: any }) {
         </div>
 
         <div style={{ maxWidth: '800px' }}>
-          <h3 style={{ fontSize: '28px', fontWeight: 800, color: '#1E293B', marginBottom: '24px' }}>{activity.name}</h3>
+          <h1 style={{ fontSize: '28px', fontWeight: 800, color: '#1E293B', marginBottom: '24px' }}>{activity.name}</h1>
           {paragraphs.map((text, i) => (
             <p key={i} style={{ marginBottom: '20px', lineHeight: '1.8', fontSize: '16px', color: '#475569' }}>{text}</p>
           ))}
@@ -110,7 +110,7 @@ export function EventDetail({ activity }: { activity: any }) {
                   onClick={() => setLightboxIndex(i)}
                   style={{ borderRadius: '10px', overflow: 'hidden', boxShadow: '0 2px 8px rgba(0,0,0,0.08)', cursor: 'pointer', position: 'relative' }}
                 >
-                  <img src={url} alt="" style={{ width: '100%', height: '220px', objectFit: 'cover', display: 'block', transition: 'transform 0.3s ease' }}
+                  <img src={url} alt={`Galería foto ${i + 1}`} style={{ width: '100%', height: '220px', objectFit: 'cover', display: 'block', transition: 'transform 0.3s ease' }}
                     onMouseEnter={(e) => (e.currentTarget.style.transform = 'scale(1.05)')}
                     onMouseLeave={(e) => (e.currentTarget.style.transform = 'scale(1)')}
                   />

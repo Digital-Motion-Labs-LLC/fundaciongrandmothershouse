@@ -1,8 +1,15 @@
+import type { Metadata } from 'next'
 import { getPayload } from 'payload'
 import configPromise from '@payload-config'
 import { cookies } from 'next/headers'
 import { PageBanner } from '@/components/PageBanner'
 import { TextSection } from '@/components/TextSection'
+
+export const metadata: Metadata = {
+  title: 'Términos y Condiciones',
+  description:
+    'Términos y condiciones de uso del sitio web de Fundación Grandmother\'s House.',
+}
 
 export default async function TermsPage() {
   const cookieStore = await cookies()

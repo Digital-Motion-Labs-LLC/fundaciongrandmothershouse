@@ -1,8 +1,15 @@
+import type { Metadata } from 'next'
 import { getPayload } from 'payload'
 import configPromise from '@payload-config'
 import { cookies } from 'next/headers'
 import { PageBanner } from '@/components/PageBanner'
 import { ContactForm } from '@/components/ContactForm'
+
+export const metadata: Metadata = {
+  title: 'Contacto',
+  description:
+    'Contáctanos para ser voluntario, donar o conocer más sobre Fundación Grandmother\'s House en Juan Dolio, San Pedro de Macorís.',
+}
 
 export default async function ContactPage() {
   const cookieStore = await cookies()

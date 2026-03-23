@@ -1,3 +1,4 @@
+import type { Metadata } from 'next'
 import { getPayload } from 'payload'
 import configPromise from '@payload-config'
 import { cookies } from 'next/headers'
@@ -7,6 +8,12 @@ import { TestimonialSlider } from '@/components/home/TestimonialSlider'
 import { TextSection } from '@/components/TextSection'
 import { CtaBanner } from '@/components/CtaBanner'
 import Link from 'next/link'
+
+export const metadata: Metadata = {
+  title: 'Quiénes Somos',
+  description:
+    'Conoce la historia y el equipo detrás de Fundación Grandmother\'s House, dedicada al cuidado infantil en Juan Dolio, RD.',
+}
 
 export default async function AboutPage() {
   const cookieStore = await cookies()

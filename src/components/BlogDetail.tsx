@@ -17,7 +17,7 @@ export function BlogDetail({ article }: { article: any }) {
                 {date && <p><i className="fa-solid fa-calendar-days"></i>{date}</p>}
               </div>
               <div className="cm-group cta">
-                <h3>{article.title}</h3>
+                <h1>{article.title}</h1>
                 {article.content_html ? (
                   <div dangerouslySetInnerHTML={{ __html: article.content_html }} />
                 ) : article.excerpt ? (

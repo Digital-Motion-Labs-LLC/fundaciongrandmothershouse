@@ -1,9 +1,16 @@
+import type { Metadata } from 'next'
 import { getPayload } from 'payload'
 import configPromise from '@payload-config'
 import { cookies } from 'next/headers'
 import { PageBanner } from '@/components/PageBanner'
 import { EventCard } from '@/components/EventCard'
 import { Pagination } from '@/components/Pagination'
+
+export const metadata: Metadata = {
+  title: 'Nuestras Actividades',
+  description:
+    'Conoce las actividades y eventos que realiza Fundación Grandmother\'s House para el bienestar de los niños en Juan Dolio, República Dominicana.',
+}
 
 export default async function ActivitiesPage({ searchParams }: { searchParams: Promise<{ page?: string; q?: string }> }) {
   const params = await searchParams

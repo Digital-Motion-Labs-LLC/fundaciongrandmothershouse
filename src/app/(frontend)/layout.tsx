@@ -72,8 +72,8 @@ export default async function FrontendLayout({ children }: { children: React.Rea
     '@type': 'NGO',
     name: "Fundación Grandmother's House",
     description: 'Proporcionamos un entorno seguro, estimulante y cariñoso donde cada niño pueda desarrollarse plenamente.',
-    url: 'https://grandmothershouse.org',
-    logo: 'https://grandmothershouse.org/logos/logo-full.png',
+    url: 'https://fundaciongrandmothershouse.com',
+    logo: 'https://fundaciongrandmothershouse.com/og-image.png',
     email: 'grandmothershousedaycare@gmail.com',
     telephone: '809-655-0290',
     address: {

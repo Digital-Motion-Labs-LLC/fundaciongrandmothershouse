@@ -1,9 +1,16 @@
+import type { Metadata } from 'next'
 import { getPayload } from 'payload'
 import configPromise from '@payload-config'
 import { cookies } from 'next/headers'
 import { PageBanner } from '@/components/PageBanner'
 import { BlogCard } from '@/components/BlogCard'
 import { Pagination } from '@/components/Pagination'
+
+export const metadata: Metadata = {
+  title: 'Noticias',
+  description:
+    'Últimas noticias y novedades de Fundación Grandmother\'s House. Mantente informado sobre nuestro trabajo con los niños.',
+}
 
 export default async function NewsPage({ searchParams }: { searchParams: Promise<{ page?: string }> }) {
   const params = await searchParams

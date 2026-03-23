@@ -1,3 +1,4 @@
+import type { Metadata } from 'next'
 import { getPayload } from 'payload'
 import configPromise from '@payload-config'
 import { cookies } from 'next/headers'
@@ -7,6 +8,12 @@ import { HelpSection } from '@/components/home/HelpSection'
 import { TestimonialSlider } from '@/components/home/TestimonialSlider'
 import { BlogPreview } from '@/components/home/BlogPreview'
 import { SectionWrapper } from '@/components/SectionWrapper'
+
+export const metadata: Metadata = {
+  title: 'Inicio',
+  description:
+    'Fundación Grandmother\'s House — un entorno seguro y cariñoso donde cada niño puede crecer. Más de 2,100 niños impactados en Juan Dolio, RD.',
+}
 
 export default async function HomePage() {
   const cookieStore = await cookies()

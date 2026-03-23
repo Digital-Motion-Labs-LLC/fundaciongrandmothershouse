@@ -1,8 +1,15 @@
+import type { Metadata } from 'next'
 import { getPayload } from 'payload'
 import configPromise from '@payload-config'
 import { cookies } from 'next/headers'
 import { PageBanner } from '@/components/PageBanner'
 import { TextSection } from '@/components/TextSection'
+
+export const metadata: Metadata = {
+  title: 'Nuestra Visión',
+  description:
+    'La visión de Fundación Grandmother\'s House: ser referentes en el cuidado infantil y la educación en República Dominicana.',
+}
 
 export default async function VisionPage() {
   const cookieStore = await cookies()
