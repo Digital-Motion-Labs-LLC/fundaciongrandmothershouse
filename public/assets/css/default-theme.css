@@ -99,3 +99,65 @@
 .banner__content-two .banner-title span {
   color: #E8447A !important;
 }
+
+/* ══════════════════════════════════════════
+   RESPONSIVE — mobile only, does NOT affect desktop
+   ══════════════════════════════════════════ */
+
+/* Tablet and below: reduce section padding */
+@media only screen and (max-width: 1199.98px) {
+  section {
+    padding: 40px 0 !important;
+  }
+  .section__header {
+    margin-bottom: 20px !important;
+  }
+}
+
+/* Tablet and below: hide topbar, adjust header */
+@media only screen and (max-width: 1199.98px) {
+  .header-secondary {
+    top: 0px !important;
+    position: relative !important;
+    padding: 12px 0;
+  }
+  .header-secondary .navbar-logo img {
+    max-height: 50px;
+  }
+  .header-secondary .navbar__menu-wrapper {
+    display: none !important;
+  }
+  .header-secondary .navbar__options {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .header-secondary .main-header__menu-box {
+    padding: 0 !important;
+  }
+  .header-secondary .navbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .open-offcanvas-nav span {
+    background-color: #1E293B !important;
+  }
+}
+
+/* Small phones */
+@media only screen and (max-width: 575.98px) {
+  .header-secondary .navbar-logo img {
+    max-height: 40px;
+  }
+  .banner-inner {
+    padding: 100px 0 40px;
+  }
+  .banner-inner__content h2 {
+    font-size: 28px;
+  }
+  /* Footer responsive */
+  .footer-two .gutter-60 > [class*="col-"] {
+    margin-bottom: 30px;
+  }
+}
