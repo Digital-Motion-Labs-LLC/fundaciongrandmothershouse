@@ -22,7 +22,7 @@ export const metadata: Metadata = {
     description: 'Proporcionamos un entorno seguro y cariñoso donde cada niño puede crecer. Más de 2,100 niños impactados. Únete a nuestra causa en Juan Dolio, RD.',
     images: [
       {
-        url: '/logos/logo-full.png',
+        url: '/og-image.png',
         width: 1200,
         height: 630,
         alt: "Fundación Grandmother's House - Únete y Sé Voluntario",
@@ -33,13 +33,13 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: "Fundación Grandmother's House",
     description: 'Cuidado infantil, educación y apoyo comunitario en República Dominicana. Únete y sé voluntario.',
-    images: ['/logos/logo-full.png'],
+    images: ['/og-image.png'],
   },
   robots: {
     index: true,
     follow: true,
   },
-  metadataBase: new URL('https://grandmothershouse.org'),
+  metadataBase: new URL('https://fundaciongrandmothershouse.com'),
 }
 
 export default function RootLayout({
