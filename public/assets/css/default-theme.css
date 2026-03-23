@@ -104,13 +104,20 @@
    RESPONSIVE — mobile only, does NOT affect desktop
    ══════════════════════════════════════════ */
 
-/* Tablet and below: reduce section padding */
+/* Tablet and below: reduce section padding, hero gap */
 @media only screen and (max-width: 1199.98px) {
   section {
     padding: 40px 0 !important;
   }
   .section__header {
     margin-bottom: 20px !important;
+  }
+  .banner-two .banner-two__slider-single {
+    padding-top: 0 !important;
+    min-height: 85vh !important;
+  }
+  .banner-two {
+    margin-top: -1px !important;
   }
 }
 
