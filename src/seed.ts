@@ -206,7 +206,7 @@ async function seed() {
     data: {
       modalTitle: 'Make a Donation',
       modalDescription: 'Choose your preferred donation method below. Every contribution makes a difference in the lives of those who need it most.',
-      paypal: { enabled: true, link: 'https://paypal.me/grandmothershouse' },
+      paypal: { enabled: true, link: 'https://www.paypal.me/fgrandmothershouse' },
       bankTransfer: {
         enabled: true,
         bankName: 'Banreservas',
@@ -214,7 +214,7 @@ async function seed() {
         accountType: 'Checking',
         accountHolder: 'Elizabeth González Hilario - Céd. 023-0140481-6',
       },
-      zelle: { enabled: true, email: 'grandmothershousedaycare@gmail.com' },
+      zelle: { enabled: false, emailOrPhone: 'grandmothershousedaycare@gmail.com' },
     },
     locale: 'en',
   })

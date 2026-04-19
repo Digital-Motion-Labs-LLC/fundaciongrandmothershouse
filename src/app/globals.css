@@ -2,3 +2,22 @@
 @import "tailwindcss";
 
 /* Template fonts are loaded via next/font/google in layout */
+
+/* Mobile donate button: compact so it fits beside the hamburger */
+@media (max-width: 767px) {
+  .header-donate-btn {
+    padding: 10px 16px !important;
+    font-size: 13px !important;
+    gap: 6px;
+    white-space: nowrap;
+  }
+  .header-donate-btn i {
+    font-size: 11px;
+  }
+}
+@media (max-width: 380px) {
+  .header-donate-btn {
+    padding: 9px 12px !important;
+    font-size: 12px !important;
+  }
+}

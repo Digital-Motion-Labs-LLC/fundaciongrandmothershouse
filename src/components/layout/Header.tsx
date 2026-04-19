@@ -54,7 +54,7 @@ export function Header({ header, locale }: { header: any; locale: string }) {
                 </div>
                 <div className="navbar__options">
                   <div className="navbar__mobile-options">
-                    <button className="btn--primary d-none d-md-flex donate-trigger" data-donate-trigger="true">
+                    <button className="btn--primary d-flex donate-trigger header-donate-btn" data-donate-trigger="true">
                       {header.donateButtonText || (locale === 'es' ? 'Donar Ahora' : 'Donate Now')} <i className="fa-solid fa-arrow-right"></i>
                     </button>
                   </div>

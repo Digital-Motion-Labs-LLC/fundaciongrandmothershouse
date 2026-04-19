@@ -30,6 +30,44 @@ export function DonationModal({ settings, locale = 'es' }: { settings: any; loca
         {settings.modalDescription && <p style={{ marginBottom: '24px', color: '#666' }}>{settings.modalDescription}</p>}
 
         <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+          {settings.paypal?.enabled && settings.paypal?.link && (
+            <a
+              href={settings.paypal.link}
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                gap: '8px',
+                background: '#FFC439',
+                color: '#003087',
+                padding: '14px 20px',
+                borderRadius: '999px',
+                textDecoration: 'none',
+                fontWeight: 700,
+                fontSize: '16px',
+                boxShadow: '0 2px 8px rgba(0,0,0,0.08)',
+                transition: 'transform 0.15s ease, box-shadow 0.15s ease',
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.transform = 'translateY(-1px)'
+                e.currentTarget.style.boxShadow = '0 4px 14px rgba(0,0,0,0.15)'
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.transform = 'translateY(0)'
+                e.currentTarget.style.boxShadow = '0 2px 8px rgba(0,0,0,0.08)'
+              }}
+            >
+              <i className="fa-brands fa-paypal" style={{ fontSize: '20px', color: '#003087' }}></i>
+              <span style={{ color: '#003087' }}>Pay</span>
+              <span style={{ color: '#009CDE', marginLeft: '-4px' }}>Pal</span>
+              <span style={{ color: '#003087', fontWeight: 500, marginLeft: '6px' }}>
+                {isEs ? '· Donar' : '· Donate'}
+              </span>
+            </a>
+          )}
+
           {settings.bankTransfer?.enabled && (
             <div style={{ background: '#f8f9fa', padding: '16px', borderRadius: '8px' }}>
               <h6 style={{ marginBottom: '8px' }}><i className="fa-solid fa-building-columns"></i> {isEs ? 'Transferencia Bancaria' : 'Bank Transfer'}</h6>
@@ -40,12 +78,6 @@ export function DonationModal({ settings, locale = 'es' }: { settings: any; loca
               {settings.bankTransfer.routingNumber && <p style={{ margin: '4px 0', fontSize: '14px' }}><strong>Routing:</strong> {settings.bankTransfer.routingNumber}</p>}
               {settings.bankTransfer.swift && <p style={{ margin: '4px 0', fontSize: '14px' }}><strong>SWIFT:</strong> {settings.bankTransfer.swift}</p>}
             </div>
-          )}
-
-          {settings.paypal?.enabled && (
-            <a href={settings.paypal.link} target="_blank" rel="noopener noreferrer" className="btn--primary" style={{ display: 'flex', alignItems: 'center', gap: '10px', justifyContent: 'center', textDecoration: 'none' }}>
-              <i className="fa-brands fa-paypal"></i> PayPal
-            </a>
           )}
 
           {settings.zelle?.enabled && (
