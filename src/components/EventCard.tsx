@@ -9,9 +9,13 @@ export function EventCard({ activity, index = 0, locale }: { activity: any; inde
     <div className="col-12 col-lg-6">
       <div className="event__single-wrapper" data-aos="fade-up" data-aos-duration="1000">
         <div className="event__single">
-          <div className="event__single-thumb">
-            <img src={imageUrl} alt={activity.name} />
-          </div>
+          <Link href={`/actividades/${activity.slug}`} className="event__single-thumb" style={{ display: 'block', width: '100%', aspectRatio: '16 / 10', overflow: 'hidden' }}>
+            <img
+              src={imageUrl}
+              alt={activity.name}
+              style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center', display: 'block' }}
+            />
+          </Link>
           <div className="event__content">
             {date && <span>{date}</span>}
             <h4><Link href={`/actividades/${activity.slug}`}>{activity.name}</Link></h4>
