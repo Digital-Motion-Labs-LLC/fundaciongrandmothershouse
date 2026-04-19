@@ -21,3 +21,25 @@
     font-size: 12px !important;
   }
 }
+
+/* Hero portrait-poster slides (e.g. event flyers) */
+.hero-portrait-poster {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.hero-portrait-poster:hover {
+  transform: translateY(-4px) scale(1.02);
+  box-shadow: 0 28px 80px rgba(0, 0, 0, 0.45) !important;
+}
+@media (max-width: 991px) {
+  .hero-portrait-col {
+    margin-top: 24px;
+  }
+  .hero-portrait-poster {
+    max-height: 380px !important;
+  }
+}
+@media (max-width: 575px) {
+  .hero-portrait-poster {
+    max-height: 320px !important;
+  }
+}
