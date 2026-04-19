@@ -101,18 +101,28 @@ export function HeroBanner({ data }: { data: any }) {
                   )}
 
                   {isPortrait ? (
-                    /* Portrait / event-flyer layout: poster is the hero, no duplicate title */
+                    /* Portrait / event-flyer layout: poster is the hero,
+                       text column uses a complementary (not duplicated) title */
                     <div className="container hero-portrait-layout" style={{ position: 'relative', zIndex: 2 }}>
                       <div className="row align-items-center justify-content-center">
-                        <div className="col-12 col-lg-5 order-2 order-lg-1 text-center text-lg-start hero-portrait-text">
+                        <div className="col-12 col-lg-6 order-2 order-lg-1 text-center text-lg-start hero-portrait-text">
                           {slide.subtitle && (
-                            <span className="sub-title" style={{ display: 'inline-flex' }}>
+                            <span className="sub-title hero-portrait-subtitle" style={{ display: 'inline-flex' }}>
                               <i className="icon-donation"></i>{slide.subtitle}
                             </span>
                           )}
+                          {slide.title && (
+                            primaryHref ? (
+                              <Link href={primaryHref} style={{ textDecoration: 'none', color: 'inherit' }}>
+                                <h2 className="hero-portrait-title">{renderTitle(slide.title)}</h2>
+                              </Link>
+                            ) : (
+                              <h2 className="hero-portrait-title">{renderTitle(slide.title)}</h2>
+                            )
+                          )}
                           {renderCtas(slide)}
                         </div>
-                        <div className="col-12 col-lg-6 order-1 order-lg-2 hero-portrait-col" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                        <div className="col-12 col-lg-5 order-1 order-lg-2 hero-portrait-col" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
                           {primaryHref ? (
                             <Link href={primaryHref} aria-label={slide.ctaPrimaryText || slide.title || 'View details'}>
                               <img

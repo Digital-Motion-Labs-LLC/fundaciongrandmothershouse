@@ -41,8 +41,25 @@
 .hero-portrait-text {
   padding-top: 20px;
 }
-.hero-portrait-text .sub-title {
-  margin-bottom: 0 !important;
+.hero-portrait-subtitle {
+  color: #ff89b3 !important;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+.hero-portrait-subtitle i {
+  color: #ff89b3 !important;
+}
+.hero-portrait-title {
+  color: #ffffff;
+  font-size: clamp(28px, 4vw, 48px);
+  line-height: 1.15;
+  font-weight: 800;
+  margin: 12px 0 18px;
+  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.35);
+}
+.hero-portrait-title span {
+  color: #77c2d5;
+  font-style: italic;
 }
 .hero-portrait-text .banner__content-cta {
   justify-content: center;
@@ -76,11 +93,11 @@
   height: auto;
 }
 .banner-two__slider-single {
-  min-height: 720px;
+  min-height: 640px;
 }
 @media (max-width: 991px) {
   .banner-two__slider-single.is-portrait {
-    min-height: 640px;
+    min-height: 620px;
   }
   .banner-two__slider-single {
     min-height: 560px;
@@ -88,10 +105,10 @@
 }
 @media (max-width: 575px) {
   .banner-two__slider-single.is-portrait {
-    min-height: 600px;
+    min-height: 580px;
   }
   .banner-two__slider-single {
-    min-height: 520px;
+    min-height: 500px;
   }
 }
 
