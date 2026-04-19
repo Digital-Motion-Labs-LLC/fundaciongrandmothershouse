@@ -113,7 +113,7 @@ export function HeroBanner({ data }: { data: any }) {
                         </div>
                       </div>
                       {isPortrait && (
-                        <div className="col-lg-5 hero-portrait-col d-none d-lg-flex" style={{ justifyContent: 'center', alignItems: 'center' }}>
+                        <div className="col-12 col-lg-5 hero-portrait-col" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
                           {primaryHref ? (
                             <Link href={primaryHref} aria-label={slide.ctaPrimaryText || 'View details'}>
                               <img

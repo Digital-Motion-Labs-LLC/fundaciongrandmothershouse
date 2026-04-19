@@ -30,17 +30,39 @@
   transform: translateY(-4px) scale(1.02);
   box-shadow: 0 28px 80px rgba(0, 0, 0, 0.45) !important;
 }
+/* Mobile: compact thumbnail so the portrait slide stays close in
+   height to other slides (prevents Swiper fade bleed). */
 @media (max-width: 991px) {
   .hero-portrait-col {
-    margin-top: 24px;
+    margin-top: 20px;
+    margin-bottom: 20px;
   }
   .hero-portrait-poster {
-    max-height: 380px !important;
+    max-height: 260px !important;
   }
 }
 @media (max-width: 575px) {
   .hero-portrait-poster {
-    max-height: 320px !important;
+    max-height: 220px !important;
+  }
+}
+
+/* Force equal slide heights so fade effect does not reveal inactive
+   slide content around shorter active slides. */
+.banner-two .swiper-slide {
+  height: auto;
+}
+.banner-two__slider-single {
+  min-height: 720px;
+}
+@media (max-width: 991px) {
+  .banner-two__slider-single {
+    min-height: 640px;
+  }
+}
+@media (max-width: 575px) {
+  .banner-two__slider-single {
+    min-height: 560px;
   }
 }
 
