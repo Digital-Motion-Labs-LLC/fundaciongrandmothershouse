@@ -31,6 +31,34 @@ function renderTitle(html: string): React.ReactNode {
   return nodes
 }
 
+function renderCtas(slide: any) {
+  return (
+    <div className="banner__content-cta cta">
+      {slide.ctaPrimaryText && (
+        <Link href={slide.ctaPrimaryLink || '#'} aria-label={slide.ctaPrimaryText} className="btn--tertiary">
+          {slide.ctaPrimaryText} <i className="fa-solid fa-arrow-right"></i>
+        </Link>
+      )}
+      {slide.ctaSecondaryText && (() => {
+        const href = slide.ctaSecondaryLink || ''
+        const isDonate = !href || href === '#' || /donat|donar/i.test(href)
+        if (isDonate) {
+          return (
+            <button type="button" className="btn--primary donate-trigger" data-donate-trigger="true">
+              {slide.ctaSecondaryText} <i className="fa-solid fa-arrow-right"></i>
+            </button>
+          )
+        }
+        return (
+          <Link href={href} aria-label={slide.ctaSecondaryText} className="btn--primary">
+            {slide.ctaSecondaryText} <i className="fa-solid fa-arrow-right"></i>
+          </Link>
+        )
+      })()}
+    </div>
+  )
+}
+
 export function HeroBanner({ data }: { data: any }) {
   if (!data?.slides?.length) return null
 
@@ -48,16 +76,16 @@ export function HeroBanner({ data }: { data: any }) {
             const img = slide.image
             const bgUrl = img?.url || placeholderImages.hero(i)
             const isPortrait = !!(img?.width && img?.height && img.height > img.width)
-            const titleNode = slide.title ? <h1>{renderTitle(slide.title)}</h1> : null
             const primaryHref = slide.ctaPrimaryLink && slide.ctaPrimaryLink !== '#' ? slide.ctaPrimaryLink : null
+
             return (
               <SwiperSlide key={i}>
-                <div className="banner-two__slider-single">
+                <div className={`banner-two__slider-single${isPortrait ? ' is-portrait' : ''}`}>
                   <div
                     className="banner-two__slider-bg"
                     style={{
                       backgroundImage: `url(${bgUrl})`,
-                      ...(isPortrait ? { filter: 'blur(18px) brightness(0.7)', transform: 'scale(1.1)' } : {}),
+                      ...(isPortrait ? { filter: 'blur(22px) brightness(0.55)', transform: 'scale(1.15)' } : {}),
                     }}
                   ></div>
                   {isPortrait && (
@@ -66,65 +94,35 @@ export function HeroBanner({ data }: { data: any }) {
                       style={{
                         position: 'absolute',
                         inset: 0,
-                        background: 'linear-gradient(180deg, rgba(0,0,0,0.35) 0%, rgba(0,0,0,0.55) 100%)',
+                        background: 'linear-gradient(180deg, rgba(0,0,0,0.45) 0%, rgba(0,0,0,0.65) 100%)',
                         pointerEvents: 'none',
                       }}
                     />
                   )}
-                  <div className="container" style={{ position: 'relative', zIndex: 2 }}>
-                    <div className="row align-items-center">
-                      <div className={isPortrait ? 'col-12 col-lg-7' : 'col-12 col-md-9 col-lg-7 col-xxl-6'}>
-                        <div className="banner-two__slider-content">
+
+                  {isPortrait ? (
+                    /* Portrait / event-flyer layout: poster is the hero, no duplicate title */
+                    <div className="container hero-portrait-layout" style={{ position: 'relative', zIndex: 2 }}>
+                      <div className="row align-items-center justify-content-center">
+                        <div className="col-12 col-lg-5 order-2 order-lg-1 text-center text-lg-start hero-portrait-text">
                           {slide.subtitle && (
-                            <span className="sub-title">
+                            <span className="sub-title" style={{ display: 'inline-flex' }}>
                               <i className="icon-donation"></i>{slide.subtitle}
                             </span>
                           )}
-                          {titleNode && (
-                            primaryHref ? (
-                              <Link href={primaryHref} style={{ textDecoration: 'none', color: 'inherit' }}>
-                                {titleNode}
-                              </Link>
-                            ) : titleNode
-                          )}
-                          <div className="banner__content-cta cta">
-                            {slide.ctaPrimaryText && (
-                              <Link href={slide.ctaPrimaryLink || '#'} aria-label={slide.ctaPrimaryText} className="btn--tertiary">
-                                {slide.ctaPrimaryText} <i className="fa-solid fa-arrow-right"></i>
-                              </Link>
-                            )}
-                            {slide.ctaSecondaryText && (() => {
-                              const href = slide.ctaSecondaryLink || ''
-                              const isDonate = !href || href === '#' || /donat|donar/i.test(href)
-                              if (isDonate) {
-                                return (
-                                  <button type="button" className="btn--primary donate-trigger" data-donate-trigger="true">
-                                    {slide.ctaSecondaryText} <i className="fa-solid fa-arrow-right"></i>
-                                  </button>
-                                )
-                              }
-                              return (
-                                <Link href={href} aria-label={slide.ctaSecondaryText} className="btn--primary">
-                                  {slide.ctaSecondaryText} <i className="fa-solid fa-arrow-right"></i>
-                                </Link>
-                              )
-                            })()}
-                          </div>
+                          {renderCtas(slide)}
                         </div>
-                      </div>
-                      {isPortrait && (
-                        <div className="col-12 col-lg-5 hero-portrait-col" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                        <div className="col-12 col-lg-6 order-1 order-lg-2 hero-portrait-col" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
                           {primaryHref ? (
-                            <Link href={primaryHref} aria-label={slide.ctaPrimaryText || 'View details'}>
+                            <Link href={primaryHref} aria-label={slide.ctaPrimaryText || slide.title || 'View details'}>
                               <img
                                 src={bgUrl}
-                                alt={img?.alt || ''}
+                                alt={img?.alt || slide.title || ''}
                                 className="hero-portrait-poster"
                                 style={{
-                                  maxHeight: '520px',
                                   width: 'auto',
-                                  borderRadius: '16px',
-                                  boxShadow: '0 20px 60px rgba(0,0,0,0.35)',
+                                  borderRadius: '18px',
+                                  boxShadow: '0 24px 70px rgba(0,0,0,0.45)',
                                   cursor: 'pointer',
                                 }}
                               />
@@ -132,14 +130,40 @@ export function HeroBanner({ data }: { data: any }) {
                           ) : (
                             <img
                               src={bgUrl}
-                              alt={img?.alt || ''}
-                              style={{ maxHeight: '520px', width: 'auto', borderRadius: '16px', boxShadow: '0 20px 60px rgba(0,0,0,0.35)' }}
+                              alt={img?.alt || slide.title || ''}
+                              className="hero-portrait-poster"
+                              style={{ width: 'auto', borderRadius: '18px', boxShadow: '0 24px 70px rgba(0,0,0,0.45)' }}
                             />
                           )}
                         </div>
-                      )}
+                      </div>
                     </div>
-                  </div>
+                  ) : (
+                    /* Default landscape layout */
+                    <div className="container" style={{ position: 'relative', zIndex: 2 }}>
+                      <div className="row">
+                        <div className="col-12 col-md-9 col-lg-7 col-xxl-6">
+                          <div className="banner-two__slider-content">
+                            {slide.subtitle && (
+                              <span className="sub-title">
+                                <i className="icon-donation"></i>{slide.subtitle}
+                              </span>
+                            )}
+                            {slide.title && (
+                              primaryHref ? (
+                                <Link href={primaryHref} style={{ textDecoration: 'none', color: 'inherit' }}>
+                                  <h1>{renderTitle(slide.title)}</h1>
+                                </Link>
+                              ) : (
+                                <h1>{renderTitle(slide.title)}</h1>
+                              )
+                            )}
+                            {renderCtas(slide)}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  )}
                 </div>
               </SwiperSlide>
             )

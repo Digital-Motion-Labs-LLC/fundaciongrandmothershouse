@@ -25,25 +25,48 @@
 /* Hero portrait-poster slides (e.g. event flyers) */
 .hero-portrait-poster {
   transition: transform 0.3s ease, box-shadow 0.3s ease;
+  max-height: 540px;
+  max-width: 100%;
+  display: block;
 }
 .hero-portrait-poster:hover {
   transform: translateY(-4px) scale(1.02);
-  box-shadow: 0 28px 80px rgba(0, 0, 0, 0.45) !important;
+  box-shadow: 0 28px 80px rgba(0, 0, 0, 0.5) !important;
 }
-/* Mobile: compact thumbnail so the portrait slide stays close in
-   height to other slides (prevents Swiper fade bleed). */
-@media (max-width: 991px) {
-  .hero-portrait-col {
-    margin-top: 20px;
-    margin-bottom: 20px;
+
+.hero-portrait-layout {
+  padding-top: 40px;
+  padding-bottom: 40px;
+}
+.hero-portrait-text {
+  padding-top: 20px;
+}
+.hero-portrait-text .sub-title {
+  margin-bottom: 0 !important;
+}
+.hero-portrait-text .banner__content-cta {
+  justify-content: center;
+  margin-top: 16px;
+}
+@media (min-width: 992px) {
+  .hero-portrait-text {
+    padding-top: 0;
   }
+  .hero-portrait-text .banner__content-cta {
+    justify-content: flex-start;
+  }
+}
+
+/* Mobile: poster is the hero — make it big and dominant */
+@media (max-width: 991px) {
   .hero-portrait-poster {
-    max-height: 260px !important;
+    max-height: 440px;
   }
 }
 @media (max-width: 575px) {
   .hero-portrait-poster {
-    max-height: 220px !important;
+    max-height: 380px;
+    border-radius: 14px !important;
   }
 }
 
@@ -56,13 +79,19 @@
   min-height: 720px;
 }
 @media (max-width: 991px) {
-  .banner-two__slider-single {
+  .banner-two__slider-single.is-portrait {
     min-height: 640px;
+  }
+  .banner-two__slider-single {
+    min-height: 560px;
   }
 }
 @media (max-width: 575px) {
+  .banner-two__slider-single.is-portrait {
+    min-height: 600px;
+  }
   .banner-two__slider-single {
-    min-height: 560px;
+    min-height: 520px;
   }
 }
 
