@@ -51,6 +51,9 @@ export function EventDetail({ activity }: { activity: any }) {
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null)
 
   const imageUrl = activity.featuredImage?.url || placeholderImages.events(0)
+  const imgW = activity.featuredImage?.width
+  const imgH = activity.featuredImage?.height
+  const isPortrait = !!(imgW && imgH && imgH > imgW)
   const date = activity.date ? new Date(activity.date).toLocaleDateString() : ''
 
   const description = activity.description
@@ -73,9 +76,29 @@ export function EventDetail({ activity }: { activity: any }) {
   return (
     <div style={{ padding: '60px 0' }}>
       <div className="container">
-        <div style={{ borderRadius: '12px', overflow: 'hidden', marginBottom: '40px', maxHeight: '500px' }}>
-          <img src={imageUrl} alt={activity.name} style={{ width: '100%', height: '500px', objectFit: 'cover' }} />
-        </div>
+        {isPortrait ? (
+          <div
+            style={{
+              borderRadius: '12px',
+              marginBottom: '40px',
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+              padding: '24px',
+              background: `linear-gradient(135deg, rgba(119,194,213,0.08) 0%, rgba(232,68,122,0.08) 100%)`,
+            }}
+          >
+            <img
+              src={imageUrl}
+              alt={activity.name}
+              style={{ maxWidth: '100%', maxHeight: '780px', width: 'auto', height: 'auto', borderRadius: '12px', boxShadow: '0 16px 48px rgba(0,0,0,0.18)', display: 'block' }}
+            />
+          </div>
+        ) : (
+          <div style={{ borderRadius: '12px', overflow: 'hidden', marginBottom: '40px', maxHeight: '500px' }}>
+            <img src={imageUrl} alt={activity.name} style={{ width: '100%', height: '500px', objectFit: 'cover' }} />
+          </div>
+        )}
 
         <div style={{ display: 'flex', gap: '24px', marginBottom: '32px', flexWrap: 'wrap' }}>
           {date && (
