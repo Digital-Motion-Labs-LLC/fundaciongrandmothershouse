@@ -14,11 +14,22 @@ export function CtaBanner({ data }: { data: any }) {
               {data.title && <h2 className="title-animation" dangerouslySetInnerHTML={{ __html: data.title }} />}
               {data.description && <p>{data.description}</p>}
               <div className="cta" style={{ marginTop: '30px', display: 'flex', gap: '16px', justifyContent: 'center', flexWrap: 'wrap' }}>
-                {data.primaryButtonText && (
-                  <Link href={data.primaryButtonLink || '#'} className="btn--primary">
-                    {data.primaryButtonText} <i className="fa-solid fa-arrow-right"></i>
-                  </Link>
-                )}
+                {data.primaryButtonText && (() => {
+                  const href = data.primaryButtonLink || ''
+                  const isDonate = !href || href === '#' || /donat|donar/i.test(href)
+                  if (isDonate) {
+                    return (
+                      <button type="button" className="btn--primary donate-trigger" data-donate-trigger="true">
+                        {data.primaryButtonText} <i className="fa-solid fa-arrow-right"></i>
+                      </button>
+                    )
+                  }
+                  return (
+                    <Link href={href} className="btn--primary">
+                      {data.primaryButtonText} <i className="fa-solid fa-arrow-right"></i>
+                    </Link>
+                  )
+                })()}
                 {data.secondaryButtonText && (
                   <Link href={data.secondaryButtonLink || '#'} className="btn--secondary">
                     {data.secondaryButtonText} <i className="fa-solid fa-arrow-right"></i>

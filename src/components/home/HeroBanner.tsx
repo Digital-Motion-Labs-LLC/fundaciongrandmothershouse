@@ -42,11 +42,22 @@ export function HeroBanner({ data }: { data: any }) {
                                 {slide.ctaPrimaryText} <i className="fa-solid fa-arrow-right"></i>
                               </Link>
                             )}
-                            {slide.ctaSecondaryText && (
-                              <Link href={slide.ctaSecondaryLink || '#'} aria-label="contact us" title="contact us" className="btn--primary">
-                                {slide.ctaSecondaryText} <i className="fa-solid fa-arrow-right"></i>
-                              </Link>
-                            )}
+                            {slide.ctaSecondaryText && (() => {
+                              const href = slide.ctaSecondaryLink || ''
+                              const isDonate = !href || href === '#' || /donat|donar/i.test(href)
+                              if (isDonate) {
+                                return (
+                                  <button type="button" className="btn--primary donate-trigger" data-donate-trigger="true">
+                                    {slide.ctaSecondaryText} <i className="fa-solid fa-arrow-right"></i>
+                                  </button>
+                                )
+                              }
+                              return (
+                                <Link href={href} aria-label={slide.ctaSecondaryText} className="btn--primary">
+                                  {slide.ctaSecondaryText} <i className="fa-solid fa-arrow-right"></i>
+                                </Link>
+                              )
+                            })()}
                           </div>
                         </div>
                       </div>
