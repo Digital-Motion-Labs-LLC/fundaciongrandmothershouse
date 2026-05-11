@@ -5,10 +5,10 @@ export default function robots(): MetadataRoute.Robots {
     rules: [
       {
         userAgent: '*',
-        allow: '/',
-        disallow: ['/admin', '/api'],
+        allow: ['/', '/api/media/'],
       },
     ],
     sitemap: 'https://fundaciongrandmothershouse.com/sitemap.xml',
+    host: 'https://fundaciongrandmothershouse.com',
   }
 }

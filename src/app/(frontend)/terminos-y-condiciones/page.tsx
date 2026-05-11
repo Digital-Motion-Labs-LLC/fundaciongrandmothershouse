@@ -1,53 +1,34 @@
 import type { Metadata } from 'next'
-import { getPayload } from 'payload'
-import configPromise from '@payload-config'
 import { cookies } from 'next/headers'
 import { PageBanner } from '@/components/PageBanner'
 import { TextSection } from '@/components/TextSection'
+import { getPage } from '@/content'
+import { localize } from '@/content/localize'
+import { readLocaleFromCookie } from '@/content/schema'
 
 export const metadata: Metadata = {
   title: 'Términos y Condiciones',
   description:
     'Términos y condiciones de uso del sitio web de Fundación Grandmother\'s House.',
+  alternates: { canonical: '/terminos-y-condiciones' },
+  robots: { index: true, follow: true },
 }
 
 export default async function TermsPage() {
   const cookieStore = await cookies()
-  const locale = (cookieStore.get('locale')?.value || 'es') as 'en' | 'es'
-  const payload = await getPayload({ config: configPromise })
+  const locale = readLocaleFromCookie(cookieStore.get('locale')?.value)
 
-  const page = await payload.find({
-    collection: 'pages',
-    where: { slug: { equals: 'terms' } },
-    locale,
-    limit: 1,
-  })
-
-  const pageData = page.docs[0]
-  const blocks = pageData?.layout || []
+  const pageData = localize(getPage('terms'), locale) as { title: string; layout: Array<{ blockType: string }> }
+  const blocks = pageData.layout
 
   return (
     <>
       <PageBanner title={pageData?.title || (locale === 'es' ? 'Términos y condiciones' : 'Terms and conditions')} />
-      {blocks.map((block: any, i: number) => {
-        switch (block.blockType) {
-          case 'textSection':
-            return <TextSection key={i} data={block} />
-          case 'richContent':
-            return (
-              <section key={i} className="cm-details">
-                <div className="container">
-                  <div className="row">
-                    <div className="col-12">
-                      <div className="cm-group cta" dangerouslySetInnerHTML={{ __html: block.content_html || '' }} />
-                    </div>
-                  </div>
-                </div>
-              </section>
-            )
-          default:
-            return null
+      {blocks.map((block, i: number) => {
+        if (block.blockType === 'textSection') {
+          return <TextSection key={i} data={block} />
         }
+        return null
       })}
     </>
   )

@@ -16,10 +16,11 @@ export function BlogDetail({ article }: { article: any }) {
               <div className="cm-details-meta">
                 {date && <p><i className="fa-solid fa-calendar-days"></i>{date}</p>}
               </div>
-              <div className="cm-group cta">
-                <h1>{article.title}</h1>
+              <div className="news-article-body">
                 {article.content_html ? (
                   <div dangerouslySetInnerHTML={{ __html: article.content_html }} />
+                ) : typeof article.content === 'string' && article.content ? (
+                  <div dangerouslySetInnerHTML={{ __html: article.content }} />
                 ) : article.excerpt ? (
                   <p>{article.excerpt}</p>
                 ) : null}

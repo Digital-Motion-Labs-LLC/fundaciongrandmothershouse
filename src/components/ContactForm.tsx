@@ -1,37 +1,32 @@
 'use client'
-import { useState } from 'react'
+
+const CONTACT_EMAIL = 'grandmothershousedaycare@gmail.com'
+
+const buildMailto = (form: HTMLFormElement, locale: string) => {
+  const fd = new FormData(form)
+  const name = String(fd.get('full-name') ?? '').trim()
+  const email = String(fd.get('c-email') ?? '').trim()
+  const phone = String(fd.get('phone-number') ?? '').trim()
+  const message = String(fd.get('contact-message') ?? '').trim()
+
+  const subject =
+    locale === 'es'
+      ? `Contacto desde el sitio — ${name}`
+      : `Website contact — ${name}`
+
+  const lines =
+    locale === 'es'
+      ? [`Nombre: ${name}`, `Email: ${email}`, `Teléfono: ${phone}`, '', 'Mensaje:', message]
+      : [`Name: ${name}`, `Email: ${email}`, `Phone: ${phone}`, '', 'Message:', message]
+
+  const body = lines.join('\n')
+  return `mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`
+}
 
 export function ContactForm({ locale }: { locale: string }) {
-  const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle')
-
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    setStatus('loading')
-
-    const form = e.currentTarget
-    const formData = new FormData(form)
-
-    try {
-      const res = await fetch('/api/contact-submissions', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          name: formData.get('full-name'),
-          email: formData.get('c-email'),
-          phone: formData.get('phone-number'),
-          message: formData.get('contact-message'),
-        }),
-      })
-
-      if (res.ok) {
-        setStatus('success')
-        form.reset()
-      } else {
-        setStatus('error')
-      }
-    } catch {
-      setStatus('error')
-    }
+    window.location.href = buildMailto(e.currentTarget, locale)
   }
 
   return (
@@ -40,17 +35,6 @@ export function ContactForm({ locale }: { locale: string }) {
         <h4>{locale === 'es' ? 'Llena el Formulario' : 'Fill Up The Form'}</h4>
         <p>{locale === 'es' ? 'Los campos marcados con * son obligatorios' : 'Required fields are marked *'}</p>
       </div>
-
-      {status === 'success' && (
-        <div style={{ padding: '12px', background: '#d4edda', borderRadius: '8px', marginBottom: '16px', color: '#155724' }}>
-          {locale === 'es' ? 'Mensaje enviado exitosamente.' : 'Message sent successfully.'}
-        </div>
-      )}
-      {status === 'error' && (
-        <div style={{ padding: '12px', background: '#f8d7da', borderRadius: '8px', marginBottom: '16px', color: '#721c24' }}>
-          {locale === 'es' ? 'Error al enviar. Intenta de nuevo.' : 'Error sending. Please try again.'}
-        </div>
-      )}
 
       <form onSubmit={handleSubmit} className="cta">
         <div className="input-single">
@@ -70,10 +54,8 @@ export function ContactForm({ locale }: { locale: string }) {
           <i className="fa-solid fa-comments"></i>
         </div>
         <div className="form-cta">
-          <button type="submit" className="btn--primary" disabled={status === 'loading'}>
-            {status === 'loading'
-              ? (locale === 'es' ? 'Enviando...' : 'Sending...')
-              : (locale === 'es' ? 'Enviar Mensaje' : 'Send Message')}
+          <button type="submit" className="btn--primary">
+            {locale === 'es' ? 'Enviar Mensaje' : 'Send Message'}
             <i className="fa-solid fa-arrow-right"></i>
           </button>
         </div>
