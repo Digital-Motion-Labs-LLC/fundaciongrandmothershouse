@@ -1,48 +1,58 @@
 import type { Metadata } from 'next'
-import { getPayload } from 'payload'
-import configPromise from '@payload-config'
 import { cookies } from 'next/headers'
-import { PageBanner } from '@/components/PageBanner'
 import { notFound } from 'next/navigation'
+import { PageBanner } from '@/components/PageBanner'
 import { EventDetail } from '@/components/EventDetail'
+import { JsonLd } from '@/components/JsonLd'
+import { activities, findActivityBySlug } from '@/content'
+import { localize, pickLocale } from '@/content/localize'
+import { readLocaleFromCookie } from '@/content/schema'
+
+export const dynamicParams = false
+
+export const generateStaticParams = async () =>
+  activities.filter((a) => a.published).map((a) => ({ slug: a.slug }))
+
+const extractText = (root: unknown): string => {
+  if (!root || typeof root !== 'object') return ''
+  const r = root as { children?: Array<{ text?: string; children?: unknown[] }> }
+  if (!r.children) return ''
+  return r.children
+    .map((c) => c.text ?? extractText(c))
+    .join(' ')
+}
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug } = await params
-  const payload = await getPayload({ config: configPromise })
+  const activity = findActivityBySlug(slug)
+  if (!activity) return { title: 'Actividad no encontrada' }
 
-  const result = await payload.find({
-    collection: 'activities',
-    where: { slug: { equals: slug }, published: { equals: true } },
-    limit: 1,
-  })
-
-  const activity = result.docs[0]
-  if (!activity) {
-    return { title: 'Actividad no encontrada' }
-  }
-
-  const description = typeof activity.description === 'string'
-    ? activity.description.slice(0, 160)
-    : Array.isArray(activity.description)
-      ? activity.description
-          .map((block: any) =>
-            block.children?.map((child: any) => child.text).join('') || ''
-          )
-          .join(' ')
-          .slice(0, 160)
-      : ''
-
-  const image = typeof activity.image === 'object' && activity.image?.url
-    ? activity.image.url
-    : undefined
+  const name = pickLocale(activity.name, 'es') ?? slug
+  const description = pickLocale(activity.description, 'es')
+  const desc =
+    description && typeof description === 'object'
+      ? extractText((description as { root?: unknown }).root).slice(0, 160)
+      : typeof description === 'string'
+        ? description.slice(0, 160)
+        : ''
+  const image = activity.featuredImage?.url ?? undefined
 
   return {
-    title: activity.name,
-    description,
+    title: name,
+    description: desc,
+    alternates: { canonical: `/actividades/${slug}` },
     openGraph: {
-      title: activity.name,
-      description,
+      title: name,
+      description: desc,
+      url: `https://fundaciongrandmothershouse.com/actividades/${slug}`,
+      type: 'article',
       ...(image ? { images: [{ url: image }] } : {}),
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: name,
+      description: desc,
+      ...(image ? { images: [image] } : {}),
     },
   }
 }
@@ -50,21 +60,43 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
 export default async function ActivityDetailPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params
   const cookieStore = await cookies()
-  const locale = (cookieStore.get('locale')?.value || 'es') as 'en' | 'es'
-  const payload = await getPayload({ config: configPromise })
+  const locale = readLocaleFromCookie(cookieStore.get('locale')?.value)
 
-  const result = await payload.find({
-    collection: 'activities',
-    where: { slug: { equals: slug }, published: { equals: true } },
-    locale,
-    limit: 1,
-  })
+  const raw = findActivityBySlug(slug)
+  if (!raw) notFound()
+  const activity = localize(raw, locale) as Record<string, unknown> & {
+    name: string
+    date: string
+    location?: string | null
+    featuredImage?: { url?: string | null } | null
+  }
 
-  const activity = result.docs[0]
-  if (!activity) notFound()
+  const eventJsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'Event',
+    name: activity.name,
+    startDate: activity.date,
+    eventStatus: 'https://schema.org/EventScheduled',
+    eventAttendanceMode: 'https://schema.org/OfflineEventAttendanceMode',
+    location: {
+      '@type': 'Place',
+      name: activity.location ?? 'San Pedro de Macorís',
+      address: { '@type': 'PostalAddress', addressCountry: 'DO', addressRegion: 'San Pedro de Macorís' },
+    },
+    organizer: {
+      '@type': 'NGO',
+      name: "Fundación Grandmother's House",
+      url: 'https://fundaciongrandmothershouse.com',
+    },
+    image: activity.featuredImage?.url
+      ? [`https://fundaciongrandmothershouse.com${activity.featuredImage.url}`]
+      : undefined,
+    url: `https://fundaciongrandmothershouse.com/actividades/${slug}`,
+  }
 
   return (
     <>
+      <JsonLd data={eventJsonLd} />
       <PageBanner title={activity.name} />
       <EventDetail activity={activity} />
     </>

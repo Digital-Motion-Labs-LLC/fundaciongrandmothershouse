@@ -1,26 +1,61 @@
 import type { Metadata } from 'next'
-import { getPayload } from 'payload'
-import configPromise from '@payload-config'
 import { cookies } from 'next/headers'
 import { PageBanner } from '@/components/PageBanner'
 import { ContactForm } from '@/components/ContactForm'
+import { JsonLd } from '@/components/JsonLd'
+import { header as staticHeader, footer as staticFooter } from '@/content'
+import { localize } from '@/content/localize'
+import { readLocaleFromCookie } from '@/content/schema'
 
 export const metadata: Metadata = {
   title: 'Contacto',
   description:
     'Contáctanos para ser voluntario, donar o conocer más sobre Fundación Grandmother\'s House en Juan Dolio, San Pedro de Macorís.',
+  alternates: { canonical: '/contacto' },
+  openGraph: {
+    title: "Contacto — Fundación Grandmother's House",
+    description: 'Contáctanos para voluntariado, donaciones o información.',
+    url: 'https://fundaciongrandmothershouse.com/contacto',
+    type: 'website',
+  },
 }
 
 export default async function ContactPage() {
   const cookieStore = await cookies()
-  const locale = (cookieStore.get('locale')?.value || 'es') as 'en' | 'es'
-  const payload = await getPayload({ config: configPromise })
+  const locale = readLocaleFromCookie(cookieStore.get('locale')?.value)
 
-  const footer = await payload.findGlobal({ slug: 'footer', locale })
-  const header = await payload.findGlobal({ slug: 'header', locale })
+  const header = localize(staticHeader, locale) as {
+    phone?: string | null
+    email?: string | null
+    socialLinks?: Array<{ platform: string; url: string }>
+  }
+  const footer = localize(staticFooter, locale) as {
+    contactInfo?: { address?: string | null; addressLink?: string | null; phone?: string | null; email?: string | null }
+  }
+
+  const contactJsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'ContactPage',
+    name: locale === 'es' ? 'Contacto' : 'Contact',
+    url: 'https://fundaciongrandmothershouse.com/contacto',
+    mainEntity: {
+      '@type': 'NGO',
+      name: "Fundación Grandmother's House",
+      telephone: header.phone ?? undefined,
+      email: header.email ?? undefined,
+      address: footer.contactInfo?.address
+        ? {
+            '@type': 'PostalAddress',
+            streetAddress: footer.contactInfo.address,
+            addressCountry: 'DO',
+          }
+        : undefined,
+    },
+  }
 
   return (
     <>
+      <JsonLd data={contactJsonLd} />
       <PageBanner title={locale === 'es' ? 'Contacto' : 'Contact Us'} />
       <section className="contact-main volunteer">
         <div className="container">
@@ -65,7 +100,7 @@ export default async function ContactPage() {
                       <div className="content">
                         <h6>Social</h6>
                         <div className="social">
-                          {header.socialLinks.map((link: any, i: number) => (
+                          {header.socialLinks.map((link, i: number) => (
                             <a key={i} href={link.url} target="_blank" rel="noopener noreferrer">
                               <i className={`fa-brands fa-${link.platform === 'x' ? 'twitter' : link.platform}`}></i>
                             </a>

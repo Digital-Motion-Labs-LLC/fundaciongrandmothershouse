@@ -1,37 +1,48 @@
 import type { Metadata } from 'next'
-import { getPayload } from 'payload'
-import configPromise from '@payload-config'
+import Link from 'next/link'
 import { cookies } from 'next/headers'
 import { PageBanner } from '@/components/PageBanner'
 import { HelpSection } from '@/components/home/HelpSection'
 import { TestimonialSlider } from '@/components/home/TestimonialSlider'
 import { TextSection } from '@/components/TextSection'
 import { CtaBanner } from '@/components/CtaBanner'
-import Link from 'next/link'
+import { JsonLd } from '@/components/JsonLd'
+import { getPage } from '@/content'
+import { localize } from '@/content/localize'
+import { readLocaleFromCookie } from '@/content/schema'
 
 export const metadata: Metadata = {
   title: 'Quiénes Somos',
   description:
     'Conoce la historia y el equipo detrás de Fundación Grandmother\'s House, dedicada al cuidado infantil en Juan Dolio, RD.',
+  alternates: { canonical: '/quienes-somos' },
+  openGraph: {
+    title: "Quiénes Somos — Fundación Grandmother's House",
+    description: 'Más de un siglo dedicados al cuidado y desarrollo integral de los niños de la República Dominicana.',
+    url: 'https://fundaciongrandmothershouse.com/quienes-somos',
+    type: 'website',
+  },
 }
 
 export default async function AboutPage() {
   const cookieStore = await cookies()
-  const locale = (cookieStore.get('locale')?.value || 'es') as 'en' | 'es'
-  const payload = await getPayload({ config: configPromise })
+  const locale = readLocaleFromCookie(cookieStore.get('locale')?.value)
 
-  const page = await payload.find({
-    collection: 'pages',
-    where: { slug: { equals: 'about' } },
-    locale,
-    limit: 1,
-  })
+  const pageData = localize(getPage('about'), locale) as { title: string; layout: Array<{ blockType: string }> }
+  const blocks = pageData.layout
 
-  const pageData = page.docs[0]
-  const blocks = pageData?.layout || []
+  const breadcrumbJsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: locale === 'es' ? 'Inicio' : 'Home', item: 'https://fundaciongrandmothershouse.com/' },
+      { '@type': 'ListItem', position: 2, name: locale === 'es' ? 'Quiénes Somos' : 'About Us', item: 'https://fundaciongrandmothershouse.com/quienes-somos' },
+    ],
+  }
 
   return (
     <>
+      <JsonLd data={breadcrumbJsonLd} />
       <PageBanner title={pageData?.title || (locale === 'es' ? 'Quiénes Somos' : 'About Us')} />
       {blocks.map((block: any, i: number) => {
         switch (block.blockType) {
