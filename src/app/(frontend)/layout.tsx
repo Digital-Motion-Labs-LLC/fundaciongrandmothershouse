@@ -104,10 +104,7 @@ export default async function FrontendLayout({ children }: { children: React.Rea
   return (
     <>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
-      <link rel="stylesheet" href="/assets/css/main.css" />
-      <link rel="stylesheet" href="/assets/css/responsive.css" />
-      <link rel="stylesheet" href="/assets/css/default-theme.css" />
-      <link rel="stylesheet" href="/assets/css/sticky-header.css" />
+      <link rel="stylesheet" href="/assets/css/template.min.css" />
       <div className={`page-wrapper ${nunito.variable} ${nunitoSans.variable} ${caveat.variable}`}>
         <Topbar header={header} locale={locale} />
         <Header header={header} locale={locale} />

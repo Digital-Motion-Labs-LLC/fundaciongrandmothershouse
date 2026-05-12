@@ -12,7 +12,8 @@
     "test:seo": "vitest run --config vitest.seo.config.ts",
     "audit": "tsx scripts/seo-audit.ts",
     "audit:prod": "tsx scripts/seo-audit.ts prod",
-    "build:content": "tsx scripts/build-content.ts"
+    "build:content": "tsx scripts/build-content.ts",
+    "build:css": "node scripts/bundle-css.mjs && npx lightningcss-cli --minify public/assets/css/template.bundle.css -o public/assets/css/template.min.css && rm public/assets/css/template.bundle.css"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.995.0",
