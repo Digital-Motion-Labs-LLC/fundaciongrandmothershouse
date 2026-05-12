@@ -9,7 +9,7 @@ import { localize } from '@/content/localize'
 import { readLocaleFromCookie } from '@/content/schema'
 
 export const metadata: Metadata = {
-  title: 'Nuestras Actividades',
+  title: 'Actividades y Eventos Sociales',
   description:
     'Conoce las actividades y eventos que realiza Fundación Grandmother\'s House para el bienestar de los niños en Juan Dolio, República Dominicana.',
   alternates: {

@@ -9,7 +9,7 @@ import { localize } from '@/content/localize'
 import { readLocaleFromCookie } from '@/content/schema'
 
 export const metadata: Metadata = {
-  title: 'Contacto',
+  title: 'Contacto y Voluntariado',
   description:
     'Contáctanos para ser voluntario, donar o conocer más sobre Fundación Grandmother\'s House en Juan Dolio, San Pedro de Macorís.',
   alternates: {

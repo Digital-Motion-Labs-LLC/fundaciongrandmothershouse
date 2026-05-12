@@ -12,9 +12,19 @@ import { localize } from '@/content/localize'
 import { readLocaleFromCookie } from '@/content/schema'
 
 export const metadata: Metadata = {
-  title: 'Inicio',
+  title: {
+    absolute: "Fundación Grandmother's House — Cuidado Infantil Juan Dolio, RD",
+  },
   description:
-    'Fundación Grandmother\'s House — un entorno seguro y cariñoso donde cada niño puede crecer. Más de 2,100 niños impactados en Juan Dolio, RD.',
+    "Guardería y fundación sin fines de lucro en Juan Dolio, San Pedro de Macorís. Cuidado infantil, educación con valores y programas comunitarios. Más de 2,100 niños impactados en RD.",
+  keywords: [
+    'guardería Juan Dolio',
+    'cuidado infantil República Dominicana',
+    'daycare San Pedro de Macorís',
+    'fundación niños RD',
+    'educación infantil Juan Dolio',
+    'voluntariado RD',
+  ],
   alternates: {
     canonical: '/',
     languages: { es: '/', en: '/', 'x-default': '/' },
@@ -45,7 +55,10 @@ export default async function HomePage() {
 
   const page = localize(getPage('home'), locale)
   const blocks = page.layout
-  const heroBlock = blocks.find((b: { blockType: string }) => b.blockType === 'heroSlider')
+  const heroBlock = blocks.find((b: { blockType: string }) => b.blockType === 'heroSlider') as
+    | { slides?: Array<{ image?: { url?: string | null } | null }> }
+    | undefined
+  const firstHeroImage = heroBlock?.slides?.[0]?.image?.url ?? null
   const differenceBlock = blocks.find((b: { blockType: string }) => b.blockType === 'difference')
   const helpBlock = blocks.find((b: { blockType: string }) => b.blockType === 'help')
   const testimonialBlock = blocks.find((b: { blockType: string }) => b.blockType === 'testimonial')
@@ -68,8 +81,16 @@ export default async function HomePage() {
 
   return (
     <>
+      {firstHeroImage && (
+        <link
+          rel="preload"
+          as="image"
+          href={firstHeroImage}
+          fetchPriority="high"
+        />
+      )}
       <JsonLd data={websiteJsonLd} />
-      <h1 className="sr-only">Fundación Grandmother&apos;s House — Cuidado infantil y educación en Juan Dolio, RD</h1>
+      <h1 className="sr-only">Fundación Grandmother&apos;s House — Guardería, cuidado infantil y educación con valores en Juan Dolio, San Pedro de Macorís, República Dominicana</h1>
       <SectionWrapper show={siteSettings.showHeroBanner}>
         <HeroBanner data={heroBlock} />
       </SectionWrapper>

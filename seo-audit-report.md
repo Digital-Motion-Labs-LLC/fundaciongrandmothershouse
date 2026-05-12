@@ -1,10 +1,10 @@
 # SEO Audit — http://localhost:3000
 
-**Totals**: ✅ 195 pass · ⚠️ 5 warn · ❌ 0 fail · across 13 routes
+**Totals**: ✅ 192 pass · ⚠️ 8 warn · ❌ 0 fail · across 13 routes
 
-## 🟢 / (HTTP 200) — 15 pass · 0 warn · 0 fail
-- ✅ `title`: 38 chars
-- ✅ `description`: 139 chars
+## 🟡 / (HTTP 200) — 13 pass · 2 warn · 0 fail
+- ⚠️  `title-too-long`: 63 chars (>60)
+- ⚠️  `description-too-long`: 180 chars (>160)
 - ✅ `canonical`: https://fundaciongrandmothershouse.com
 - ✅ `og-image`: https://fundaciongrandmothershouse.com/og-image.png
 - ✅ `og-type`: website
@@ -13,7 +13,7 @@
 - ✅ `twitter-card`: summary_large_image
 - ✅ `hreflang`: 3 variants
 - ✅ `robots`: index, follow
-- ✅ `h1-single`: Fundación Grandmother&#x27;s House — Cuidado infantil y educación en Juan Dolio,
+- ✅ `h1-single`: Fundación Grandmother&#x27;s House — Guardería, cuidado infantil y educación con
 - ✅ `h2-count`: 7
 - ✅ `img-alt`: 36 images all with alt
 - ✅ `img-lazy`: 36/36 lazy
@@ -70,8 +70,8 @@
 - ✅ `img-lazy`: 5/5 lazy
 - ✅ `jsonld`: NGO, BreadcrumbList
 
-## 🟢 /actividades (HTTP 200) — 15 pass · 0 warn · 0 fail
-- ✅ `title`: 52 chars
+## 🟡 /actividades (HTTP 200) — 14 pass · 1 warn · 0 fail
+- ⚠️  `title-too-long`: 62 chars (>60)
 - ✅ `description`: 142 chars
 - ✅ `canonical`: https://fundaciongrandmothershouse.com/actividades
 - ✅ `og-image`: https://fundaciongrandmothershouse.com/og-image.png
@@ -142,7 +142,7 @@
 - ✅ `semantic-article`: 1 <article>
 
 ## 🟡 /noticias (HTTP 200) — 14 pass · 1 warn · 0 fail
-- ✅ `title`: 40 chars
+- ✅ `title`: 57 chars
 - ✅ `description`: 118 chars
 - ✅ `canonical`: https://fundaciongrandmothershouse.com/noticias
 - ✅ `og-image`: https://fundaciongrandmothershouse.com/og-image.png
@@ -195,7 +195,7 @@
 - ✅ `semantic-article`: 1 <article>
 
 ## 🟢 /contacto (HTTP 200) — 15 pass · 0 warn · 0 fail
-- ✅ `title`: 40 chars
+- ✅ `title`: 55 chars
 - ✅ `description`: 125 chars
 - ✅ `canonical`: https://fundaciongrandmothershouse.com/contacto
 - ✅ `og-image`: https://fundaciongrandmothershouse.com/og-image.png
