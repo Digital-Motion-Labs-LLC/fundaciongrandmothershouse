@@ -13,8 +13,7 @@ export function BlogCard({ article, index = 0, locale }: { article: any; index?:
         style={{ display: 'block', color: 'inherit', textDecoration: 'none' }}
       >
         <div className="blog__single-thumb" style={{ width: '100%', aspectRatio: '16 / 10', overflow: 'hidden' }}>
-          <img
-            src={imageUrl}
+          <img loading="lazy" decoding="async" src={imageUrl}
             alt={article.title}
             style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center', display: 'block' }}
           />

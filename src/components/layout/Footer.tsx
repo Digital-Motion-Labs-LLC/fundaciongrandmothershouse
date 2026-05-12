@@ -18,7 +18,7 @@ export function Footer({ footer, locale }: { footer: any; locale: string }) {
           <div className="col-12 col-md-6 col-xl-3">
             <div className="footer-two__widget" data-aos="fade-up" data-aos-duration="1000">
               <div className="footer-two__widget-logo">
-                <Link href="/"><img src={logoUrl} alt="Logo" style={{ maxHeight: '60px' }} /></Link>
+                <Link href="/"><img loading="lazy" decoding="async" src={logoUrl} alt="Logo" style={{ maxHeight: '60px' }} /></Link>
               </div>
               <div className="footer-two__widget-content">
                 {footer.description && <p>{footer.description}</p>}
@@ -106,10 +106,10 @@ export function Footer({ footer, locale }: { footer: any; locale: string }) {
         </div>
       </div>
       <div className="sprade" data-aos="zoom-in" data-aos-duration="1000">
-        <img src="/assets/images/sprade.png" alt="Image" className="base-img" />
+        <img loading="lazy" decoding="async" src="/assets/images/sprade.png" alt="Image" className="base-img" />
       </div>
       <div className="sprade-light" data-aos="zoom-in" data-aos-duration="1000">
-        <img src="/assets/images/sprade-light.png" alt="Image" />
+        <img loading="lazy" decoding="async" src="/assets/images/sprade-light.png" alt="Image" />
       </div>
     </footer>
   )

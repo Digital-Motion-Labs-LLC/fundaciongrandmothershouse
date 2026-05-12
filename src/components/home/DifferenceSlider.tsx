@@ -78,7 +78,7 @@ export function DifferenceSlider({ data }: { data: any }) {
         </div>
       </div>
       <div className="shape-hand" data-aos="fade-right" data-aos-duration="1000" data-aos-delay="300">
-        <img src="/assets/images/difference/shape-hand.png" alt="Image" />
+        <img loading="lazy" decoding="async" src="/assets/images/difference/shape-hand.png" alt="Image" />
       </div>
     </section>
   )

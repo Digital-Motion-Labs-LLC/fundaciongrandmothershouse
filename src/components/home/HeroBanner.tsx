@@ -125,8 +125,7 @@ export function HeroBanner({ data }: { data: any }) {
                         <div className="col-12 col-lg-5 order-1 order-lg-2 hero-portrait-col" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
                           {primaryHref ? (
                             <Link href={primaryHref} aria-label={slide.ctaPrimaryText || slide.title || 'View details'}>
-                              <img
-                                src={bgUrl}
+                              <img loading={i === 0 ? 'eager' : 'lazy'} fetchPriority={i === 0 ? 'high' : 'auto'} decoding="async" src={bgUrl}
                                 alt={img?.alt || slide.title || ''}
                                 className="hero-portrait-poster"
                                 style={{
@@ -138,8 +137,7 @@ export function HeroBanner({ data }: { data: any }) {
                               />
                             </Link>
                           ) : (
-                            <img
-                              src={bgUrl}
+                            <img loading={i === 0 ? 'eager' : 'lazy'} fetchPriority={i === 0 ? 'high' : 'auto'} decoding="async" src={bgUrl}
                               alt={img?.alt || slide.title || ''}
                               className="hero-portrait-poster"
                               style={{ width: 'auto', borderRadius: '18px', boxShadow: '0 24px 70px rgba(0,0,0,0.45)' }}
@@ -162,10 +160,10 @@ export function HeroBanner({ data }: { data: any }) {
                             {slide.title && (
                               primaryHref ? (
                                 <Link href={primaryHref} style={{ textDecoration: 'none', color: 'inherit' }}>
-                                  <h1>{renderTitle(slide.title)}</h1>
+                                  <h2 className="banner-hero-title">{renderTitle(slide.title)}</h2>
                                 </Link>
                               ) : (
-                                <h1>{renderTitle(slide.title)}</h1>
+                                <h2 className="banner-hero-title">{renderTitle(slide.title)}</h2>
                               )
                             )}
                             {renderCtas(slide)}
@@ -189,16 +187,16 @@ export function HeroBanner({ data }: { data: any }) {
         </button>
       </div>
       <div className="shape">
-        <img src="/assets/images/shape.png" alt="Image" />
+        <img loading="lazy" decoding="async" src="/assets/images/shape.png" alt="Image" />
       </div>
       <div className="shape-left" data-aos="fade-right" data-aos-duration="1000" data-aos-delay="300">
-        <img src="/assets/images/banner/banner-two-shape.png" alt="Image" />
+        <img loading="lazy" decoding="async" src="/assets/images/banner/banner-two-shape.png" alt="Image" />
       </div>
       <div className="sprade-shape">
-        <img src="/assets/images/sprade-base.png" alt="Image" className="base-img" data-aos="zoom-in" data-aos-duration="1000" />
+        <img loading="lazy" decoding="async" src="/assets/images/sprade-base.png" alt="Image" className="base-img" data-aos="zoom-in" data-aos-duration="1000" />
       </div>
       <div className="unity">
-        <img src="/assets/images/unity.png" alt="Image" />
+        <img loading="lazy" decoding="async" src="/assets/images/unity.png" alt="Image" />
       </div>
     </section>
   )

@@ -41,7 +41,7 @@ export function CtaBanner({ data }: { data: any }) {
         </div>
       </div>
       <div className="shape" data-aos="fade-right" data-aos-duration="1000">
-        <img src="/assets/images/cta/shape.png" alt="Image" className="base-img" />
+        <img loading="lazy" decoding="async" src="/assets/images/cta/shape.png" alt="Image" className="base-img" />
       </div>
     </section>
   )

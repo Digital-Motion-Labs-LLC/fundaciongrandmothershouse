@@ -7,6 +7,7 @@ import { JsonLd } from '@/components/JsonLd'
 import { news, findNewsBySlug } from '@/content'
 import { localize, pickLocale } from '@/content/localize'
 import { readLocaleFromCookie } from '@/content/schema'
+import { breadcrumbJsonLd } from '@/lib/seo'
 
 export const dynamicParams = false
 
@@ -25,12 +26,21 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   return {
     title,
     description: excerpt.slice(0, 160),
-    alternates: { canonical: `/noticias/${slug}` },
+    alternates: {
+      canonical: `/noticias/${slug}`,
+      languages: {
+        es: `/noticias/${slug}`,
+        en: `/noticias/${slug}`,
+        'x-default': `/noticias/${slug}`,
+      },
+    },
     openGraph: {
       title,
       description: excerpt.slice(0, 160),
       url: `https://fundaciongrandmothershouse.com/noticias/${slug}`,
       type: 'article',
+    locale: 'es_DO',
+    alternateLocale: 'en_US',
       publishedTime: article.date,
       ...(image ? { images: [{ url: image }] } : {}),
     },
@@ -83,9 +93,16 @@ export default async function NewsDetailPage({ params }: { params: Promise<{ slu
       : undefined,
   }
 
+  const crumbs = breadcrumbJsonLd([
+    { name: locale === 'es' ? 'Inicio' : 'Home', path: '/' },
+    { name: locale === 'es' ? 'Noticias' : 'News', path: '/noticias' },
+    { name: article.title as string, path: `/noticias/${slug}` },
+  ])
+
   return (
     <>
       <JsonLd data={articleJsonLd} />
+      <JsonLd data={crumbs} />
       <PageBanner title={article.title} />
       <BlogDetail article={article} />
     </>

@@ -28,7 +28,7 @@ export function BlogPreview({ data, news, locale = 'es', linkBase = '/noticias' 
                   <div className="blog__single">
                     <div className="blog__single-thumb">
                       <Link href={`${linkBase}/${item.slug}`}>
-                        <img src={imageUrl} alt={title} />
+                        <img loading="lazy" decoding="async" src={imageUrl} alt={title} />
                       </Link>
                     </div>
                     <div className="blog__single-inner">
@@ -43,7 +43,7 @@ export function BlogPreview({ data, news, locale = 'es', linkBase = '/noticias' 
                         <Link href={`${linkBase}/${item.slug}`}>{locale === 'es' ? 'Ver Más' : 'Read More'}<i className="fa-solid fa-circle-arrow-right"></i></Link>
                       </div>
                     </div>
-                    <img src="/assets/images/blog/spade.png" alt="Image" className="spade-two" />
+                    <img loading="lazy" decoding="async" src="/assets/images/blog/spade.png" alt="Image" className="spade-two" />
                   </div>
                 </div>
               </div>
@@ -59,10 +59,10 @@ export function BlogPreview({ data, news, locale = 'es', linkBase = '/noticias' 
         </div>
       </div>
       <div className="blog-bg">
-        <img src="/assets/images/blog/blog-bg.png" alt="Image" />
+        <img loading="lazy" decoding="async" src="/assets/images/blog/blog-bg.png" alt="Image" />
       </div>
       <div className="spade">
-        <img src="/assets/images/blog/spade-base.png" alt="Image" className="base-img" />
+        <img loading="lazy" decoding="async" src="/assets/images/blog/spade-base.png" alt="Image" className="base-img" />
       </div>
     </section>
   )

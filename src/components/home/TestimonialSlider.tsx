@@ -53,7 +53,7 @@ export function TestimonialSlider({ data }: { data: any }) {
                         </div>
                         <div className="author-info">
                           <div className="author-thumb">
-                            <img src={t.authorImage?.url || `https://images.pexels.com/photos/${[1239291,2379004,1181690,3778603][i % 4]}/pexels-photo-${[1239291,2379004,1181690,3778603][i % 4]}.jpeg?auto=compress&cs=tinysrgb&w=150&h=150&dpr=1`} alt={t.authorName} />
+                            <img loading="lazy" decoding="async" src={t.authorImage?.url || `https://images.pexels.com/photos/${[1239291,2379004,1181690,3778603][i % 4]}/pexels-photo-${[1239291,2379004,1181690,3778603][i % 4]}.jpeg?auto=compress&cs=tinysrgb&w=150&h=150&dpr=1`} alt={t.authorName} />
                           </div>
                           <div className="author-content">
                             <h6>{t.authorName}</h6>
@@ -61,7 +61,7 @@ export function TestimonialSlider({ data }: { data: any }) {
                           </div>
                         </div>
                         <div className="quote">
-                          <img src="/assets/images/quote.png" alt="Image" />
+                          <img loading="lazy" decoding="async" src="/assets/images/quote.png" alt="Image" />
                         </div>
                       </div>
                     </SwiperSlide>
@@ -81,7 +81,7 @@ export function TestimonialSlider({ data }: { data: any }) {
         </div>
       </div>
       <div className="shape" data-aos="fade-right" data-aos-duration="1000" data-aos-delay="200">
-        <img src="/assets/images/community/shape.png" alt="Image" className="base-img" />
+        <img loading="lazy" decoding="async" src="/assets/images/community/shape.png" alt="Image" className="base-img" />
       </div>
     </section>
   )

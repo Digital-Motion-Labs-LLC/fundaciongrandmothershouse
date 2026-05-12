@@ -8,6 +8,7 @@ import { TextSection } from '@/components/TextSection'
 import { CtaBanner } from '@/components/CtaBanner'
 import { JsonLd } from '@/components/JsonLd'
 import { getPage } from '@/content'
+import { aboutFAQs, faqJsonLd } from '@/content/faqs'
 import { localize } from '@/content/localize'
 import { readLocaleFromCookie } from '@/content/schema'
 
@@ -15,12 +16,18 @@ export const metadata: Metadata = {
   title: 'Quiénes Somos',
   description:
     'Conoce la historia y el equipo detrás de Fundación Grandmother\'s House, dedicada al cuidado infantil en Juan Dolio, RD.',
-  alternates: { canonical: '/quienes-somos' },
+  alternates: {
+    canonical: "/quienes-somos",
+    languages: { es: "/quienes-somos", en: "/quienes-somos", "x-default": "/quienes-somos" },
+  },
   openGraph: {
     title: "Quiénes Somos — Fundación Grandmother's House",
     description: 'Más de un siglo dedicados al cuidado y desarrollo integral de los niños de la República Dominicana.',
     url: 'https://fundaciongrandmothershouse.com/quienes-somos',
     type: 'website',
+    locale: 'es_DO',
+    alternateLocale: 'en_US',
+    images: [{ url: '/og-image.png', width: 1200, height: 630, alt: "Fundación Grandmother\u0027s House" }],
   },
 }
 
@@ -43,6 +50,7 @@ export default async function AboutPage() {
   return (
     <>
       <JsonLd data={breadcrumbJsonLd} />
+      <JsonLd data={faqJsonLd(aboutFAQs, locale)} />
       <PageBanner title={pageData?.title || (locale === 'es' ? 'Quiénes Somos' : 'About Us')} />
       {blocks.map((block: any, i: number) => {
         switch (block.blockType) {

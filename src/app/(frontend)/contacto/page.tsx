@@ -4,6 +4,7 @@ import { PageBanner } from '@/components/PageBanner'
 import { ContactForm } from '@/components/ContactForm'
 import { JsonLd } from '@/components/JsonLd'
 import { header as staticHeader, footer as staticFooter } from '@/content'
+import { contactFAQs, faqJsonLd } from '@/content/faqs'
 import { localize } from '@/content/localize'
 import { readLocaleFromCookie } from '@/content/schema'
 
@@ -11,12 +12,18 @@ export const metadata: Metadata = {
   title: 'Contacto',
   description:
     'Contáctanos para ser voluntario, donar o conocer más sobre Fundación Grandmother\'s House en Juan Dolio, San Pedro de Macorís.',
-  alternates: { canonical: '/contacto' },
+  alternates: {
+    canonical: "/contacto",
+    languages: { es: "/contacto", en: "/contacto", "x-default": "/contacto" },
+  },
   openGraph: {
     title: "Contacto — Fundación Grandmother's House",
     description: 'Contáctanos para voluntariado, donaciones o información.',
     url: 'https://fundaciongrandmothershouse.com/contacto',
     type: 'website',
+    locale: 'es_DO',
+    alternateLocale: 'en_US',
+    images: [{ url: '/og-image.png', width: 1200, height: 630, alt: "Fundación Grandmother\u0027s House" }],
   },
 }
 
@@ -56,6 +63,7 @@ export default async function ContactPage() {
   return (
     <>
       <JsonLd data={contactJsonLd} />
+      <JsonLd data={faqJsonLd(contactFAQs, locale)} />
       <PageBanner title={locale === 'es' ? 'Contacto' : 'Contact Us'} />
       <section className="contact-main volunteer">
         <div className="container">

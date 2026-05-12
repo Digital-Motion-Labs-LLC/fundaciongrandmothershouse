@@ -5,16 +5,21 @@ export function BlogDetail({ article }: { article: any }) {
   const date = article.date ? new Date(article.date).toLocaleDateString() : ''
 
   return (
-    <div className="cm-details">
+    <article className="cm-details">
       <div className="container">
         <div className="row gutter-60">
           <div className="col-12 col-xl-8">
             <div className="cm-details__content">
               <div className="cm-details__poster" data-aos="fade-up" data-aos-duration="1000">
-                <img src={imageUrl} alt={article.title} />
+                <img loading="lazy" decoding="async" src={imageUrl} alt={article.title} />
               </div>
               <div className="cm-details-meta">
-                {date && <p><i className="fa-solid fa-calendar-days"></i>{date}</p>}
+                {date && (
+                  <p>
+                    <i className="fa-solid fa-calendar-days"></i>
+                    <time dateTime={article.date}>{date}</time>
+                  </p>
+                )}
               </div>
               <div className="news-article-body">
                 {article.content_html ? (
@@ -29,6 +34,6 @@ export function BlogDetail({ article }: { article: any }) {
           </div>
         </div>
       </div>
-    </div>
+    </article>
   )
 }

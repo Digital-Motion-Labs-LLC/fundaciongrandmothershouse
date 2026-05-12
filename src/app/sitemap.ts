@@ -3,6 +3,12 @@ import { activities, news } from '@/content'
 
 const BASE_URL = 'https://fundaciongrandmothershouse.com'
 
+const absolutize = (url?: string | null): string | null => {
+  if (!url) return null
+  if (url.startsWith('http')) return url
+  return `${BASE_URL}${url}`
+}
+
 export default function sitemap(): MetadataRoute.Sitemap {
   const now = new Date()
 
@@ -19,21 +25,32 @@ export default function sitemap(): MetadataRoute.Sitemap {
 
   const activityPages: MetadataRoute.Sitemap = activities
     .filter((a) => a.published)
-    .map((a) => ({
-      url: `${BASE_URL}/actividades/${a.slug}`,
-      lastModified: new Date(a.updatedAt),
-      changeFrequency: 'monthly' as const,
-      priority: 0.7,
-    }))
+    .map((a) => {
+      const imageUrls = [
+        absolutize(a.featuredImage?.url),
+        ...(a.gallery ?? []).map((g) => absolutize(g.image?.url)),
+      ].filter((u): u is string => !!u)
+      return {
+        url: `${BASE_URL}/actividades/${a.slug}`,
+        lastModified: new Date(a.updatedAt),
+        changeFrequency: 'monthly' as const,
+        priority: 0.7,
+        images: imageUrls.length > 0 ? imageUrls : undefined,
+      }
+    })
 
   const newsPages: MetadataRoute.Sitemap = news
     .filter((n) => n.published)
-    .map((n) => ({
-      url: `${BASE_URL}/noticias/${n.slug}`,
-      lastModified: new Date(n.updatedAt),
-      changeFrequency: 'monthly' as const,
-      priority: 0.7,
-    }))
+    .map((n) => {
+      const img = absolutize(n.image?.url)
+      return {
+        url: `${BASE_URL}/noticias/${n.slug}`,
+        lastModified: new Date(n.updatedAt),
+        changeFrequency: 'monthly' as const,
+        priority: 0.7,
+        images: img ? [img] : undefined,
+      }
+    })
 
   return [...staticPages, ...activityPages, ...newsPages]
 }

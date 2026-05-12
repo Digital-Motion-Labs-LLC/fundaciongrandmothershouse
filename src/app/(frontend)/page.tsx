@@ -15,7 +15,10 @@ export const metadata: Metadata = {
   title: 'Inicio',
   description:
     'Fundación Grandmother\'s House — un entorno seguro y cariñoso donde cada niño puede crecer. Más de 2,100 niños impactados en Juan Dolio, RD.',
-  alternates: { canonical: '/' },
+  alternates: {
+    canonical: '/',
+    languages: { es: '/', en: '/', 'x-default': '/' },
+  },
   openGraph: {
     title: "Fundación Grandmother's House",
     description:
@@ -25,12 +28,14 @@ export const metadata: Metadata = {
     locale: 'es_DO',
     alternateLocale: 'en_US',
     siteName: "Fundación Grandmother's House",
+    images: [{ url: '/og-image.png', width: 1200, height: 630, alt: "Fundación Grandmother's House" }],
   },
   twitter: {
     card: 'summary_large_image',
     title: "Fundación Grandmother's House",
     description:
       'Un entorno seguro y cariñoso donde cada niño puede crecer. Más de 2,100 niños impactados en Juan Dolio, RD.',
+    images: ['/og-image.png'],
   },
 }
 
@@ -64,6 +69,7 @@ export default async function HomePage() {
   return (
     <>
       <JsonLd data={websiteJsonLd} />
+      <h1 className="sr-only">Fundación Grandmother&apos;s House — Cuidado infantil y educación en Juan Dolio, RD</h1>
       <SectionWrapper show={siteSettings.showHeroBanner}>
         <HeroBanner data={heroBlock} />
       </SectionWrapper>

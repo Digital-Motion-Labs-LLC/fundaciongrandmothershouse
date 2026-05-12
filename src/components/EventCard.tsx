@@ -14,8 +14,7 @@ export function EventCard({ activity, index = 0, locale }: { activity: any; inde
           style={{ display: 'block', color: 'inherit', textDecoration: 'none' }}
         >
           <div className="event__single-thumb" style={{ width: '100%', aspectRatio: '16 / 10', overflow: 'hidden' }}>
-            <img
-              src={imageUrl}
+            <img loading="lazy" decoding="async" src={imageUrl}
               alt={activity.name}
               style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center', display: 'block' }}
             />

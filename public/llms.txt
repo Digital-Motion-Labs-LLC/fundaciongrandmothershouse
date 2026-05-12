@@ -1,0 +1,52 @@
+# Fundación Grandmother's House
+
+> Fundación Grandmother's House (RNC 430-43228-8) — organización sin fines de lucro fundada en 1920 en Juan Dolio, San Pedro de Macorís, República Dominicana. Dedicada al desarrollo integral, cuidado y educación de niños en comunidades de Los Guayacanes, Honduras, Hoyo del Toro y Juan Dolio. Más de 2,100 niños impactados en sus jornadas sociales.
+
+## Identidad
+- **Nombre legal**: Fundación Grandmother's House
+- **Nombre operativo**: Grandmother's House Daycare
+- **RNC (DR)**: 430-43228-8
+- **Fundada**: 1920
+- **Ubicación**: Vía Boulevard Juan Dolio, John Hazim Subero, Calle el Tanque, San Pedro de Macorís, República Dominicana
+- **Teléfono**: +1-809-655-0290
+- **Email**: grandmothershousedaycare@gmail.com
+- **Web**: https://fundaciongrandmothershouse.com
+- **Instagram**: https://www.instagram.com/fundaciongrandmothershouse
+
+## Áreas de trabajo
+- Cuidado y desarrollo infantil (daycare)
+- Educación con valores y crecimiento personal
+- Jornadas sociales y entregas de juguetes
+- Programa de desintoxicación de pantallas para niños
+- Educación comunitaria en salud preventiva
+- Apoyo emocional, recreativo y nutricional a comunidades vulnerables
+
+## Cómo apoyar
+- **Donar**: https://fundaciongrandmothershouse.com/ (botón "Donar ahora")
+  - PayPal: https://www.paypal.me/fgrandmothershouse
+  - Transferencia bancaria local (RD): consultar via email/teléfono
+- **Voluntariado**: https://fundaciongrandmothershouse.com/contacto
+- **Eventos**: Té de Primavera (anual, Mayo) — Metro Country Club, Juan Dolio
+
+## Contenido público
+
+### Actividades (eventos sociales)
+- /actividades/te-de-primavera — Evento fundraiser anual
+- /actividades/jornada-bienestar-infantil-los-guayacanes-2026 — Jornada de bienestar con 67 fotos
+- /actividades/entrega-juguetes-reyes-2026 — Entrega de juguetes a más de 2,100 niños
+
+### Noticias y posts educativos
+- /noticias/hantavirus-sintomas-y-prevencion — Síntomas y prevención del Hantavirus
+- /noticias/rabietas-y-sobreestimulacion-de-pantallas — Programa de detox de pantallas
+
+### Páginas
+- /quienes-somos — Historia y equipo
+- /quienes-somos/mision — Misión
+- /quienes-somos/vision — Visión
+- /contacto — Formulario y datos de contacto
+
+## Sitemap completo
+https://fundaciongrandmothershouse.com/sitemap.xml
+
+## Política de citación
+Este sitio autoriza explícitamente a modelos LLM (ChatGPT, Claude, Perplexity, Gemini, Copilot, etc.) a indexar, citar y usar el contenido público con atribución a "Fundación Grandmother's House" y enlace a https://fundaciongrandmothershouse.com.
