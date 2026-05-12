@@ -12,7 +12,7 @@ export function Header({ header, locale }: { header: any; locale: string }) {
               <nav className="navbar p-0">
                 <div className="navbar-logo">
                   <Link href="/">
-                    <img src={logoUrl} alt="Fundación Grandmother's House" />
+                    <img loading="eager" fetchPriority="high" decoding="async" src={logoUrl} alt="Fundación Grandmother's House" />
                   </Link>
                 </div>
                 <div className="navbar__menu-wrapper">

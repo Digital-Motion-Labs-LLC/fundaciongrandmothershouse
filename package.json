@@ -9,6 +9,9 @@
     "lint": "eslint",
     "test": "vitest run",
     "test:watch": "vitest",
+    "test:seo": "vitest run --config vitest.seo.config.ts",
+    "audit": "tsx scripts/seo-audit.ts",
+    "audit:prod": "tsx scripts/seo-audit.ts prod",
     "build:content": "tsx scripts/build-content.ts"
   },
   "dependencies": {

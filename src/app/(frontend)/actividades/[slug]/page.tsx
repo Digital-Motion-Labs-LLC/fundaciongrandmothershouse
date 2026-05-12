@@ -7,6 +7,7 @@ import { JsonLd } from '@/components/JsonLd'
 import { activities, findActivityBySlug } from '@/content'
 import { localize, pickLocale } from '@/content/localize'
 import { readLocaleFromCookie } from '@/content/schema'
+import { breadcrumbJsonLd } from '@/lib/seo'
 
 export const dynamicParams = false
 
@@ -40,12 +41,21 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   return {
     title: name,
     description: desc,
-    alternates: { canonical: `/actividades/${slug}` },
+    alternates: {
+      canonical: `/actividades/${slug}`,
+      languages: {
+        es: `/actividades/${slug}`,
+        en: `/actividades/${slug}`,
+        'x-default': `/actividades/${slug}`,
+      },
+    },
     openGraph: {
       title: name,
       description: desc,
       url: `https://fundaciongrandmothershouse.com/actividades/${slug}`,
       type: 'article',
+    locale: 'es_DO',
+    alternateLocale: 'en_US',
       ...(image ? { images: [{ url: image }] } : {}),
     },
     twitter: {
@@ -94,9 +104,16 @@ export default async function ActivityDetailPage({ params }: { params: Promise<{
     url: `https://fundaciongrandmothershouse.com/actividades/${slug}`,
   }
 
+  const crumbs = breadcrumbJsonLd([
+    { name: locale === 'es' ? 'Inicio' : 'Home', path: '/' },
+    { name: locale === 'es' ? 'Actividades' : 'Activities', path: '/actividades' },
+    { name: activity.name as string, path: `/actividades/${slug}` },
+  ])
+
   return (
     <>
       <JsonLd data={eventJsonLd} />
+      <JsonLd data={crumbs} />
       <PageBanner title={activity.name} />
       <EventDetail activity={activity} />
     </>

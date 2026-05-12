@@ -10,7 +10,10 @@ export const metadata: Metadata = {
   title: 'Términos y Condiciones',
   description:
     'Términos y condiciones de uso del sitio web de Fundación Grandmother\'s House.',
-  alternates: { canonical: '/terminos-y-condiciones' },
+  alternates: {
+    canonical: "/terminos-y-condiciones",
+    languages: { es: "/terminos-y-condiciones", en: "/terminos-y-condiciones", "x-default": "/terminos-y-condiciones" },
+  },
   robots: { index: true, follow: true },
 }
 

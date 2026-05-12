@@ -31,8 +31,7 @@ function Lightbox({ images, startIndex, onClose }: { images: string[]; startInde
       <button onClick={(e) => { e.stopPropagation(); prev() }} style={{ position: 'absolute', left: '20px', background: 'none', border: 'none', color: '#fff', fontSize: '36px', cursor: 'pointer', zIndex: 10 }}>
         <i className="fa-solid fa-chevron-left"></i>
       </button>
-      <img
-        src={images[index]}
+      <img loading="lazy" decoding="async" src={images[index]}
         alt={`Foto ${index + 1}`}
         onClick={(e) => e.stopPropagation()}
         style={{ maxHeight: '85vh', maxWidth: '90vw', objectFit: 'contain', borderRadius: '8px' }}
@@ -74,7 +73,7 @@ export function EventDetail({ activity }: { activity: any }) {
   )
 
   return (
-    <div style={{ padding: '60px 0' }}>
+    <article style={{ padding: '60px 0' }}>
       <div className="container">
         {isPortrait ? (
           <div
@@ -88,15 +87,14 @@ export function EventDetail({ activity }: { activity: any }) {
               background: `linear-gradient(135deg, rgba(119,194,213,0.08) 0%, rgba(232,68,122,0.08) 100%)`,
             }}
           >
-            <img
-              src={imageUrl}
+            <img loading="lazy" decoding="async" src={imageUrl}
               alt={activity.name}
               style={{ maxWidth: '100%', maxHeight: '780px', width: 'auto', height: 'auto', borderRadius: '12px', boxShadow: '0 16px 48px rgba(0,0,0,0.18)', display: 'block' }}
             />
           </div>
         ) : (
           <div style={{ borderRadius: '12px', overflow: 'hidden', marginBottom: '40px', maxHeight: '500px' }}>
-            <img src={imageUrl} alt={activity.name} style={{ width: '100%', height: '500px', objectFit: 'cover' }} />
+            <img loading="lazy" decoding="async" src={imageUrl} alt={activity.name} style={{ width: '100%', height: '500px', objectFit: 'cover' }} />
           </div>
         )}
 
@@ -114,7 +112,7 @@ export function EventDetail({ activity }: { activity: any }) {
         </div>
 
         <div style={{ maxWidth: '800px' }}>
-          <h1 style={{ fontSize: '28px', fontWeight: 800, color: '#1E293B', marginBottom: '24px' }}>{activity.name}</h1>
+          <h2 style={{ fontSize: '28px', fontWeight: 800, color: '#1E293B', marginBottom: '24px' }}>{activity.name}</h2>
           {paragraphs.map((text, i) => (
             <p key={i} style={{ marginBottom: '20px', lineHeight: '1.8', fontSize: '16px', color: '#475569' }}>{text}</p>
           ))}
@@ -133,7 +131,7 @@ export function EventDetail({ activity }: { activity: any }) {
                   onClick={() => setLightboxIndex(i)}
                   style={{ borderRadius: '10px', overflow: 'hidden', boxShadow: '0 2px 8px rgba(0,0,0,0.08)', cursor: 'pointer', position: 'relative' }}
                 >
-                  <img src={url} alt={`Galería foto ${i + 1}`} style={{ width: '100%', height: '220px', objectFit: 'cover', display: 'block', transition: 'transform 0.3s ease' }}
+                  <img loading="lazy" decoding="async" src={url} alt={`Galería foto ${i + 1}`} style={{ width: '100%', height: '220px', objectFit: 'cover', display: 'block', transition: 'transform 0.3s ease' }}
                     onMouseEnter={(e) => (e.currentTarget.style.transform = 'scale(1.05)')}
                     onMouseLeave={(e) => (e.currentTarget.style.transform = 'scale(1)')}
                   />
@@ -147,6 +145,6 @@ export function EventDetail({ activity }: { activity: any }) {
       {lightboxIndex !== null && (
         <Lightbox images={galleryImages} startIndex={lightboxIndex} onClose={() => setLightboxIndex(null)} />
       )}
-    </div>
+    </article>
   )
 }

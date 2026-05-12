@@ -16,10 +16,10 @@ export function HelpSection({ data }: { data: any }) {
             <div className="help__thumb">
               <div className="help__thumb-inner">
                 <div className="thumb-top thumb">
-                  <img src={thumbTopUrl} alt="Image" />
+                  <img loading="lazy" decoding="async" src={thumbTopUrl} alt="Image" />
                 </div>
                 <div className="thumb-lg thumb" data-aos="fade-left" data-aos-duration="1000">
-                  <img src={imageUrl} alt="Image" />
+                  <img loading="lazy" decoding="async" src={imageUrl} alt="Image" />
                   {data.videoUrl && (
                     <div className="video-btn-wrapper">
                       <a href={data.videoUrl} target="_blank" title="video Player" className="open-video-popup" rel="noopener noreferrer">
@@ -29,13 +29,13 @@ export function HelpSection({ data }: { data: any }) {
                   )}
                 </div>
                 <div className="thumb thumb-bottom">
-                  <img src={thumbBottomUrl} alt="Image" />
+                  <img loading="lazy" decoding="async" src={thumbBottomUrl} alt="Image" />
                 </div>
                 <div className="line">
-                  <img src="/assets/images/help/line.png" alt="Image" />
+                  <img loading="lazy" decoding="async" src="/assets/images/help/line.png" alt="Image" />
                 </div>
                 <div className="grid-line">
-                  <img src="/assets/images/help/grid.png" alt="Image" className="base-img" />
+                  <img loading="lazy" decoding="async" src="/assets/images/help/grid.png" alt="Image" className="base-img" />
                 </div>
                 <div className="vertical-text">
                   <h5>We Give <span>Donations</span> to Poor People</h5>
@@ -99,13 +99,13 @@ export function HelpSection({ data }: { data: any }) {
         </div>
       </div>
       <div className="hand">
-        <img src="/assets/images/help/hand.png" alt="Image" />
+        <img loading="lazy" decoding="async" src="/assets/images/help/hand.png" alt="Image" />
       </div>
       <div className="parasuit">
-        <img src="/assets/images/parasuit.png" alt="Image" />
+        <img loading="lazy" decoding="async" src="/assets/images/parasuit.png" alt="Image" />
       </div>
       <div className="spade">
-        <img src="/assets/images/help/spade.png" alt="Image" />
+        <img loading="lazy" decoding="async" src="/assets/images/help/spade.png" alt="Image" />
       </div>
     </section>
   )

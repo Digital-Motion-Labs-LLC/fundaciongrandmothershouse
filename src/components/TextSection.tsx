@@ -14,7 +14,7 @@ export function TextSection({ data, index = 0 }: { data: any; index?: number }) 
           {pos !== 'none' && imageUrl && (
             <div className="col-12 col-lg-5 col-xxl-6">
               <div className="help__thumb" data-aos="fade-up" data-aos-duration="1000">
-                <img src={imageUrl} alt={data.heading || 'Image'} style={{ borderRadius: '12px', width: '100%' }} />
+                <img loading="lazy" decoding="async" src={imageUrl} alt={data.heading || 'Image'} style={{ borderRadius: '12px', width: '100%' }} />
               </div>
             </div>
           )}

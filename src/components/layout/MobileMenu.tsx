@@ -58,7 +58,7 @@ export function MobileMenu({ header, locale }: { header: any; locale: string }) 
         {/* Header */}
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '16px 20px', borderBottom: '1px solid #f1f5f9', flexShrink: 0 }}>
           <Link href="/" onClick={() => setIsOpen(false)}>
-            <img src={logoUrl} alt="Logo" style={{ maxHeight: '40px' }} />
+            <img loading="lazy" decoding="async" src={logoUrl} alt="Logo" style={{ maxHeight: '40px' }} />
           </Link>
           <button
             onClick={() => setIsOpen(false)}

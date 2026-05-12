@@ -51,7 +51,36 @@ export default async function FrontendLayout({ children }: { children: React.Rea
     logo: 'https://fundaciongrandmothershouse.com/og-image.png',
     image: 'https://fundaciongrandmothershouse.com/og-image.png',
     email: 'grandmothershousedaycare@gmail.com',
-    telephone: '809-655-0290',
+    telephone: '+1-809-655-0290',
+    contactPoint: [
+      {
+        '@type': 'ContactPoint',
+        telephone: '+1-809-655-0290',
+        contactType: 'customer support',
+        email: 'grandmothershousedaycare@gmail.com',
+        availableLanguage: ['Spanish', 'English'],
+        areaServed: 'DO',
+      },
+    ],
+    geo: {
+      '@type': 'GeoCoordinates',
+      latitude: 18.4296,
+      longitude: -69.4147,
+    },
+    hasMap: 'https://maps.google.com/?q=Juan+Dolio+San+Pedro+de+Macoris+RD',
+    openingHoursSpecification: [
+      {
+        '@type': 'OpeningHoursSpecification',
+        dayOfWeek: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
+        opens: '07:30',
+        closes: '17:00',
+      },
+    ],
+    potentialAction: {
+      '@type': 'DonateAction',
+      target: 'https://fundaciongrandmothershouse.com/',
+      name: 'Donar a Fundación Grandmother\'s House',
+    },
     address: {
       '@type': 'PostalAddress',
       streetAddress: 'Vía Boulevard Juan Dolio, John Hazim Subero, Calle el Tanque',

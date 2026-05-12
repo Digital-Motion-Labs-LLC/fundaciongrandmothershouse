@@ -12,12 +12,18 @@ export const metadata: Metadata = {
   title: 'Noticias',
   description:
     'Últimas noticias y novedades de Fundación Grandmother\'s House. Mantente informado sobre nuestro trabajo con los niños.',
-  alternates: { canonical: '/noticias' },
+  alternates: {
+    canonical: "/noticias",
+    languages: { es: "/noticias", en: "/noticias", "x-default": "/noticias" },
+  },
   openGraph: {
     title: "Noticias — Fundación Grandmother's House",
     description: 'Novedades del trabajo social, eventos y comunidad.',
     url: 'https://fundaciongrandmothershouse.com/noticias',
     type: 'website',
+    locale: 'es_DO',
+    alternateLocale: 'en_US',
+    images: [{ url: '/og-image.png', width: 1200, height: 630, alt: "Fundación Grandmother\u0027s House" }],
   },
 }
 

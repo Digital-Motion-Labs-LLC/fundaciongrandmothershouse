@@ -12,13 +12,19 @@ export const metadata: Metadata = {
   title: 'Nuestras Actividades',
   description:
     'Conoce las actividades y eventos que realiza Fundación Grandmother\'s House para el bienestar de los niños en Juan Dolio, República Dominicana.',
-  alternates: { canonical: '/actividades' },
+  alternates: {
+    canonical: "/actividades",
+    languages: { es: "/actividades", en: "/actividades", "x-default": "/actividades" },
+  },
   openGraph: {
     title: "Actividades — Fundación Grandmother's House",
     description:
       'Jornadas, eventos y proyectos sociales para los niños de Los Guayacanes, Juan Dolio y comunidades de SPM.',
     url: 'https://fundaciongrandmothershouse.com/actividades',
     type: 'website',
+    locale: 'es_DO',
+    alternateLocale: 'en_US',
+    images: [{ url: '/og-image.png', width: 1200, height: 630, alt: "Fundación Grandmother\u0027s House" }],
   },
 }
 
