@@ -51,6 +51,8 @@ export default function RootLayout({
   return (
     <html lang="es">
       <head>
+        <link rel="preconnect" href="https://www.googletagmanager.com" />
+        <link rel="dns-prefetch" href="https://www.google-analytics.com" />
         <Script src="https://www.googletagmanager.com/gtag/js?id=G-5EW6E83DF9" strategy="afterInteractive" />
         <Script id="gtag-init" strategy="afterInteractive">
           {`

@@ -9,7 +9,7 @@ import { localize } from '@/content/localize'
 import { readLocaleFromCookie } from '@/content/schema'
 
 export const metadata: Metadata = {
-  title: 'Noticias',
+  title: 'Noticias y Salud Infantil',
   description:
     'Últimas noticias y novedades de Fundación Grandmother\'s House. Mantente informado sobre nuestro trabajo con los niños.',
   alternates: {
