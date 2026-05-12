@@ -90,7 +90,12 @@ export default async function HomePage() {
         />
       )}
       <JsonLd data={websiteJsonLd} />
-      <h1 className="sr-only">Fundación Grandmother&apos;s House — Guardería, cuidado infantil y educación con valores en Juan Dolio, San Pedro de Macorís, República Dominicana</h1>
+      <h1 className="sr-only" aria-describedby="home-h1-context">
+        Fundación Grandmother&apos;s House — Cuidado infantil en Juan Dolio, RD
+      </h1>
+      <span id="home-h1-context" className="sr-only">
+        Guardería y fundación sin fines de lucro en San Pedro de Macorís, República Dominicana. Educación con valores, programas comunitarios y voluntariado para más de 2,100 niños.
+      </span>
       <SectionWrapper show={siteSettings.showHeroBanner}>
         <HeroBanner data={heroBlock} />
       </SectionWrapper>
