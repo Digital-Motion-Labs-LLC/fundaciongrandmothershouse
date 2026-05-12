@@ -13,7 +13,7 @@
 - ✅ `twitter-card`: summary_large_image
 - ✅ `hreflang`: 3 variants
 - ✅ `robots`: index, follow
-- ✅ `h1-single`: Fundación Grandmother&#x27;s House — Guardería, cuidado infantil y educación con
+- ✅ `h1-single`: Fundación Grandmother&#x27;s House — Cuidado infantil en Juan Dolio, RD
 - ✅ `h2-count`: 7
 - ✅ `img-alt`: 36 images all with alt
 - ✅ `img-lazy`: 36/36 lazy

@@ -80,7 +80,7 @@ export default async function ContactPage() {
                       <div className="thumb"><i className="fa-solid fa-location-dot"></i></div>
                       <div className="content">
                         <h6>{locale === 'es' ? 'Ubicación' : 'Location'}</h6>
-                        <p><a href={footer.contactInfo.addressLink || '#'} target="_blank">{footer.contactInfo.address}</a></p>
+                        <p><a href={footer.contactInfo.addressLink || '#'} target="_blank" rel="noopener noreferrer">{footer.contactInfo.address}</a></p>
                       </div>
                     </div>
                   )}

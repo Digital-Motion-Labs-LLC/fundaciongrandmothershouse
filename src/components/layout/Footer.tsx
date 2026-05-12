@@ -71,7 +71,7 @@ export function Footer({ footer, locale }: { footer: any; locale: string }) {
               <div className="footer-two__widget-content footer-two__widget-content--contact">
                 <ul>
                   {footer.contactInfo?.address && (
-                    <li><a href={footer.contactInfo.addressLink || '#'} target="_blank"><i className="fa-solid fa-location-dot"></i>{footer.contactInfo.address}</a></li>
+                    <li><a href={footer.contactInfo.addressLink || '#'} target="_blank" rel="noopener noreferrer"><i className="fa-solid fa-location-dot"></i>{footer.contactInfo.address}</a></li>
                   )}
                   {footer.contactInfo?.phone && (
                     <li><a href={`tel:${footer.contactInfo.phone}`}><i className="fa-solid fa-phone"></i>{footer.contactInfo.phone}</a></li>
