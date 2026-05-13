@@ -6,7 +6,7 @@ import 'swiper/css'
 import 'swiper/css/navigation'
 import 'swiper/css/effect-fade'
 import Link from 'next/link'
-import { placeholderImages } from '@/lib/placeholder-images'
+import { placeholderImages, bgImageSet } from '@/lib/placeholder-images'
 
 function renderTitle(html: string): React.ReactNode {
   const nodes: React.ReactNode[] = []
@@ -84,7 +84,7 @@ export function HeroBanner({ data }: { data: any }) {
                   <div
                     className="banner-two__slider-bg"
                     style={{
-                      backgroundImage: `url(${bgUrl})`,
+                      backgroundImage: bgImageSet(bgUrl),
                       ...(isPortrait ? { filter: 'blur(22px) brightness(0.55)', transform: 'scale(1.15)' } : {}),
                     }}
                   ></div>
@@ -125,11 +125,16 @@ export function HeroBanner({ data }: { data: any }) {
                         <div className="col-12 col-lg-5 order-1 order-lg-2 hero-portrait-col" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
                           {primaryHref ? (
                             <Link href={primaryHref} aria-label={slide.ctaPrimaryText || slide.title || 'View details'}>
-                              <img loading={i === 0 ? 'eager' : 'lazy'} fetchPriority={i === 0 ? 'high' : 'auto'} decoding="async" src={bgUrl}
+                              <img
+                                loading={i === 0 ? 'eager' : 'lazy'}
+                                fetchPriority={i === 0 ? 'high' : 'auto'}
+                                decoding="async"
+                                src={bgUrl}
                                 alt={img?.alt || slide.title || ''}
+                                width={img?.width ?? 720}
+                                height={img?.height ?? 980}
                                 className="hero-portrait-poster"
                                 style={{
-                                  width: 'auto',
                                   borderRadius: '18px',
                                   boxShadow: '0 24px 70px rgba(0,0,0,0.45)',
                                   cursor: 'pointer',
@@ -137,10 +142,16 @@ export function HeroBanner({ data }: { data: any }) {
                               />
                             </Link>
                           ) : (
-                            <img loading={i === 0 ? 'eager' : 'lazy'} fetchPriority={i === 0 ? 'high' : 'auto'} decoding="async" src={bgUrl}
+                            <img
+                              loading={i === 0 ? 'eager' : 'lazy'}
+                              fetchPriority={i === 0 ? 'high' : 'auto'}
+                              decoding="async"
+                              src={bgUrl}
                               alt={img?.alt || slide.title || ''}
+                              width={img?.width ?? 720}
+                              height={img?.height ?? 980}
                               className="hero-portrait-poster"
-                              style={{ width: 'auto', borderRadius: '18px', boxShadow: '0 24px 70px rgba(0,0,0,0.45)' }}
+                              style={{ borderRadius: '18px', boxShadow: '0 24px 70px rgba(0,0,0,0.45)' }}
                             />
                           )}
                         </div>
